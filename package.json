@@ -1,0 +1,57 @@
+{
+  "name": "reamix",
+  "version": "1.0.0",
+  "description": "The new web browser \"reamix\"",
+  "main": "main.js",
+  "scripts": {
+    "test": "npx electron .",
+    "build": "npx electron-builder",
+    "makeEnv": "src\\environment.cmd"
+  },
+  "author": "VCborn <support@vcborn.com>",
+  "homepage": "https://vcborn.com/services/reamix/",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^14.2.0",
+    "electron-builder": "^22.14.5"
+  },
+  "build": {
+    "appId": "com.vcborn.reamix",
+    "productName": "reamix",
+    "files": [
+      "!.git",
+      "!.dist",
+      "node_modules",
+      "src",
+      "main.js",
+      "package-lock.json",
+      "package.json"
+    ],
+    "asar": false,
+    "win": {
+      "icon": "src/image/logo.ico",
+      "target": "nsis",
+      "legalTrademarks": "Copyright 2021 vcborn"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "src/image/logo.ico"
+    },
+    "linux": {
+      "icon": "src/image/icon.icns",
+      "target": "deb"
+    },
+    "appImage": {
+      "category": "Utility",
+      "synopsis": "reamix ver1.0b6Build6"
+    },
+    "deb": {
+      "category": "Utility",
+      "synopsis": "reamix ver1.0b6Build6"
+    }
+  },
+  "dependencies": {
+    "electron-context-menu": "^3.1.1"
+  }
+}
