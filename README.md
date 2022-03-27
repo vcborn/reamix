@@ -51,7 +51,7 @@ VCLinuxに標準搭載。
 
 タブの移動には対応していませんが、正式版では対応する見通しです。
 
-# Download
+## Download
 
 [こちら](https://vcborn.com/services/reamix/)からダウンロードできます。
 
