@@ -4,7 +4,7 @@
   "description": "The new web browser \"reamix\"",
   "main": "main.js",
   "scripts": {
-    "test": "npx electron .",
+    "test": "npx electron --trace-warnings .",
     "build": "npx electron-builder",
     "makeEnv": "src\\environment.cmd"
   },

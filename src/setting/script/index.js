@@ -4,23 +4,50 @@
 document.getElementById('default').addEventListener('click',()=>{
   node.writeBackgroundDefault();
 })*/
-document.getElementsByTagName('select')[0].addEventListener('change',()=>{
-  node.changeSearchEngine(document.getElementsByTagName('select')[0].value)
-})
 
-function changeExperimental(arg){
-  node.changeExperimentalFunctions(arg.target.value,arg.target.checked);
+if (node.loadTheme()) {
+  if (node.loadTheme() === 'dark') {
+    document.documentElement.classList.add('dark')
+    document
+      .getElementById('theme')
+      .querySelector("option[value='dark']").selected = true
+  } else {
+    document
+      .getElementById('theme')
+      .querySelector("option[value='light']").selected = true
+  }
 }
 
-document.getElementsByTagName('input')[0].addEventListener('change',changeExperimental);
-document.getElementsByTagName('input')[1].addEventListener('change',(arg)=>{
-  changeExperimental(arg);
-  if(arg.target.checked){
-    document.getElementById('changedfont').removeAttribute('disabled');
-  }else{
-    document.getElementById('changedfont').setAttribute('disabled','')
+document.getElementsByTagName('select')[0].addEventListener('change', () => {
+  node.changeLang(document.getElementsByTagName('select')[0].value)
+})
+
+document.getElementsByTagName('select')[1].addEventListener('change', () => {
+  node.changeTheme(document.getElementsByTagName('select')[1].value)
+})
+
+document.getElementsByTagName('select')[2].addEventListener('change', () => {
+  node.changeSearchEngine(document.getElementsByTagName('select')[2].value)
+})
+
+function changeExperimental(arg) {
+  node.changeExperimentalFunctions(arg.target.value, arg.target.checked)
+}
+
+document
+  .getElementsByTagName('input')[0]
+  .addEventListener('change', changeExperimental)
+document.getElementsByTagName('input')[1].addEventListener('change', (arg) => {
+  changeExperimental(arg)
+  if (arg.target.checked) {
+    document.getElementById('changedfont').removeAttribute('disabled')
+  } else {
+    document.getElementById('changedfont').setAttribute('disabled', '')
   }
 })
-document.getElementById('changedfont').addEventListener('input',()=>{
-  node.changeExperimentalFunctions('changedfont',document.getElementById('changedfont').value);
+document.getElementById('changedfont').addEventListener('input', () => {
+  node.changeExperimentalFunctions(
+    'changedfont',
+    document.getElementById('changedfont').value
+  )
 })
