@@ -1,43 +1,39 @@
-![image](https://user-images.githubusercontent.com/69241694/143031805-9e5636a0-e9c7-44ff-b2d5-5f4cf9bed654.png)
+# Reamix
 
-monochrome.による、「オシャレ、高機能、そして使いやすい」を目指しているウェブブラウザです。
+![reamix](https://user-images.githubusercontent.com/39876629/160284567-22120f26-9e13-49ee-84ee-4992c6dd42bd.png)
 
-## 概要
-
-| Reamix     | について                                                               |
+| Reamixについて |                                                                        |
 | :--------- | :--------------------------------------------------------------------- |
 | 名前       | Reamix                                                                 |
 | 正式名称   | Reamix v.1.0.0 Beta 6 (Build 6)                                        |
 | バージョン | v.1.0 Beta 6                                                           |
 | ビルド番号 | 6                                                                      |
 | 公開日     | 2021 年 11 月 23 日(火)                                                |
-| ライセンス | [monochrome License.](https://sorakime.github.io/mncr/license?v=1.1.1) |
+| ライセンス | [monochrome License.](https://www.monochrome.tk/mncr/license) |
 | 言語       | 日本語                                                                 |
 
----
+## Description
 
-## 説明
+[monochrome.](https://www.monochrome.tk/mncr/)が制作中のMonotをカスタマイズしたブラウザ。
+VCLinuxに標準搭載。
 
-Sorakime 様が作成した Monot by monochrome.をベースとした VCborn 独自ブラウザでございます。
-VCLinux で搭載しております
-
-# アップデート内容
+## Changelog
 
 - タブ対応
   - タブを左右に移動することには未対応
 - ダークモード完全対応
 
-## スクショ
+## Screenshots
 
 すべてダークモードで動作しています。ライトモードも完全に対応しています。
 
-![起動直後の画面](https://user-images.githubusercontent.com/69241694/143030979-a3d142b6-cbb0-4775-9673-114aa59ec42f.png)
+![起動直後の画面](https://user-images.githubusercontent.com/39876629/160284910-0c1e28d9-e04c-4d73-9b5d-e09040753f31.png)
 起動直後の画面
 
-![実際にウェブサイトを閲覧している様子](https://user-images.githubusercontent.com/69241694/143031042-9a797fdf-4689-47d2-b0fd-c626f3b9145d.png)
+![実際にウェブサイトを閲覧している様子](https://user-images.githubusercontent.com/39876629/160284937-348bb44a-2a69-4ee5-9da5-2ab597ed1019.png)
 実際にウェブサイトを閲覧している様子
 
-## ショートカットキー
+## Shortcuts
 
 | ショートカット               | キー一覧               |
 | :--------------------------- | :--------------------- |
@@ -55,12 +51,11 @@ VCLinux で搭載しております
 
 タブの移動には対応していませんが、正式版では対応する見通しです。
 
-# ダウンロードしてくださいっ！！！！！
+# Download
 
-右上のこのボタンをクリックしてください。
-![image](https://user-images.githubusercontent.com/69241694/132985506-fa49c272-6032-4349-bad9-e97a068aa8fe.png)
+[こちら](https://vcborn.com/services/reamix/)からダウンロードできます。
 
 ---
 
-Copyright 2021 VCborn.
-Licensed by [monochrome License.](https://sorakime.github.io/mncr/license?v=1.1.1)
+Copyright &copy; 2021 VCborn.  
+Reamix is released under the [monochrome License](https://www.monochrome.tk/mncr/license).
