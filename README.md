@@ -24,11 +24,12 @@
 A customized Monot browser being produced by [monochrome.](https://www.monochrome.tk/mncr/)  
 A browser that comes standard with VCLinux.
 
-## Changelog
-
-- Tab Support
-  - Not yet supported moving tabs
-- Dark mode fully supported
+## Difference
+The following features have been added to **Reamix only**.
+- i18n
+- Theme switching
+- Bug fixes
+- More convenient UI
 
 ## Screenshots
 
