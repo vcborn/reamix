@@ -4,8 +4,12 @@ function each() {
   // when close button clicked
   document.querySelectorAll('div>span>a:last-child').forEach((i, item) => {
     i.addEventListener('click', () => {
+      let elements = document.querySelectorAll('div>span')
+      const element = i.parentNode
+      elements = [].slice.call(elements)
+      const index = elements.indexOf(element)
       i.parentNode.remove()
-      node.removeTab(getCurrent())
+      node.removeTab(index, getCurrent())
     })
   })
   document.querySelectorAll('div>span').forEach((i, item) => {

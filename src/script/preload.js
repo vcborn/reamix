@@ -87,8 +87,8 @@ contextBridge.exposeInMainWorld('node', {
     //move tab
     ipcRenderer.send('tabMove', index)
   },
-  removeTab: (index) => {
+  removeTab: (index, current) => {
     //remove tab
-    ipcRenderer.send('removeTab', index)
+    ipcRenderer.send('removeTab', index, current)
   },
 })

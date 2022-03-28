@@ -15,13 +15,13 @@
 | :--------- | :--------------------------------------------------------------------- |
 | 名前       | Reamix                                                                 |
 | バージョン | v1.0.0 Beta 6                                                           |
-| 公開日     | 2021 年 11 月 23 日(火)                                                |
+| 公開日     | 2021年11月23日                                                     |
 | ライセンス | [monochrome License.](https://www.monochrome.tk/mncr/license) |
 | 言語       | 日本語、英語                                                            |
 
 ## 概要
 
-[monochrome.](https://www.monochrome.tk/mncr/)が制作中のMonotをカスタマイズしたブラウザ。
+[monochrome.](https://www.monochrome.tk/mncr/)が制作中のMonotをカスタマイズしたブラウザ。  
 VCLinuxに標準搭載。
 
 ## 変更履歴

@@ -15,13 +15,13 @@
 | :--------- | :--------------------------------------------------------------------- |
 | Name       | Reamix                                                                 |
 | Version | v1.0.0 Beta 6                                                           |
-| Release     | 2021 年 11 月 23 日(火)                                                |
+| Release     | 2021/11/23                                                |
 | License | [monochrome License.](https://www.monochrome.tk/mncr/license) |
 | Language       | Japanese, English                                                     |
 
 ## Description
 
-A customized Monot browser being produced by [monochrome.](https://www.monochrome.tk/mncr/)
+A customized Monot browser being produced by [monochrome.](https://www.monochrome.tk/mncr/)  
 A browser that comes standard with VCLinux.
 
 ## Changelog

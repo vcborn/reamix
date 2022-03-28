@@ -11,12 +11,13 @@ function moveBrowser() {
   document.activeElement.blur()
   node.moveBrowser(word, getCurrent())
 }
-document.getElementsByTagName('input')[0].addEventListener('keydown', (e) => {
-  let word = document.getElementsByTagName('input')[0].value
+
+function searchEnter(e) {
+  let word = e.value
   //press enter
-  if (e.key == 'Enter' && word != null) {
+  if (window.event.key === 'Enter' && word != null) {
     //<span#opened>
     document.activeElement.blur()
     node.moveBrowser(word, getCurrent())
   }
-})
+}

@@ -14,7 +14,7 @@
     <a href="javascript:node.reloadBrowser(getCurrent())" title="%reload%"></a>
     <a href="javascript:node.backBrowser(getCurrent())" title="%back%"></a>
     <a href="javascript:node.goBrowser(getCurrent())" title="%forward%"></a>
-    <input id="search" type="text" placeholder="%search%" title="%search%">
+    <input id="search" type="text" placeholder="%search%" title="%search%" onkeydown="searchEnter(this)">
     <a href="javascript:moveBrowser(getCurrent())" title="%move%"></a>
     <a href="javascript:node.winMinimize(getCurrent())" title="%minimize%"></a>
     <a href="javascript:node.maxMin();" id="maxMini" title="%maximize%"></a>

@@ -4,19 +4,18 @@ const {
   BrowserView,
   dialog,
   ipcMain,
-  ipcRenderer,
-  screen,
   Menu,
   nativeTheme,
 } = require('electron')
 const contextMenu = require('electron-context-menu')
 const fs = require('fs')
-const path = require('path')
 let win, setting
-var options, index
+var index
 var bv = []
 let viewY = 66
 index = 0
+
+require('events').EventEmitter.defaultMaxListeners = 50
 
 contextMenu({
   prepend: (defaultActions, parameters, browserWindow) => [
@@ -245,6 +244,9 @@ function newtab() {
       document.documentElement.classList.add("dark");
     `)
   }
+  win.webContents.executeJavaScript(`
+  document.getElementById('search').value='';
+  `)
 }
 
 function nw() {
@@ -314,7 +316,6 @@ ipcMain.on('moveView', (e, link, index) => {
     .executeJavaScript(`document.addEventListener('contextmenu',()=>{
     node.context();
   })`)
-  console.log(index)
   if (link == '') {
     return true
   } else {
@@ -336,8 +337,18 @@ ipcMain.on('moveView', (e, link, index) => {
         bv[index].webContents
           .loadURL(`file://${__dirname}/src/resource/server-notfound.html`)
           .then(() => {
-            bv[index].webContents
-              .executeJavaScript(`document.getElementsByTagName('span')[0].innerText='${link.toLowerCase()}';
+            bv[index].webContents.executeJavaScript(`
+              let page = document.documentElement.innerHTML;
+              if (node.loadLang()[0]) {
+                Object.keys(node.loadLang()[1]).forEach((item) => {
+                  page = page.replace(
+                    new RegExp('%' + item + '%', 'g'),
+                    node.loadLang()[1][item]
+                  )
+                  document.documentElement.innerHTML = page
+                })
+              }
+              document.getElementsByTagName('span')[0].innerText='${link.toLowerCase()}';
           var requiredUrl='${link}';
         `)
           })
@@ -411,37 +422,22 @@ ipcMain.on('newtab', () => {
 ipcMain.on('tabMove', (e, i) => {
   index = i < 0 ? 0 : i
   win.setTopBrowserView(bv[index])
-  try {
-    win.webContents.executeJavaScript(`
+  win.webContents.executeJavaScript(`
      document.getElementById('search').value='${bv[index].webContents
        .getURL()
        .substring(
-         browserview.webContents.getURL().indexOf('/') + 2,
-         browserview.webContents.getURL().length
+         bv[index].webContents.getURL().indexOf('/') + 2,
+         bv[index].webContents.getURL().length
        )}';
      document.getElementsByTagName('title')[0].innerText='${bv[
-       i
+       index
      ].webContents.getTitle()} - Reamix';
      `)
-  } catch (e) {
-    win.webContents.executeJavaScript(`
-    document.getElementById('search').value='';
-    document.getElementsByTagName('title')[0].innerText='Home - Reamix';
-    `)
-  }
 })
-ipcMain.on('tabMove', (e, i) => {
-  win.setTopBrowserView(bv[index])
-  win.webContents.executeJavaScript(`
-      
-      document.getElementsByTagName('title')[0].innerText='${bv[
-        index
-      ].webContents.getTitle()} - Reamix';
-      `)
-})
-ipcMain.on('removeTab', (e, i) => {
+ipcMain.on('removeTab', (e, i, c) => {
   try {
-    console.log(i)
+    console.log('delete', i)
+    console.log('current', c)
     win.removeBrowserView(bv[i])
     bv[i].webContents.destroy()
     bv.splice(i, 1)
