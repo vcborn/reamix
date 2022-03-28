@@ -30,23 +30,38 @@
     "asar": false,
     "win": {
       "icon": "src/image/logo.ico",
-      "target": "nsis",
+      "target": "portable",
       "legalTrademarks": "Copyright 2021 VCborn"
     },
     "nsis": {
+      "artifactName": "${productName}_${version}_setup.${ext}",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "installerIcon": "src/image/logo.ico"
     },
+    "portable": {
+      "artifactName": "${productName}_${version}_portable.${ext}"
+    },
+    "mac": {
+      "icon": "src/image/logo.icns",
+      "target": "dmg"
+    },
     "linux": {
       "icon": "src/image/icon.icns",
-      "target": "deb"
+      "target": "appImage"
     },
     "appImage": {
+      "artifactName": "${productName}_${version}_${arch}.${ext}",
       "category": "Utility",
       "synopsis": "Reamix v1.0.0-beta6.2"
     },
     "deb": {
+      "artifactName": "${productName}_${version}_${arch}.${ext}",
+      "category": "Utility",
+      "synopsis": "Reamix v1.0.0-beta6.2"
+    },
+    "rpm": {
+      "artifactName": "${productName}-${version}.${arch}.${ext}",
       "category": "Utility",
       "synopsis": "Reamix v1.0.0-beta6.2"
     }

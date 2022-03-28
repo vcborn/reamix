@@ -61,7 +61,8 @@ VCLinuxに標準搭載。
 
 ## ダウンロード
 
-[こちら](https://vcborn.com/services/reamix/)からダウンロードできます。
+[こちら](https://vcborn.com/services/reamix/)からダウンロードできます。  
+開発版ビルドは[こちら](https://nightly.link/vcborn/reamix/workflows/build-dev/dev)からダウンロードできます。
 
 ---
 
