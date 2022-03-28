@@ -6,7 +6,10 @@ contextBridge.exposeInMainWorld('node', {
     let obj = JSON.parse(
       fs.readFileSync(`${__dirname}/../config/config.mncfg`, 'utf-8')
     )
-    return obj.theme
+    return [
+      obj.theme,
+      window.matchMedia('(prefers-color-scheme: dark)').matches,
+    ]
   },
   loadLang: () => {
     let obj = JSON.parse(

@@ -5,17 +5,18 @@ document.getElementById('default').addEventListener('click',()=>{
   node.writeBackgroundDefault();
 })*/
 
-if (node.loadTheme()) {
-  if (node.loadTheme() === 'dark') {
-    document.documentElement.classList.add('dark')
-    document
-      .getElementById('theme')
-      .querySelector("option[value='dark']").selected = true
-  } else {
-    document
-      .getElementById('theme')
-      .querySelector("option[value='light']").selected = true
-  }
+if (
+  node.loadTheme()[0] === 'dark' ||
+  (node.loadTheme()[1] && node.loadTheme()[0] === '')
+) {
+  document.documentElement.classList.add('dark')
+  document
+    .getElementById('theme')
+    .querySelector("option[value='dark']").selected = true
+} else {
+  document
+    .getElementById('theme')
+    .querySelector("option[value='light']").selected = true
 }
 
 let page = document.documentElement.innerHTML
