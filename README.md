@@ -3,7 +3,7 @@
 <table>
 <tbody>
   <tr>
-    <td><a href="https://github.com/vcborn/reamix/blob/main/README.md">English</a></td>
+    <td><a href="https://github.com/vcborn/reamix#readme">English</a></td>
     <td><a href="https://github.com/vcborn/reamix/blob/main/README_JP.md">日本語</a></td>
   </tr>
   </tbody>

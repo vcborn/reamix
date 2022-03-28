@@ -3,7 +3,7 @@
 <table>
 <tbody>
   <tr>
-    <td><a href="https://github.com/vcborn/reamix/blob/main/README.md">English</a></td>
+    <td><a href="https://github.com/vcborn/reamix#readme">English</a></td>
     <td><a href="https://github.com/vcborn/reamix/blob/main/README_JP.md">日本語</a></td>
   </tr>
   </tbody>
@@ -17,7 +17,7 @@
 | バージョン | v1.0.0 Beta 6                                                           |
 | 公開日     | 2021 年 11 月 23 日(火)                                                |
 | ライセンス | [monochrome License.](https://www.monochrome.tk/mncr/license) |
-| 言語       | 日本語                                                                 |
+| 言語       | 日本語、英語                                                            |
 
 ## 概要
 
