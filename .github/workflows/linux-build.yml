@@ -1,4 +1,4 @@
-name: Build Reamix Dev for Linux
+name: Build Reamix for Linux
 
 on:
   push:
@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: initialize
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }} 
+          GITHUB_CONTEXT: ${{ toJson(github) }}
         run: sudo apt-get install --no-install-recommends -y rpm libopenjp2-tools
       - uses: actions/setup-node@v2
         with:
