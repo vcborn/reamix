@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer, Menu } = require('electron')
+const { contextBridge, ipcRenderer, Menu, BrowserWindow } = require('electron')
 const fs = require('fs')
 const path = require('path')
 
@@ -19,5 +19,8 @@ contextBridge.exposeInMainWorld('node', {
     let file = fs.readFileSync(`${__dirname}/../config/engines.mncfg`, 'utf-8')
     let obj = JSON.parse(file)
     return obj.values[obj.engine]
+  },
+  openSettings: () => {
+    ipcRenderer.send('openSettings')
   },
 })

@@ -449,6 +449,29 @@ ipcMain.on('removeTab', (e, i) => {
     return true
   }
 })
+ipcMain.on('openSettings', () => {
+  setting = new BrowserWindow({
+    width: 760,
+    height: 480,
+    minWidth: 300,
+    minHeight: 270,
+    icon: `${__dirname}/src/image/logo.ico`,
+    autoHideMenuBar: true,
+    webPreferences: {
+      preload: `${__dirname}/src/setting/preload.js`,
+      scrollBounce: true,
+    },
+  })
+  setting.loadFile(`${__dirname}/src/setting/index.html`)
+  if (
+    JSON.parse(fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8'))
+      .experiments.forceDark == true
+  ) {
+    setting.webContents.executeJavaScript(
+      `document.querySelectorAll('input[type="checkbox"]')[0].checked=true`
+    )
+  }
+})
 
 let obj = JSON.parse(
   fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
