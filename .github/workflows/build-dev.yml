@@ -1,0 +1,73 @@
+name: Build Reamix for Linux
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-2022, macos-11, ubuntu-20.04]
+
+    steps:
+      - name: Set Context
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }} 
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - uses: actions/checkout@v3
+      - name: Initialize
+        if: matrix.os == 'ubuntu-20.04'
+        run: sudo apt-get install --no-install-recommends -y rpm libopenjp2-tools
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build AppImage
+        if: matrix.os == 'ubuntu-20.04'
+        run: npx electron-builder --linux --publish never
+      - name: Build deb
+        if: matrix.os == 'ubuntu-20.04'
+        shell: bash
+        run: | 
+          sed -i -e "0,/appImage/ s/appImage/deb/" package.json
+          npx electron-builder --linux --publish never
+      - name: Build rpm
+        if: matrix.os == 'ubuntu-20.04'
+        shell: bash
+        run: | 
+          sed -i -e "0,/deb/ s/deb/rpm/" package.json
+          npx electron-builder --linux --publish never
+
+      - name: Build for macOS
+        if: matrix.os == 'macos-11'
+        run: npx electron-builder --mac --publish never
+
+      - name: Build windows portable
+        if: matrix.os == 'windows-2022'
+        run: npx electron-builder --win --publish never
+      - name: Build windows setup
+        if: matrix.os == 'windows-2022'
+        shell: pwsh
+        run: | 
+          (gc .\package.json).Replace('"target": "portable"','"target": "nsis"') | Out-File package.json
+          npx electron-builder --win --publish never
+      
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        if: github.ref == 'refs/heads/dev'
+        with:
+          name: reamix-dev
+          path: |
+            dist/*.deb
+            dist/*.AppImage
+            dist/*.rpm
+            dist/*.exe
+            dist/*.dmg
+          if-no-files-found: error
