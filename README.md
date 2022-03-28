@@ -61,7 +61,8 @@ Moving tabs is not supported, but is expected to be supported in the official ve
 
 ## Download
 
-You can download it [here](https://vcborn.com/services/reamix/).
+You can download it [here](https://vcborn.com/services/reamix/).  
+The latest development build can be downloaded [here](https://nightly.link/vcborn/reamix/workflows/build-dev/dev).
 
 ---
 
