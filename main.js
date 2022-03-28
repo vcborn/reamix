@@ -286,13 +286,13 @@ function nw() {
     }
     if (exists(`/mncr/applications.mncfg`)) {
       let obj = JSON.parse(fs.readFileSync(`/mncr/applications.mncfg`, 'utf-8'))
-      obj.monot = ['v.1.0.0 Beta 6', '6']
+      obj.monot = ['v1.0.0-beta.6.2', '6']
       fs.writeFileSync(`/mncr/applications.mncfg`, JSON.stringify(obj))
     } else {
       fs.mkdir('/mncr/', () => {
         return true
       })
-      let obj = { monot: ['v.1.0.0 Beta 6', '6'] }
+      let obj = { monot: ['v1.0.0-beta.6.2', '6'] }
       fs.writeFileSync(`/mncr/applications.mncfg`, JSON.stringify(obj))
     }
     fs.writeFileSync(
@@ -563,8 +563,8 @@ let menu = Menu.buildFromTemplate([
             icon: './src/image/logo.png',
             title: t['about'],
             message: t['about'],
-            detail: `Reamix v1.0.0 Beta 7
-バージョン: 1.0.0 Beta 7
+            detail: `Reamix v1.0.0-beta.6.2
+バージョン: 1.0.0-beta.6.2
 開発者: VCborn
 
 リポジトリ: https://github.com/vcborn/reamix
