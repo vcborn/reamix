@@ -1,6 +1,6 @@
 {
   "name": "reamix",
-  "version": "1.0.0",
+  "version": "1.0.0-beta6.2",
   "description": "Monot-based browser",
   "main": "main.js",
   "scripts": {
@@ -44,11 +44,11 @@
     },
     "appImage": {
       "category": "Utility",
-      "synopsis": "reamix ver1.0b6Build6"
+      "synopsis": "Reamix v1.0.0-beta6.2"
     },
     "deb": {
       "category": "Utility",
-      "synopsis": "reamix ver1.0b6Build6"
+      "synopsis": "Reamix v1.0.0-beta6.2"
     }
   },
   "dependencies": {
