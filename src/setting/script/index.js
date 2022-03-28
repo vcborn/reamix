@@ -18,6 +18,20 @@ if (node.loadTheme()) {
   }
 }
 
+let page = document.documentElement.innerHTML
+if (node.loadLang()[0]) {
+  Object.keys(node.loadLang()[1]).forEach((item) => {
+    page = page.replace(
+      new RegExp('%' + item + '%', 'g'),
+      node.loadLang()[1][item]
+    )
+    document.documentElement.innerHTML = page
+  })
+  document
+    .getElementById('lang')
+    .querySelector(`option[value='${node.loadLang()[0]}']`).selected = true
+}
+
 document.getElementsByTagName('select')[0].addEventListener('change', () => {
   node.changeLang(document.getElementsByTagName('select')[0].value)
 })

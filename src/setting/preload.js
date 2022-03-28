@@ -8,6 +8,15 @@ contextBridge.exposeInMainWorld('node', {
     )
     return obj.theme
   },
+  loadLang: () => {
+    let obj = JSON.parse(
+      fs.readFileSync(`${__dirname}/../config/config.mncfg`, 'utf-8')
+    )
+    let langJson = JSON.parse(
+      fs.readFileSync(`${__dirname}/../i18n/${obj.lang}.json`, 'utf-8')
+    )
+    return [obj.lang, langJson]
+  },
   changeSearchEngine: (engine) => {
     let text = fs.readFileSync(`${__dirname}/../config/engines.mncfg`, 'utf-8')
     let obj = JSON.parse(text)

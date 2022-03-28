@@ -1,14 +1,23 @@
-const {contextBridge, ipcRenderer, Menu} = require('electron');
-const fs = require('fs');
-const path = require('path');
+const { contextBridge, ipcRenderer, Menu } = require('electron')
+const fs = require('fs')
+const path = require('path')
 
-contextBridge.exposeInMainWorld('node',{
-  context: ()=>{
-    ipcRenderer.send('context');
+contextBridge.exposeInMainWorld('node', {
+  context: () => {
+    ipcRenderer.send('context')
   },
-  getEngineURL: ()=>{
-    let file=fs.readFileSync(`${__dirname}/../config/engines.mncfg`,'utf-8');
-    let obj=JSON.parse(file);
-    return obj.values[obj.engine];
-  }
+  loadLang: () => {
+    let obj = JSON.parse(
+      fs.readFileSync(`${__dirname}/../config/config.mncfg`, 'utf-8')
+    )
+    let langJson = JSON.parse(
+      fs.readFileSync(`${__dirname}/../i18n/${obj.lang}.json`, 'utf-8')
+    )
+    return [obj.lang, langJson]
+  },
+  getEngineURL: () => {
+    let file = fs.readFileSync(`${__dirname}/../config/engines.mncfg`, 'utf-8')
+    let obj = JSON.parse(file)
+    return obj.values[obj.engine]
+  },
 })

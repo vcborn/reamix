@@ -1,80 +1,94 @@
-const {contextBridge, ipcRenderer} = require('electron');
-const fs = require('fs');
+const { contextBridge, ipcRenderer } = require('electron')
+const fs = require('fs')
 
-contextBridge.exposeInMainWorld('node',{
-  winClose: ()=>{
+contextBridge.exposeInMainWorld('node', {
+  loadLang: () => {
+    let obj = JSON.parse(
+      fs.readFileSync(`${__dirname}/../config/config.mncfg`, 'utf-8')
+    )
+    let langJson = JSON.parse(
+      fs.readFileSync(`${__dirname}/../i18n/${obj.lang}.json`, 'utf-8')
+    )
+    return [obj.lang, langJson]
+  },
+  winClose: () => {
     //Close window
-    ipcRenderer.send('windowClose');
+    ipcRenderer.send('windowClose')
   },
-  winMinimize: ()=>{
+  winMinimize: () => {
     //Minimize Window
-    ipcRenderer.send('windowMinimize');
+    ipcRenderer.send('windowMinimize')
   },
-  winMaximize: ()=>{
+  winMaximize: () => {
     //Maximize Window
-    ipcRenderer.send('windowMaximize');
+    ipcRenderer.send('windowMaximize')
   },
-  winUnmaximize: ()=>{
+  winUnmaximize: () => {
     //Unmaximize Window
-    ipcRenderer.send('windowUnmaximize');
+    ipcRenderer.send('windowUnmaximize')
   },
-  maxMin: ()=>{
+  maxMin: () => {
     //Maximize or Minimize Window
-    ipcRenderer.send('windowMaxMin');
+    ipcRenderer.send('windowMaxMin')
   },
-  moveBrowser: (word,index)=>{
+  moveBrowser: (word, index) => {
     //Page navigation
-    let file=fs.readFileSync(`${__dirname}/../config/engines.mncfg`,'utf-8');
-    let obj=JSON.parse(file);
-    let engine=obj.values[obj.engine];
-    if(word.toLowerCase().substring(0, 6)=='http:/' || word.toLowerCase().substring(0, 7)=='https:/'){
+    let file = fs.readFileSync(`${__dirname}/../config/engines.mncfg`, 'utf-8')
+    let obj = JSON.parse(file)
+    let engine = obj.values[obj.engine]
+    if (
+      word.toLowerCase().substring(0, 6) == 'http:/' ||
+      word.toLowerCase().substring(0, 7) == 'https:/'
+    ) {
       // for like "https://example.com" and "http://example.com"
-      if(word.indexOf(' ')==-1){
+      if (word.indexOf(' ') == -1) {
         //if it's url
-        ipcRenderer.send('moveView',word,index);
-      }else{
+        ipcRenderer.send('moveView', word, index)
+      } else {
         //if it's not url
-        ipcRenderer.send('moveView',engine+word,index);
+        ipcRenderer.send('moveView', engine + word, index)
       }
-    }else if(word.indexOf(' ')==-1&&word.indexOf('.')!=-1){
+    } else if (word.indexOf(' ') == -1 && word.indexOf('.') != -1) {
       //for like "example.com" and "example.com/example/"
-      ipcRenderer.send('moveView',`http://${word}`,index);
-    }else{
+      ipcRenderer.send('moveView', `http://${word}`, index)
+    } else {
       //LAST
-      ipcRenderer.send('moveView',engine+word,index);
+      ipcRenderer.send('moveView', engine + word, index)
     }
   },
-  moveToNewTab: (index)=>{
+  moveToNewTab: (index) => {
     //move to new tab
-    ipcRenderer.send('moveToNewTab',index)
+    ipcRenderer.send('moveToNewTab', index)
   },
-  reloadBrowser: (index)=>{
+  reloadBrowser: (index) => {
     //reload current BrowserView
-    ipcRenderer.send('reloadBrowser',index);
+    ipcRenderer.send('reloadBrowser', index)
   },
-  backBrowser: (index)=>{
+  backBrowser: (index) => {
     //back current BrowserView
-    ipcRenderer.send('browserBack',index);
+    ipcRenderer.send('browserBack', index)
   },
-  goBrowser: (index)=>{
+  goBrowser: (index) => {
     //go current BrowserView
-    ipcRenderer.send('browserGoes',index);
+    ipcRenderer.send('browserGoes', index)
   },
-  dirName: ()=>{return __dirname},
-  optionsWindow: ()=>{
+  dirName: () => {
+    return __dirname
+  },
+  optionsWindow: () => {
     //open options (settings) window
-    ipcRenderer.send('options');
+    ipcRenderer.send('options')
   },
-  newtab: ()=>{
+  newtab: () => {
     //create new tab
-    ipcRenderer.send('newtab');
+    ipcRenderer.send('newtab')
   },
-  tabMove: (index)=>{
+  tabMove: (index) => {
     //move tab
-    ipcRenderer.send('tabMove',index);
+    ipcRenderer.send('tabMove', index)
   },
-  removeTab: (index)=>{
+  removeTab: (index) => {
     //remove tab
-    ipcRenderer.send('removeTab',index)
-  }
+    ipcRenderer.send('removeTab', index)
+  },
 })

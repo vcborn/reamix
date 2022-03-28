@@ -40,6 +40,7 @@ contextMenu({
           height: 480,
           minWidth: 300,
           minHeight: 270,
+          autoHideMenuBar: true,
           webPreferences: {
             preload: `${__dirname}/src/setting/preload.js`,
             scrollBounce: true,
@@ -217,6 +218,18 @@ function newtab() {
   })
   browserview.setAutoResize({ width: true, height: true })
   browserview.webContents.loadURL(`file://${__dirname}/src/resource/index.html`)
+  browserview.webContents.executeJavaScript(`
+  let page = document.documentElement.innerHTML;
+  if (node.loadLang()[0]) {
+    Object.keys(node.loadLang()[1]).forEach((item) => {
+      page = page.replace(
+        new RegExp('%' + item + '%', 'g'),
+        node.loadLang()[1][item]
+      )
+      document.documentElement.innerHTML = page
+    })
+  }
+  `)
   if (
     (nativeTheme.shouldUseDarkColors &&
       JSON.parse(
@@ -437,9 +450,16 @@ ipcMain.on('removeTab', (e, i) => {
   }
 })
 
+let obj = JSON.parse(
+  fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
+)
+let t = JSON.parse(
+  fs.readFileSync(`${__dirname}/src/i18n/${obj.lang}.json`, 'utf-8')
+)
+
 let menu = Menu.buildFromTemplate([
   {
-    label: '表示',
+    label: t['view'],
     submenu: [
       {
         type: 'separator',
@@ -447,47 +467,47 @@ let menu = Menu.buildFromTemplate([
       {
         role: 'togglefullscreen',
         accelerator: 'F11',
-        label: '全画面表示',
+        label: t['fullscreen'],
       },
       {
         role: 'hide',
-        label: '隠す',
+        label: t['hide'],
       },
       {
         role: 'hideothers',
-        label: '他を隠す',
+        label: t['hide_others'],
       },
       {
         role: 'reload',
-        label: 'navの再表示',
+        label: t['restate'],
         accelerator: 'CmdOrCtrl+Alt+R',
       },
       {
-        label: '終了',
+        label: t['quit'],
         role: 'quit',
         accelerator: 'CmdOrCtrl+Q',
       },
     ],
   },
   {
-    label: '移動',
+    label: t['move'],
     submenu: [
       {
-        label: '再読み込み',
+        label: t['reload'],
         accelerator: 'CmdOrCtrl+R',
         click: () => {
           bv[index].webContents.reload()
         },
       },
       {
-        label: '戻る',
+        label: t['back'],
         accelerator: 'CmdOrCtrl+Alt+Z',
         click: () => {
           bv[index].webContents.goBack()
         },
       },
       {
-        label: '進む',
+        label: t['forward'],
         accelerator: 'CmdOrCtrl+Alt+X',
         click: () => {
           bv[index].webContents.goForward()
@@ -496,37 +516,36 @@ let menu = Menu.buildFromTemplate([
     ],
   },
   {
-    label: '編集',
+    label: t['edit'],
     submenu: [
       {
-        label: 'カット',
+        label: t['cut'],
         role: 'cut',
       },
       {
-        label: 'コピー',
+        label: t['copy'],
         role: 'copy',
       },
       {
-        label: 'ペースト',
+        label: t['paste'],
         role: 'paste',
       },
     ],
   },
   {
-    label: 'ウィンドウ',
+    label: t['window'],
     submenu: [
       {
-        label: 'Reamixについて',
+        label: t['about'],
         accelerator: 'CmdOrCtrl+Alt+A',
         click: () => {
           dialog.showMessageBox(null, {
             type: 'info',
             icon: './src/image/logo.png',
-            title: 'Reamixについて',
-            message: 'Reamix 1.0.0 Beta 6について',
-            detail: `Reamix v.1.0.0 Beta 6 (Build 6)
-バージョン: 1.0.0 Beta 6
-ビルド番号: 6
+            title: t['about'],
+            message: t['about'],
+            detail: `Reamix v1.0.0 Beta 7
+バージョン: 1.0.0 Beta 7
 開発者: VCborn
 
 リポジトリ: https://github.com/vcborn/reamix
@@ -537,7 +556,7 @@ Copyright 2021 vcborn.`,
         },
       },
       {
-        label: '設定',
+        label: t['settings'],
         accelerator: 'CmdOrCtrl+Alt+S',
         click: () => {
           setting = new BrowserWindow({
@@ -546,6 +565,7 @@ Copyright 2021 vcborn.`,
             minWidth: 300,
             minHeight: 270,
             icon: `${__dirname}/src/image/logo.ico`,
+            autoHideMenuBar: true,
             webPreferences: {
               preload: `${__dirname}/src/setting/preload.js`,
               scrollBounce: true,
@@ -566,10 +586,10 @@ Copyright 2021 vcborn.`,
     ],
   },
   {
-    label: '開発',
+    label: t['dev'],
     submenu: [
       {
-        label: '開発者向けツール',
+        label: t['dev_tools'],
         accelerator: 'F12',
         click: () => {
           console.log(index)
@@ -577,7 +597,7 @@ Copyright 2021 vcborn.`,
         },
       },
       {
-        label: 'Reamixの開発者向けツール',
+        label: t['reamix_dev_tools'],
         accelerator: 'Alt+F12',
         click: () => {
           win.webContents.toggleDevTools()

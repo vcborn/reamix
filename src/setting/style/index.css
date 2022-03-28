@@ -97,6 +97,7 @@ input[type='text'] {
 
 input[type='checkbox'] {
   margin: 5px;
+  margin-bottom: 1rem;
 }
 form > * {
   user-select: none;
@@ -125,4 +126,8 @@ label {
   color: #eee;
   background-color: #222;
   padding: 0;
+}
+.dark #wallpaper-select > *:hover {
+  background-color: #fff3;
+  box-shadow: 2px 2px 15px #333;
 }
