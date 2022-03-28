@@ -1,0 +1,50 @@
+name: Build Reamix Dev for Linux
+
+on:
+  push:
+    branches:
+      - dev
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: initialize
+        run: sudo apt-get install --no-install-recommends -y rpm libopenjp2-tools
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install Dependencies
+        run: npm install
+      - name: Build AppImage
+        run: npx electron-builder --linux
+      - name: Build deb
+        run: | 
+          sed -i -e "0,/appImage/ s/appImage/deb/" package.json
+          npx electron-builder --linux
+      - name: Build rpm
+        run: | 
+          sed -i -e "0,/deb/ s/deb/rpm/" package.json
+          npx electron-builder --linux
+      - name: Build windows portable
+        run: npx electron-builder --win
+      - name: Build windows setup
+        run: | 
+          sed -i -e "0,/portable/ s/portable/nsis/" package.json
+          npx electron-builder --win
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        if: github.ref == 'refs/heads/dev'
+        with:
+          name: reamix-dev
+          path: |
+            dist/*.deb
+            dist/*.AppImage
+            dist/*.rpm
+          if-no-files-found: error

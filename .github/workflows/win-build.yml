@@ -1,0 +1,36 @@
+name: Build Reamix for Windows
+
+on:
+  push:
+    branches:
+      - dev
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install Dependencies
+        run: npm install
+      - name: Build windows portable
+        run: npx electron-builder --win
+      - name: Build windows setup
+        run: | 
+          (gc .\package.json).Replace('"target": "portable"','"target": "nsis"') | Out-File package.json
+          npx electron-builder --win
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        if: github.ref == 'refs/heads/dev'
+        with:
+          name: reamix-dev
+          path: |
+            dist/*.exe
+          if-no-files-found: error
