@@ -4,7 +4,7 @@
   "description": "Monot-based browser",
   "main": "main.js",
   "scripts": {
-    "test": "npx electron --trace-warnings .",
+    "test": "npx electron .",
     "build": "npx electron-builder",
     "makeEnv": "src\\environment.cmd"
   },
@@ -67,6 +67,7 @@
     }
   },
   "dependencies": {
+    "electron-chrome-extensions": "^3.9.0",
     "electron-context-menu": "^3.1.2"
   }
 }

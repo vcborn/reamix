@@ -8,6 +8,7 @@ const {
   nativeTheme,
 } = require('electron')
 const contextMenu = require('electron-context-menu')
+const { ElectronChromeExtensions } = require('electron-chrome-extensions')
 const fs = require('fs')
 let win, setting
 var index
@@ -15,7 +16,7 @@ var bv = []
 let viewY = 66
 index = 0
 
-require('events').EventEmitter.defaultMaxListeners = 50
+require('events').EventEmitter.defaultMaxListeners = 5000
 
 contextMenu({
   prepend: (defaultActions, parameters, browserWindow) => [
@@ -250,6 +251,7 @@ function newtab() {
 }
 
 function nw() {
+  const extensions = new ElectronChromeExtensions()
   //create window
   win = new BrowserWindow({
     width: 1000,
@@ -268,6 +270,9 @@ function nw() {
       preload: `${__dirname}/src/script/preload.js`,
     },
   })
+
+  extensions.addTab(win.webContents, win)
+
   win.loadFile(`${__dirname}/src/index.html`)
   //create tab
   newtab()
