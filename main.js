@@ -272,13 +272,19 @@ async function nw() {
     },
   })
 
-  const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
+  if (fs.existsSync(`${__dirname}/src/extensions/`)) {
+    const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
 
-  for (const extension of extensionsDir) {
-    await session.defaultSession.loadExtension(
-      `${__dirname}/src/extensions/${extension}`,
-      { allowFileAccess: true }
-    )
+    for (const extension of extensionsDir) {
+      try {
+        await session.defaultSession.loadExtension(
+          `${__dirname}/src/extensions/${extension}`,
+          { allowFileAccess: true }
+        )
+      } catch (e) {
+        dialog.showErrorBox('Error', `${e}`)
+      }
+    }
   }
 
   win.loadFile(`${__dirname}/src/index.html`)
@@ -669,10 +675,29 @@ Copyright &copy; 2021 VCborn.`,
               fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
             ).experiments.forceDark == true
           ) {
-            setting.webContents.executeJavaScript(
-              `document.querySelectorAll('input[type="checkbox"]')[0].checked=true`
-            )
+            setting.webContents.executeJavaScript(`
+            document.querySelectorAll('input[type="checkbox"]')[0].checked=true
+            `)
           }
+        },
+      },
+      {
+        label: t['extensions'],
+        accelerator: 'CmdOrCtrl+Alt+E',
+        click: () => {
+          manager = new BrowserWindow({
+            width: 760,
+            height: 480,
+            minWidth: 300,
+            minHeight: 270,
+            icon: `${__dirname}/src/image/logo.ico`,
+            autoHideMenuBar: true,
+            webPreferences: {
+              preload: `${__dirname}/src/manager/preload.js`,
+              scrollBounce: true,
+            },
+          })
+          manager.loadFile(`${__dirname}/src/manager/index.html`)
         },
       },
     ],
