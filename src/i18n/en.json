@@ -48,5 +48,10 @@
   "about": "About Reamix",
   "dev": "Dev",
   "dev_tools": "Developer Tools",
-  "reamix_dev_tools": "Reamix Developer Tools"
+  "reamix_dev_tools": "Reamix Developer Tools",
+
+  "developer": "Developer",
+  "version": "Version",
+  "repository": "Repository",
+  "official_site": "Official Web Site"
 }

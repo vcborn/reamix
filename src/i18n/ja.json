@@ -48,5 +48,10 @@
   "about": "Reamixについて",
   "dev": "開発",
   "dev_tools": "開発者向けツール",
-  "reamix_dev_tools": "Reamixの開発者向けツール"
+  "reamix_dev_tools": "Reamixの開発者向けツール",
+
+  "developer": "開発者",
+  "version": "バージョン",
+  "repository": "リポジトリ",
+  "official_site": "公式サイト"
 }

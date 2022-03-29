@@ -16,7 +16,6 @@ var bv = []
 let viewY = 66
 const unzip = require('unzip-crx-3')
 const downloadCRX = require('download-crx')
-const { ElectronChromeExtensions } = require('electron-chrome-extensions')
 index = 0
 
 //require('events').EventEmitter.defaultMaxListeners = 5000
@@ -254,7 +253,6 @@ function newtab() {
 }
 
 async function nw() {
-  const extensions = new ElectronChromeExtensions()
   //create window
   win = new BrowserWindow({
     width: 1000,
@@ -273,8 +271,6 @@ async function nw() {
       preload: `${__dirname}/src/script/preload.js`,
     },
   })
-
-  extensions.addTab(win.webContents, win)
 
   const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
 
@@ -498,15 +494,15 @@ ipcMain.on('tabMove', (e, i) => {
   win.setTopBrowserView(bv[index])
   win.webContents.executeJavaScript(`
     console.log('${bv[index].webContents.getURL()}');
-    if ('${bv[index].webContents.getURL()}'.includes('reamix/src')) {
-      document.getElementById('search').value='';
-    } else {
+    if ('${bv[index].webContents.getURL()}'.includes('https')) {
       document.getElementById('search').value='${bv[index].webContents
         .getURL()
         .substring(
           bv[index].webContents.getURL().indexOf('/') + 2,
           bv[index].webContents.getURL().length
         )}';
+    } else {
+        document.getElementById('search').value='';
     }
      document.getElementsByTagName('title')[0].innerText='${bv[
        index
@@ -641,13 +637,13 @@ let menu = Menu.buildFromTemplate([
             title: t['about'],
             message: t['about'],
             detail: `Reamix v1.0.0-beta.6.2
-バージョン: 1.0.0-beta.6.2
-開発者: VCborn
+${t['version']}: 1.0.0-beta.6.2
+${t['developer']}: VCborn
 
-リポジトリ: https://github.com/vcborn/reamix
-公式サイト: https://vcborn.com/services/reamix
+${t['repository']}: https://github.com/vcborn/reamix
+${t['official_site']}: https://vcborn.com/services/reamix
 
-Copyright 2021 vcborn.`,
+Copyright &copy; 2021 VCborn.`,
           })
         },
       },

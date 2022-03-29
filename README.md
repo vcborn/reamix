@@ -28,6 +28,7 @@ A browser that comes standard with VCLinux.
 The following features have been added to **Reamix only**.
 - i18n
 - Theme switching
+- Support for Chrome extensions
 - Bug fixes
 - More convenient UI
 
