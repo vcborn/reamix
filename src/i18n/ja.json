@@ -53,5 +53,8 @@
   "developer": "開発者",
   "version": "バージョン",
   "repository": "リポジトリ",
-  "official_site": "公式サイト"
+  "official_site": "公式サイト",
+  "extensions": "拡張機能",
+  "success_install": "正常にインストールされました",
+  "success_remove": "正常に削除されました"
 }

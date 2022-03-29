@@ -53,5 +53,8 @@
   "developer": "Developer",
   "version": "Version",
   "repository": "Repository",
-  "official_site": "Official Web Site"
+  "official_site": "Official Web Site",
+  "extensions": "Extensions",
+  "success_install": "Installed successfully",
+  "success_remove": "Deleted successfully"
 }

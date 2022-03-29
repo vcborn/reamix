@@ -433,7 +433,12 @@ ipcMain.on('installExtension', (e, url) => {
           { allowFileAccess: true }
         )
         fs.unlinkSync(`${__dirname}/src/extensions/${id[1]}.crx`)
-        console.log('Install Success')
+        dialog.showMessageBox(null, {
+          type: 'info',
+          icon: './src/image/logo.png',
+          title: t['extensions'],
+          message: t['success_install'],
+        })
       })
     })
 })
@@ -443,7 +448,12 @@ ipcMain.on('removeExtension', (e, url) => {
   const id = pattern.exec(url)
   fs.remove(`${__dirname}/src/extensions/${id[1]}`, (err) => {
     if (err) throw err
-    console.log('Removed Successfully')
+    dialog.showMessageBox(null, {
+      type: 'info',
+      icon: './src/image/logo.png',
+      title: t['extensions'],
+      message: t['success_remove'],
+    })
   })
 })
 ipcMain.on('windowMaxMin', () => {
