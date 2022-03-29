@@ -1,4 +1,4 @@
-const { contextBridge } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron')
 const fs = require('fs-extra')
 
 contextBridge.exposeInMainWorld('node', {
@@ -35,5 +35,11 @@ contextBridge.exposeInMainWorld('node', {
       manifest['name'],
       `${__dirname}/../extensions/${id}/${manifest['icons']['32']}`,
     ]
+  },
+  removeExtension: (id) => {
+    ipcRenderer.send(
+      'removeExtension',
+      `https://chrome.google.com/webstore/detail/example/${id}`
+    )
   },
 })

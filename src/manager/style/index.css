@@ -59,3 +59,17 @@ main > * {
 .dark * {
   color: #eee;
 }
+
+.b,
+.w {
+  width: 20px;
+}
+.b {
+  display: none;
+}
+.dark .w {
+  display: none;
+}
+.dark .b {
+  display: block;
+}

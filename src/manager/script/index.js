@@ -26,3 +26,12 @@ if (node.loadExtension()) {
     document.getElementById('list').appendChild(clone)
   }
 }
+
+function removeExtension(e) {
+  let elements = document.querySelectorAll('#list>#col')
+  const element = e.parentNode
+  elements = [].slice.call(elements)
+  let index = elements.indexOf(element) === -1 ? 0 : elements.indexOf(element)
+  document.querySelectorAll('#list>#col')[index].remove()
+  node.removeExtension(node.loadExtension()[index])
+}
