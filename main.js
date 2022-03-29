@@ -6,17 +6,20 @@ const {
   ipcMain,
   Menu,
   nativeTheme,
+  session,
 } = require('electron')
 const contextMenu = require('electron-context-menu')
-const { ElectronChromeExtensions } = require('electron-chrome-extensions')
-const fs = require('fs')
+const fs = require('fs-extra')
 let win, setting
 var index
 var bv = []
 let viewY = 66
+const unzip = require('unzip-crx-3')
+const downloadCRX = require('download-crx')
+const { ElectronChromeExtensions } = require('electron-chrome-extensions')
 index = 0
 
-require('events').EventEmitter.defaultMaxListeners = 5000
+//require('events').EventEmitter.defaultMaxListeners = 5000
 
 contextMenu({
   prepend: (defaultActions, parameters, browserWindow) => [
@@ -250,7 +253,7 @@ function newtab() {
   `)
 }
 
-function nw() {
+async function nw() {
   const extensions = new ElectronChromeExtensions()
   //create window
   win = new BrowserWindow({
@@ -272,6 +275,15 @@ function nw() {
   })
 
   extensions.addTab(win.webContents, win)
+
+  const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
+
+  for (const extension of extensionsDir) {
+    await session.defaultSession.loadExtension(
+      `${__dirname}/src/extensions/${extension}`,
+      { allowFileAccess: true }
+    )
+  }
 
   win.loadFile(`${__dirname}/src/index.html`)
   //create tab
@@ -324,8 +336,12 @@ ipcMain.on('moveView', (e, link, index) => {
   if (link == '') {
     return true
   } else {
+    const currentUA = win.webContents.getUserAgent()
+    const chromeUA = currentUA
+      .replace(/reamix\/.*?.[0-9]\s/g, '')
+      .replace(/Electron\/.*?.[0-9]\s/g, '')
     bv[index].webContents
-      .loadURL(link)
+      .loadURL(link, { userAgent: chromeUA })
       .then(() => {
         win.webContents.executeJavaScript(
           `document.getElementsByTagName('input')[0].value='${bv[
@@ -337,6 +353,33 @@ ipcMain.on('moveView', (e, link, index) => {
               bv[index].webContents.getURL().length
             )}'`
         )
+        const webstore = new RegExp(
+          /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
+        )
+        if (webstore.test(link)) {
+          const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
+          if (extensionsDir.includes(webstore.exec(link)[1])) {
+            bv[index].webContents.executeJavaScript(`
+            const button = '<style>a[aria-label="Reamix から削除"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix から削除"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix から削除" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix から削除</div></div></div></div>';
+            setTimeout(function(){
+              document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
+            }, 1000);
+            document.addEventListener('click', function(){
+              node.removeExtension(location.href);
+            })
+          `)
+          } else {
+            bv[index].webContents.executeJavaScript(`
+            const button = '<style>a[aria-label="Reamix に追加"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix に追加"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix に追加" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix に追加</div></div></div></div>';
+            setTimeout(function(){
+              document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
+            }, 1000);
+            document.addEventListener('click', function(){
+              node.installExtension(location.href);
+            })
+          `)
+          }
+        }
       })
       .catch(() => {
         bv[index].webContents
@@ -374,6 +417,32 @@ ipcMain.on('windowMinimize', () => {
 })
 ipcMain.on('windowUnmaximize', () => {
   win.unmaximize()
+})
+ipcMain.on('installExtension', (e, url) => {
+  const pattern =
+    /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
+  const id = pattern.exec(url)
+  downloadCRX
+    .download(url, `${__dirname}/src/extensions/`, id[1])
+    .then((filePath) => {
+      unzip(filePath).then(async () => {
+        await session.defaultSession.loadExtension(
+          `${__dirname}/src/extensions/${id[1]}`,
+          { allowFileAccess: true }
+        )
+        fs.unlinkSync(`${__dirname}/src/extensions/${id[1]}.crx`)
+        console.log('Install Success')
+      })
+    })
+})
+ipcMain.on('removeExtension', (e, url) => {
+  const pattern =
+    /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
+  const id = pattern.exec(url)
+  fs.remove(`${__dirname}/src/extensions/${id[1]}`, (err) => {
+    if (err) throw err
+    console.log('Removed Successfully')
+  })
 })
 ipcMain.on('windowMaxMin', () => {
   if (win.isMaximized() == true) {
@@ -428,12 +497,17 @@ ipcMain.on('tabMove', (e, i) => {
   index = i < 0 ? 0 : i
   win.setTopBrowserView(bv[index])
   win.webContents.executeJavaScript(`
-     document.getElementById('search').value='${bv[index].webContents
-       .getURL()
-       .substring(
-         bv[index].webContents.getURL().indexOf('/') + 2,
-         bv[index].webContents.getURL().length
-       )}';
+    console.log('${bv[index].webContents.getURL()}');
+    if ('${bv[index].webContents.getURL()}'.includes('reamix/src')) {
+      document.getElementById('search').value='';
+    } else {
+      document.getElementById('search').value='${bv[index].webContents
+        .getURL()
+        .substring(
+          bv[index].webContents.getURL().indexOf('/') + 2,
+          bv[index].webContents.getURL().length
+        )}';
+    }
      document.getElementsByTagName('title')[0].innerText='${bv[
        index
      ].webContents.getTitle()} - Reamix';
@@ -441,8 +515,6 @@ ipcMain.on('tabMove', (e, i) => {
 })
 ipcMain.on('removeTab', (e, i, c) => {
   try {
-    console.log('delete', i)
-    console.log('current', c)
     win.removeBrowserView(bv[i])
     bv[i].webContents.destroy()
     bv.splice(i, 1)

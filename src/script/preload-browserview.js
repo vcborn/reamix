@@ -22,4 +22,10 @@ contextBridge.exposeInMainWorld('node', {
   openSettings: () => {
     ipcRenderer.send('openSettings')
   },
+  installExtension: (url) => {
+    ipcRenderer.send('installExtension', url)
+  },
+  removeExtension: (url) => {
+    ipcRenderer.send('removeExtension', url)
+  },
 })

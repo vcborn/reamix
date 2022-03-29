@@ -67,7 +67,11 @@
     }
   },
   "dependencies": {
+    "download-crx": "^1.1.0",
     "electron-chrome-extensions": "^3.9.0",
-    "electron-context-menu": "^3.1.2"
+    "electron-context-menu": "^3.1.2",
+    "fs-extra": "^10.0.1",
+    "nodejs-file-downloader": "^4.9.3",
+    "unzip-crx-3": "^0.2.0"
   }
 }
