@@ -64,37 +64,37 @@ jobs:
         if: matrix.os == 'windows-2022'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-windows-setup
+          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-windows-setup
           path: dist/*_setup.exe
       - name: Upload Windows Portable
         if: matrix.os == 'windows-2022'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-windows-portable
+          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-windows-portable
           path: dist/*_portable.exe
 
       - name: Upload dmg
         if: matrix.os == 'macos-11'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-macos-dmg
+          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-macos-dmg
           path: dist/*.dmg
 
       - name: Upload AppImage
         if: matrix.os == 'ubuntu-20.04'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-linux-appimage
+          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-linux-appimage
           path: dist/*.AppImage
       - name: Upload deb
         if: matrix.os == 'ubuntu-20.04'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-linux-deb
+          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-linux-deb
           path: dist/*.deb
       - name: Upload rpm
         if: matrix.os == 'ubuntu-20.04'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-linux-rpm
+          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-linux-rpm
           path: dist/*.rpm
