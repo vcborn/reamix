@@ -21,6 +21,9 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
       - uses: actions/checkout@v3
+      - name: Set outputs
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - name: Initialize
         if: matrix.os == 'ubuntu-20.04'
         run: sudo apt-get install --no-install-recommends -y rpm libopenjp2-tools
@@ -64,37 +67,37 @@ jobs:
         if: matrix.os == 'windows-2022'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-windows-setup
+          name: reamix-dev-${{ steps.vars.outputs.sha_short }}-windows-setup
           path: dist/*_setup.exe
       - name: Upload Windows Portable
         if: matrix.os == 'windows-2022'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-windows-portable
+          name: reamix-dev-${{ steps.vars.outputs.sha_short }}-windows-portable
           path: dist/*_portable.exe
 
       - name: Upload dmg
         if: matrix.os == 'macos-11'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-macos-dmg
+          name: reamix-dev-${{ steps.vars.outputs.sha_short }}-macos-dmg
           path: dist/*.dmg
 
       - name: Upload AppImage
         if: matrix.os == 'ubuntu-20.04'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-linux-appimage
+          name: reamix-dev-${{ steps.vars.outputs.sha_short }}-linux-appimage
           path: dist/*.AppImage
       - name: Upload deb
         if: matrix.os == 'ubuntu-20.04'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-linux-deb
+          name: reamix-dev-${{ steps.vars.outputs.sha_short }}-linux-deb
           path: dist/*.deb
       - name: Upload rpm
         if: matrix.os == 'ubuntu-20.04'
         uses: actions/upload-artifact@v3
         with:
-          name: reamix-dev-${{ env.GIT_HASH_SHORT }}-linux-rpm
+          name: reamix-dev-${{ steps.vars.outputs.sha_short }}-linux-rpm
           path: dist/*.rpm
