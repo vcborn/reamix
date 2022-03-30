@@ -9,3 +9,14 @@
 h1{
   font-size: 60px;
 }
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: url('NotoSansSC-Light.otf') format('opentype');
+}
+*{
+  font-family: 'Noto Sans SC';
+  font-weight: 100;
+}
+h1{
+  font-size: 60px;
+}
