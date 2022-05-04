@@ -39,15 +39,15 @@ jobs:
 
       - name: Build for Linux
         if: matrix.os == 'ubuntu-20.04'
-        run: npx electron-builder --linux --publish never
+        run: npm run build
 
       - name: Build for macOS
         if: matrix.os == 'macos-11'
-        run: npx electron-builder --mac --publish never
+        run: npm run build
 
       - name: Build for Windows
         if: matrix.os == 'windows-2022'
-        run: npx electron-builder --win --publish never
+        run: npm run build
       
       - name: Upload Windows Installer
         if: matrix.os == 'windows-2022'
