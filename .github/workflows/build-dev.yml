@@ -33,9 +33,9 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: set package version
-        id: package-version
-        run: node -p -e '`::set-output name=version::${require("./package.json").version}`'
+      - name: Extract version
+        id: extract_version
+        uses: Saionaro/extract-package-version@v1.0.6
 
       - name: Build for Linux
         if: matrix.os == 'ubuntu-20.04'
@@ -54,36 +54,36 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: reamix-dev-${{ steps.vars.outputs.sha_short }}-windows-setup
-          path: release/${{ steps.package-version.outputs.version}}/*_setup.exe
+          path: release/${{ steps.extract_version.outputs.version }}/*_setup.exe
       - name: Upload Windows Portable
         if: matrix.os == 'windows-2022'
         uses: actions/upload-artifact@v3
         with:
           name: reamix-dev-${{ steps.vars.outputs.sha_short }}-windows-portable
-          path: release/${{ steps.package-version.outputs.version}}/*_portable.exe
+          path: release/${{ steps.extract_version.outputs.version }}/*_portable.exe
 
       - name: Upload dmg
         if: matrix.os == 'macos-11'
         uses: actions/upload-artifact@v3
         with:
           name: reamix-dev-${{ steps.vars.outputs.sha_short }}-macos-dmg
-          path: release/${{ steps.package-version.outputs.version}}/*.dmg
+          path: release/${{ steps.extract_version.outputs.version }}/*.dmg
 
       - name: Upload AppImage
         if: matrix.os == 'ubuntu-20.04'
         uses: actions/upload-artifact@v3
         with:
           name: reamix-dev-${{ steps.vars.outputs.sha_short }}-linux-appimage
-          path: release/${{ steps.package-version.outputs.version}}/*.AppImage
+          path: release/${{ steps.extract_version.outputs.version }}/*.AppImage
       - name: Upload deb
         if: matrix.os == 'ubuntu-20.04'
         uses: actions/upload-artifact@v3
         with:
           name: reamix-dev-${{ steps.vars.outputs.sha_short }}-linux-deb
-          path: release/${{ steps.package-version.outputs.version}}/*.deb
+          path: release/${{ steps.extract_version.outputs.version }}/*.deb
       - name: Upload rpm
         if: matrix.os == 'ubuntu-20.04'
         uses: actions/upload-artifact@v3
         with:
           name: reamix-dev-${{ steps.vars.outputs.sha_short }}-linux-rpm
-          path: release/${{ steps.package-version.outputs.version}}/*.rpm
+          path: release/${{ steps.extract_version.outputs.version }}/*.rpm
