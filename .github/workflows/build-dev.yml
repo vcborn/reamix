@@ -37,16 +37,7 @@ jobs:
         id: extract_version
         uses: Saionaro/extract-package-version@v1.0.6
 
-      - name: Build for Linux
-        if: matrix.os == 'ubuntu-20.04'
-        run: npm run build
-
-      - name: Build for macOS
-        if: matrix.os == 'macos-11'
-        run: npm run build
-
-      - name: Build for Windows
-        if: matrix.os == 'windows-2022'
+      - name: Build
         run: npm run build
       
       - name: Upload Windows Installer
