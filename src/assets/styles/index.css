@@ -1,0 +1,178 @@
+* {
+  font-family: 'Noto Sans JP', 'Noto Sans SC', sans-serif;
+  position: relative;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  z-index: 100;
+}
+html,
+body,
+#root,
+main {
+  height: 100%;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+script,
+style {
+  display: none !important;
+  width: 0;
+  height: 0;
+}
+a {
+  border-radius: 0.5rem;
+  transition-duration: 200ms;
+}
+nav a {
+  padding: 1px 3px;
+  padding-top: 4px;
+}
+a:hover {
+  background-color: #bfbfbf;
+}
+body {
+  background-color: #efefef;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+nav {
+  margin-top: 13px;
+  width: 42px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+main > div {
+  width: 100%;
+}
+main > div > header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  -webkit-app-region: drag;
+}
+.group {
+  display: flex;
+  align-items: center;
+}
+.group > a {
+  height: 20px;
+  padding: 0.25rem;
+}
+.tabs {
+  display: flex;
+  align-items: center;
+}
+.action a {
+  padding: 0.25rem 0.5rem;
+}
+main > div > header > *,
+main > div > .bar > * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-app-region: none;
+}
+main > div header .action {
+  margin-top: 5px;
+  margin-right: 5px;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: end;
+}
+.tabs a {
+  padding: 0 0.25rem;
+}
+.tab {
+  display: flex;
+  position: relative;
+  align-items: center;
+  background-color: #ccc;
+  border-bottom: 2px solid #aaa;
+  padding: 0.25rem 4rem;
+  margin-right: 0.25rem;
+  transition-duration: 200ms;
+}
+.dark .tab {
+  background-color: #222;
+  border-bottom: 2px solid #555;
+  color: #fff;
+}
+.dark .tab#opened {
+  background-color: #333;
+}
+.tab#opened {
+  background-color: #fff;
+  border-bottom: 2px solid #1664c9;
+}
+.tab .close {
+  position: absolute;
+  right: 7px;
+  top: 5px;
+}
+.bar {
+  margin: 8px 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+.bar a {
+  padding: 0.125rem;
+  height: 20px;
+}
+.bar input {
+  border-radius: 1rem;
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+}
+
+.dark body {
+  background-color: #222;
+  border-bottom: 1px solid #333;
+}
+.dark body input {
+  background-color: #fff1;
+  color: #fff;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+.icon.small {
+  width: 15px;
+  height: 15px;
+}
+.dark .icon {
+  filter: invert(1);
+}
+#extensions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+#extensions a {
+  display: flex;
+  align-items: center;
+}
+#extensions a #exicon {
+  width: 22px;
+  padding: 0.5rem 0;
+}

@@ -4,3 +4,4 @@ package-lock.json
 src/extensions/*
 !.gitkeep
 *.code-workspace
+release/2*

@@ -4,32 +4,62 @@
 <head>
   <meta charset="utf-8">
   <title>Reamix</title>
-  <link rel="stylesheet" href="style/navigation.css">
-  <link rel="stylesheet" href="resource/style/font.css">
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/index.css">
 </head>
 
 <body>
-  <nav>
-    <a href="javascript:node.moveToNewTab(getCurrent())" title="%home%"></a>
-    <a href="javascript:node.reloadBrowser(getCurrent())" title="%reload%"></a>
-    <a href="javascript:node.backBrowser(getCurrent())" title="%back%"></a>
-    <a href="javascript:node.goBrowser(getCurrent())" title="%forward%"></a>
-    <input id="search" type="text" placeholder="%search%" title="%search%" onkeydown="searchEnter(this)">
-    <a href="javascript:moveBrowser(getCurrent())" title="%move%"></a>
-    <a href="javascript:node.winMinimize(getCurrent())" title="%minimize%"></a>
-    <a href="javascript:node.maxMin();" id="maxMini" title="%maximize%"></a>
-    <a href="javascript:node.winClose(getCurrent())" title="%close%"></a>
-  </nav>
-  <tab-el>
-    <div id="tab">
-      <span id="opened">
-        <a href="javascript:void(0)">Home</a>
-        <a href="javascript:void(0)"></a>
-      </span>
+  <main>
+    <nav>
+      <a href="javascript:node.moveToNewTab(getCurrent())" title="%home%"><img src="assets/icons/home.svg"
+          class="icon" /></a>
+      <a href="#" title="%bookmarks%"><img src="assets/icons/star.svg" class="icon" /></a>
+      <a href="#" title="%downloads%"><img src="assets/icons/download.svg" class="icon" /></a>
+      <a href="#" title="%history%"><img src="assets/icons/clock.svg" class="icon" /></a>
+      <a href="javascript:node.openSettings()" title="%settings%"><img src="assets/icons/gear.svg" class="icon" /></a>
+      <a href="javascript:node.openExtensions()" title="%extensions%"><img src="assets/icons/extension.svg"
+          class="icon" /></a>
+    </nav>
+    <div>
+      <header>
+        <div class="group">
+          <div class="tabs" id="tabs">
+            <span id="opened" class="tab">
+              <p>Home</p>
+              <a href="#" class="close"><img src="assets/icons/x.svg" class="icon small" /></a>
+            </span>
+          </div>
+          <a href="javascript:newtab('Home')"><img src="assets/icons/plus.svg" class="icon" /></a>
+        </div>
+        <div class="action">
+          <a href="javascript:node.winMinimize(getCurrent())" title="%minimize%"><img src="assets/icons/minimize.svg"
+              class="icon small" /></a>
+          <a href="javascript:node.maxMin();" id="maxMini" title="%maximize%"><img src="assets/icons/maximize.svg"
+              class="icon small" /></a>
+          <a href="javascript:node.winClose(getCurrent())" title="%close%"><img src="assets/icons/x.svg"
+              class="icon small" /></a>
+        </div>
+      </header>
+      <div class="bar">
+        <a href="javascript:node.backBrowser(getCurrent())" title="%back%"><img src="assets/icons/left.svg"
+            class="icon" /></a>
+        <a href="javascript:node.goBrowser(getCurrent())" title="%forward%"><img src="assets/icons/right.svg"
+            class="icon" /></a>
+        <a href="javascript:node.reloadBrowser(getCurrent())" title="%reload%"><img src="assets/icons/reload.svg"
+            class="icon" /></a>
+        <input id="search" type="text" placeholder="%search%" title="%search%" onkeydown="searchEnter(this)">
+        <a href="#" title="%bookmarks%"><img src="assets/icons/star.svg" class="icon" /></a>
+        <a href="javascript:moveBrowser(getCurrent())" title="%move%"><img src="assets/icons/right.svg"
+            class="icon" /></a>
+        <div id="extensions">
+          <template id="extension">
+            <a href="#"><img id="exicon" src="#" /></a>
+          </template>
+        </div>
+      </div>
+      <div class="loading"></div>
     </div>
-    <a href="javascript:newtab('Home')"></a>
-  </tab-el>
-  <yomikomi-bar></yomikomi-bar>
+  </main>
   <script src="script/moveBrowser.js"></script>
   <script src="script/event.js"></script>
 </body>

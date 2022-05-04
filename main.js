@@ -1,3 +1,5 @@
+'use strict'
+
 const {
   app,
   BrowserWindow,
@@ -10,60 +12,61 @@ const {
 } = require('electron')
 const contextMenu = require('electron-context-menu')
 const fs = require('fs-extra')
-let win, setting
-var index
-var bv = []
-let viewY = 66
+let win
+let index
+let bv = []
 const unzip = require('unzip-crx-3')
 const downloadCRX = require('download-crx')
+const { ElectronBlocker } = require('@cliqz/adblocker-electron')
+const fetch = require('cross-fetch')
+const Store = require('electron-store')
+const store = new Store()
 index = 0
 
+const lang = store.get('lang') ? store.get('lang') : 'ja'
+let t = JSON.parse(
+  fs.readFileSync(`${__dirname}/src/assets/i18n/${lang}.json`, 'utf-8')
+)
 //require('events').EventEmitter.defaultMaxListeners = 5000
 
 contextMenu({
   prepend: (defaultActions, parameters, browserWindow) => [
     {
-      label: '戻る',
+      label: t['back'],
       click: () => {
         bv[index].webContents.goBack()
       },
     },
     {
-      label: '進む',
+      label: t['forward'],
       click: () => {
         bv[index].webContents.goForward()
-      },
-    },
-    {
-      label: '設定',
-      click: () => {
-        setting = new BrowserWindow({
-          width: 760,
-          height: 480,
-          minWidth: 300,
-          minHeight: 270,
-          autoHideMenuBar: true,
-          webPreferences: {
-            preload: `${__dirname}/src/setting/preload.js`,
-            scrollBounce: true,
-          },
-        })
-        setting.loadFile(`${__dirname}/src/setting/index.html`)
       },
     },
   ],
 })
 
-//creating new tab function
 function newtab() {
-  let winSize = win.getSize()
-  //create new tab
   let browserview = new BrowserView({
     webPreferences: {
       scrollBounce: true,
       preload: `${__dirname}/src/script/preload-browserview.js`,
     },
   })
+  if (store.get('adblocker') == null) {
+    store.set('adblocker', true)
+  }
+  if (store.get('history') == null) {
+    store.set('history', [])
+  }
+  if (store.get('bookmarks') == null) {
+    store.set('bookmarks', [])
+  }
+  if (store.get('adblocker')) {
+    ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+      blocker.enableBlockingInSession(browserview.webContents.session)
+    })
+  }
   browserview.webContents
     .executeJavaScript(`document.addEventListener('contextmenu',()=>{
     node.context();
@@ -75,41 +78,13 @@ function newtab() {
     })`)
   })
 
-  //window's behavior
   win.on('closed', () => {
     win = null
-  })
-  win.on('maximize', () => {
-    winSize = win.getContentSize()
-    browserview.setBounds({
-      x: 0,
-      y: viewY,
-      width: winSize[0],
-      height: winSize[1] - viewY + 3,
-    })
-  })
-  win.on('unmaximize', () => {
-    winSize = win.getContentSize()
-    browserview.setBounds({
-      x: 0,
-      y: viewY,
-      width: winSize[0],
-      height: winSize[1] - viewY,
-    })
-  })
-  win.on('enter-full-screen', () => {
-    winSize = win.getContentSize()
-    browserview.setBounds({
-      x: 0,
-      y: viewY,
-      width: winSize[0],
-      height: winSize[1] - viewY + 2,
-    })
   })
 
   browserview.webContents.on('did-start-loading', () => {
     win.webContents.executeJavaScript(
-      "document.getElementsByTagName('yomikomi-bar')[0].setAttribute('id','loading')"
+      "document.getElementsByClassName('loading')[0].setAttribute('id','loading')"
     )
     browserview.webContents
       .executeJavaScript(`document.addEventListener('contextmenu',()=>{
@@ -118,7 +93,7 @@ function newtab() {
   })
   browserview.webContents.on('did-finish-load', () => {
     win.webContents.executeJavaScript(
-      `document.getElementsByTagName('yomikomi-bar')[0].setAttribute('id','loaded')`
+      `document.getElementsByClassName('loading')[0].setAttribute('id','loaded')`
     )
     if (
       browserview.webContents
@@ -140,15 +115,14 @@ function newtab() {
     }
     win.webContents.executeJavaScript(
       `document.getElementsByTagName('title')[0].innerText='${browserview.webContents.getTitle()} - Reamix';
-      document.getElementById('opened').getElementsByTagName('a')[0].innerText='${browserview.webContents.getTitle()}';`
+      document.getElementById('opened').getElementsByTagName('p')[0].innerText='${browserview.webContents.getTitle()}';`
     )
   })
   browserview.webContents.on('did-stop-loading', () => {
     win.webContents.executeJavaScript(
-      "document.getElementsByTagName('yomikomi-bar')[0].removeAttribute('id')"
+      "document.getElementsByClassName('loading')[0].removeAttribute('id')"
     )
 
-    //ifの条件が糞長いのが気になる。これはただただアドレスバーにURL出力してるだけ。
     if (
       browserview.webContents
         .getURL()
@@ -169,11 +143,7 @@ function newtab() {
     }
 
     //強制ダークモード(Force-Dark)
-    if (
-      JSON.parse(
-        fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-      ).experiments.forceDark == true
-    ) {
+    if (store.get('experimental.forcedark')) {
       browserview.webContents.insertCSS(`
         *{
           background-color: #202020!important;
@@ -186,18 +156,12 @@ function newtab() {
         }`)
     }
     //フォント変更
-    if (
-      JSON.parse(
-        fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-      ).experiments.fontChange == true
-    ) {
+    if (store.get('experimental.changedfont')) {
       browserview.webContents.insertCSS(`
         body,body>*, *{
-          font-family: ${
-            JSON.parse(
-              fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-            ).experiments.changedfont
-          },'Noto Sans JP'!important;
+          font-family: ${store.get(
+            'experimental.changedfont'
+          )},'Noto Sans JP'!important;
         }`)
     }
   })
@@ -206,20 +170,16 @@ function newtab() {
   browserview.webContents.on('page-title-updated', (e, t) => {
     win.webContents.executeJavaScript(
       `document.getElementsByTagName('title')[0].innerText='${t} - Reamix';
-      document.getElementsByTagName('span')[getCurrent()].getElementsByTagName('a')[0].innerText='${t}';`
+      document.querySelector('#opened>p').innerText='${t}';`
     )
   })
   index = bv.length
   bv.push(browserview)
   win.addBrowserView(browserview)
-  browserview.setBounds({
-    x: 0,
-    y: viewY,
-    width: winSize[0],
-    height: winSize[1] - viewY,
-  })
+  browserview.setBounds({ x: 40, y: 80, width: 960, height: 620 })
   browserview.setAutoResize({ width: true, height: true })
-  browserview.webContents.loadURL(`file://${__dirname}/src/resource/index.html`)
+  browserview.setBackgroundColor('#ffffffff')
+  browserview.webContents.loadURL(`${__dirname}/src/pages/home.html`)
   browserview.webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
   if (node.loadLang()[0]) {
@@ -233,12 +193,8 @@ function newtab() {
   }
   `)
   if (
-    (nativeTheme.shouldUseDarkColors &&
-      JSON.parse(
-        fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-      ).theme === '') ||
-    JSON.parse(fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8'))
-      .theme === 'dark'
+    (nativeTheme.shouldUseDarkColors && store.get('theme') === '') ||
+    store.get('theme') === 'dark'
   ) {
     win.webContents.executeJavaScript(`
       document.documentElement.classList.add("dark");
@@ -253,7 +209,6 @@ function newtab() {
 }
 
 async function nw() {
-  //create window
   win = new BrowserWindow({
     width: 1000,
     height: 700,
@@ -272,14 +227,17 @@ async function nw() {
     },
   })
 
+  if (!app.isPackaged) {
+    win.webContents.openDevTools()
+  }
+
   if (fs.existsSync(`${__dirname}/src/extensions/`)) {
     const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
 
     for (const extension of extensionsDir) {
       try {
         await session.defaultSession.loadExtension(
-          `${__dirname}/src/extensions/${extension}`,
-          { allowFileAccess: true }
+          `${__dirname}/src/extensions/${extension}`
         )
       } catch (e) {
         dialog.showErrorBox('Error', `${e}`)
@@ -288,36 +246,9 @@ async function nw() {
   }
 
   win.loadFile(`${__dirname}/src/index.html`)
-  //create tab
   newtab()
-  let configObj = JSON.parse(
-    fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-  )
-  if (configObj.startup == true) {
-    configObj.startup = false
-    function exists(path) {
-      try {
-        fs.readFileSync(path, 'utf-8')
-        return true
-      } catch (e) {
-        return false
-      }
-    }
-    if (exists(`/mncr/applications.mncfg`)) {
-      let obj = JSON.parse(fs.readFileSync(`/mncr/applications.mncfg`, 'utf-8'))
-      obj.monot = ['v1.0.0-beta.6.2', '6']
-      fs.writeFileSync(`/mncr/applications.mncfg`, JSON.stringify(obj))
-    } else {
-      fs.mkdir('/mncr/', () => {
-        return true
-      })
-      let obj = { monot: ['v1.0.0-beta.6.2', '6'] }
-      fs.writeFileSync(`/mncr/applications.mncfg`, JSON.stringify(obj))
-    }
-    fs.writeFileSync(
-      `${__dirname}/src/config/config.mncfg`,
-      JSON.stringify(configObj)
-    )
+  if (store.get('startup') == true) {
+    store.set('startup', false)
   }
 }
 
@@ -331,17 +262,25 @@ app.on('activate', () => {
 
 //ipc channels
 ipcMain.on('moveView', (e, link, index) => {
+  let history = store.get('history')
   bv[index].webContents
     .executeJavaScript(`document.addEventListener('contextmenu',()=>{
     node.context();
   })`)
-  if (link == '') {
+  if (link === '') {
     return true
+  } else if (link === 'reamix://settings') {
+    openPage('settings')
+  } else if (link === 'reamix://about') {
+    openPage('about')
+  } else if (link === 'reamix://extensions') {
+    openPage('extensions')
   } else {
     const currentUA = win.webContents.getUserAgent()
     const chromeUA = currentUA
       .replace(/reamix\/.*?.[0-9]\s/g, '')
       .replace(/Electron\/.*?.[0-9]\s/g, '')
+    bv[index].webContents.forcefullyCrashRenderer()
     bv[index].webContents
       .loadURL(link, { userAgent: chromeUA })
       .then(() => {
@@ -385,7 +324,7 @@ ipcMain.on('moveView', (e, link, index) => {
       })
       .catch(() => {
         bv[index].webContents
-          .loadURL(`file://${__dirname}/src/resource/server-notfound.html`)
+          .loadURL(`file://${__dirname}/src/pages/notfound.html`)
           .then(() => {
             bv[index].webContents.executeJavaScript(`
               let page = document.documentElement.innerHTML;
@@ -401,11 +340,21 @@ ipcMain.on('moveView', (e, link, index) => {
               document.getElementsByTagName('span')[0].innerText='${link.toLowerCase()}';
           var requiredUrl='${link}';
         `)
+            if (
+              (nativeTheme.shouldUseDarkColors && store.get('theme') === '') ||
+              store.get('theme') === 'dark'
+            ) {
+              bv[index].webContents.executeJavaScript(`
+            document.documentElement.classList.add("dark");
+          `)
+            }
           })
         console.log(
           "The previous error is normal. It redirected to a page where the server couldn't be found."
         )
       })
+    history.push({ url: link, title: bv[index].webContents.getTitle() })
+    store.set('history', history)
   }
 })
 ipcMain.on('windowClose', () => {
@@ -468,6 +417,29 @@ ipcMain.on('moveViewBlank', (e, index) => {
 })
 ipcMain.on('reloadBrowser', (e, index) => {
   bv[index].webContents.reload()
+  bv[index].webContents.executeJavaScript(`
+  let page = document.documentElement.innerHTML;
+  if (node.loadLang()[0]) {
+    Object.keys(node.loadLang()[1]).forEach((item) => {
+      page = page.replace(
+        new RegExp('%' + item + '%', 'g'),
+        node.loadLang()[1][item]
+      )
+      document.documentElement.innerHTML = page
+    })
+  }
+  `)
+  if (
+    (nativeTheme.shouldUseDarkColors && store.get('theme') === '') ||
+    store.get('theme') === 'dark'
+  ) {
+    win.webContents.executeJavaScript(`
+      document.documentElement.classList.add("dark");
+    `)
+    bv[index].webContents.executeJavaScript(`
+      document.documentElement.classList.add("dark");
+    `)
+  }
 })
 ipcMain.on('browserBack', (e, index) => {
   bv[index].webContents.goBack()
@@ -497,7 +469,30 @@ ipcMain.on('getBrowserUrl', (e, index) => {
   return bv[index].webContents.getURL()
 })
 ipcMain.on('moveToNewTab', (e, index) => {
-  bv[index].webContents.loadURL(`${__dirname}/src/resource/index.html`)
+  bv[index].webContents.loadURL(`${__dirname}/src/pages/home.html`)
+  bv[index].webContents.executeJavaScript(`
+  let page = document.documentElement.innerHTML;
+  if (node.loadLang()[0]) {
+    Object.keys(node.loadLang()[1]).forEach((item) => {
+      page = page.replace(
+        new RegExp('%' + item + '%', 'g'),
+        node.loadLang()[1][item]
+      )
+      document.documentElement.innerHTML = page
+    })
+  }
+  `)
+  win.webContents.executeJavaScript(`
+    document.getElementById('search').value = ""
+  `)
+  if (
+    (nativeTheme.shouldUseDarkColors && store.get('theme') === '') ||
+    store.get('theme') === 'dark'
+  ) {
+    bv[index].webContents.executeJavaScript(`
+      document.documentElement.classList.add("dark");
+    `)
+  }
 })
 ipcMain.on('context', () => {
   menu.popup()
@@ -509,7 +504,6 @@ ipcMain.on('tabMove', (e, i) => {
   index = i < 0 ? 0 : i
   win.setTopBrowserView(bv[index])
   win.webContents.executeJavaScript(`
-    console.log('${bv[index].webContents.getURL()}');
     if ('${bv[index].webContents.getURL()}'.includes('https')) {
       document.getElementById('search').value='${bv[index].webContents
         .getURL()
@@ -525,45 +519,48 @@ ipcMain.on('tabMove', (e, i) => {
      ].webContents.getTitle()} - Reamix';
      `)
 })
-ipcMain.on('removeTab', (e, i, c) => {
+ipcMain.on('removeTab', (e, i) => {
   try {
     win.removeBrowserView(bv[i])
-    bv[i].webContents.destroy()
+    bv[i].webContents.forcefullyCrashRenderer()
     bv.splice(i, 1)
   } catch (e) {
     return true
   }
 })
 ipcMain.on('openSettings', () => {
-  setting = new BrowserWindow({
-    width: 760,
-    height: 480,
-    minWidth: 300,
-    minHeight: 270,
-    icon: `${__dirname}/src/image/logo.ico`,
-    autoHideMenuBar: true,
-    webPreferences: {
-      preload: `${__dirname}/src/setting/preload.js`,
-      scrollBounce: true,
-    },
-  })
-  setting.loadFile(`${__dirname}/src/setting/index.html`)
-  if (
-    JSON.parse(fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8'))
-      .experiments.forceDark == true
-  ) {
-    setting.webContents.executeJavaScript(
-      `document.querySelectorAll('input[type="checkbox"]')[0].checked=true`
-    )
-  }
+  openPage('settings')
+})
+ipcMain.on('openExtensions', () => {
+  openPage('extensions')
 })
 
-let obj = JSON.parse(
-  fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-)
-let t = JSON.parse(
-  fs.readFileSync(`${__dirname}/src/i18n/${obj.lang}.json`, 'utf-8')
-)
+const openPage = (name) => {
+  bv[index].webContents.loadURL(`${__dirname}/src/pages/${name}.html`)
+  bv[index].webContents.executeJavaScript(`
+  let page = document.documentElement.innerHTML;
+  if (node.loadLang()[0]) {
+    Object.keys(node.loadLang()[1]).forEach((item) => {
+      page = page.replace(
+        new RegExp('%' + item + '%', 'g'),
+        node.loadLang()[1][item]
+      )
+      document.documentElement.innerHTML = page
+    })
+  }
+  `)
+  win.webContents.executeJavaScript(`
+    document.getElementById('search').value = "reamix://${name}"
+  `)
+  if (
+    (nativeTheme.shouldUseDarkColors && store.get('theme') === '') ||
+    store.get('theme') === 'dark'
+  ) {
+    bv[index].webContents.executeJavaScript(`
+      document.documentElement.classList.add("dark");
+    `)
+  }
+}
 
 let menu = Menu.buildFromTemplate([
   {
@@ -647,67 +644,21 @@ let menu = Menu.buildFromTemplate([
         label: t['about'],
         accelerator: 'CmdOrCtrl+Alt+A',
         click: () => {
-          dialog.showMessageBox(null, {
-            type: 'info',
-            icon: './src/image/logo.png',
-            title: t['about'],
-            message: t['about'],
-            detail: `Reamix v1.0.0-beta.6.2
-${t['version']}: 1.0.0-beta.6.2
-${t['developer']}: VCborn
-
-${t['repository']}: https://github.com/vcborn/reamix
-${t['official_site']}: https://vcborn.com/services/reamix
-
-Copyright &copy; 2021 VCborn.`,
-          })
+          openPage('about')
         },
       },
       {
         label: t['settings'],
         accelerator: 'CmdOrCtrl+Alt+S',
         click: () => {
-          setting = new BrowserWindow({
-            width: 760,
-            height: 480,
-            minWidth: 300,
-            minHeight: 270,
-            icon: `${__dirname}/src/image/logo.ico`,
-            autoHideMenuBar: true,
-            webPreferences: {
-              preload: `${__dirname}/src/setting/preload.js`,
-              scrollBounce: true,
-            },
-          })
-          setting.loadFile(`${__dirname}/src/setting/index.html`)
-          if (
-            JSON.parse(
-              fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-            ).experiments.forceDark == true
-          ) {
-            setting.webContents.executeJavaScript(`
-            document.querySelectorAll('input[type="checkbox"]')[0].checked=true
-            `)
-          }
+          openPage('settings')
         },
       },
       {
         label: t['extensions'],
         accelerator: 'CmdOrCtrl+Alt+E',
         click: () => {
-          manager = new BrowserWindow({
-            width: 760,
-            height: 480,
-            minWidth: 300,
-            minHeight: 270,
-            icon: `${__dirname}/src/image/logo.ico`,
-            autoHideMenuBar: true,
-            webPreferences: {
-              preload: `${__dirname}/src/manager/preload.js`,
-              scrollBounce: true,
-            },
-          })
-          manager.loadFile(`${__dirname}/src/manager/index.html`)
+          openPage('extensions')
         },
       },
     ],

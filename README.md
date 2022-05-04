@@ -1,71 +1,42 @@
 # Reamix
 
-<table>
-<tbody>
-  <tr>
-    <td><a href="https://github.com/vcborn/reamix#readme">English</a></td>
-    <td><a href="https://github.com/vcborn/reamix/blob/main/README_JP.md">日本語</a></td>
-  </tr>
-  </tbody>
-</table>
-
-![reamix](https://user-images.githubusercontent.com/39876629/160284567-22120f26-9e13-49ee-84ee-4992c6dd42bd.png)
-
-| About Reamix |                                                                        |
-| :--------- | :--------------------------------------------------------------------- |
-| Name       | Reamix                                                                 |
-| Version | v1.0.0 Beta 6                                                           |
-| Release     | 2021/11/23                                                |
-| License | [monochrome License.](https://www.monochrome.tk/mncr/license) |
-| Language       | Japanese, English                                                     |
-
+![reamix](https://user-images.githubusercontent.com/39876629/161370659-bbe7ca7b-df8f-4e3e-bf39-8765b75395bf.jpg)
 ## Description
 
-A customized Monot browser being produced by [monochrome.](https://www.monochrome.tk/mncr/)  
-A browser that comes standard with VCLinux.
+A simple and convenient browser based on [Monot](https://github.com/Sorakime/monot).   
+Comes standard with VCLinux.
 
-## Difference
-The following features have been added to **Reamix only**.
+## Features
 - i18n
 - Theme switching
 - Support for Chrome extensions
-- Bug fixes
-- More convenient UI
+- Built-in Ad Blocker
+- Convenient UI
 
 ## Screenshots
 
-All operate in dark mode. Light mode is also fully supported.
+![Startup Screen](https://user-images.githubusercontent.com/39876629/161370714-5b56e181-48d3-46a3-8b7a-9bf07b880a73.png)
 
-![Screen immediately after startup](https://user-images.githubusercontent.com/39876629/160284910-0c1e28d9-e04c-4d73-9b5d-e09040753f31.png)
-Screen immediately after startup
-
-![Actual browsing of the website](https://user-images.githubusercontent.com/39876629/160284937-348bb44a-2a69-4ee5-9da5-2ab597ed1019.png)
-Actual browsing of the website
+![Browsing](https://user-images.githubusercontent.com/39876629/161370735-018fa8e1-bd31-45bc-9466-6b91436ace88.png)
 
 ## Shortcuts
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd> - About Reamix
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + R</kbd> - Restart
+- <kbd>Ctrl</kbd> + <kbd>Q</kbd> - Quit
+- <kbd>Ctrl</kbd> + <kbd>R</kbd> - Reload
+- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + Z</kbd> - Go Back
+- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> - Go Forward
+- <kbd>F12</kbd> - Open Developer Tools
+- <kbd>Alt</kbd> + <kbd>F12</kbd> - Open Browser Developer Tools
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>S</kbd> - Open Settings
 
-| Shortcut List               |                  |
-| :--------------------------- | :--------------------- |
-| About Reamix                | Ctrl(Cmd) + Alt + A    |
-| Hide                         | Ctrl(Cmd) + H?         |
-| Hide others                     | Ctrl(Cmd) + Shift + H? |
-| Restart                      | Ctrl(Cmd) + Alt + R    |
-| Quit                         | Ctrl(Cmd) + Q          |
-| Reload                   | Ctrl(Dmd) + R          |
-| Go back                         | Ctrl(Cmd) + Shift + Z  |
-| Go forward                         | Ctrl(Cmd) + Shift + X  |
-| Developer Tools | F12                    |
-| Reamix Developer Tools    | Alt + F12              |
-| Settings               | Ctrl(Cmd) + Alt + S    |
-
-Moving tabs is not supported, but is expected to be supported in the official version.
+Moving tabs is not supported, but is expected to be supported in later version.
 
 ## Download
 
 You can download it [here](https://vcborn.com/services/reamix/).  
 The latest development build can be downloaded [here](https://nightly.link/vcborn/reamix/workflows/build-dev/dev).
 
----
+## License
 
-Copyright &copy; 2021 VCborn.  
-Reamix is released under the [monochrome License](https://www.monochrome.tk/mncr/license).
+[monochrome License.](https://github.com/vcborn/reamix/blob/main/LICENCE)

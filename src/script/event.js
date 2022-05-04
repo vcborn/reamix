@@ -1,27 +1,30 @@
+'use strict'
+
 each()
 
 function each() {
-  // when close button clicked
-  document.querySelectorAll('div>span>a:last-child').forEach((i, item) => {
+  document.querySelectorAll('.tab').forEach((i, item) => {
     i.addEventListener('click', () => {
-      let elements = document.querySelectorAll('div>span')
-      const element = i.parentNode
-      elements = [].slice.call(elements)
-      const index = elements.indexOf(element)
-      i.parentNode.remove()
-      node.removeTab(index, getCurrent())
-    })
-  })
-  document.querySelectorAll('div>span').forEach((i, item) => {
-    //when tab-bar clicked
-    i.addEventListener('click', () => {
-      //remove #opened's id(Opened)
       if (document.getElementById('opened')) {
         document.getElementById('opened').removeAttribute('id')
       }
-      //clicked tab
       i.setAttribute('id', 'opened')
       node.tabMove(getCurrent())
+    })
+  })
+  document.querySelectorAll('.close').forEach((i, item) => {
+    i.addEventListener('click', (e) => {
+      let elements = document.querySelectorAll('.tab')
+      const element = i.parentNode
+      elements = [].slice.call(elements)
+      const index = elements.indexOf(element)
+      element.remove()
+      node.removeTab(index)
+      const lasttab = document.querySelector('.tab:last-child')
+      node.tabMove(-1)
+      setTimeout(() => {
+        lasttab.setAttribute('id', 'opened')
+      }, 1)
     })
   })
 }
@@ -37,36 +40,28 @@ if (node.loadLang()[0]) {
   })
 }
 
-document.getElementsByTagName('div')[0].addEventListener('click', () => {
-  if (!document.getElementById('opened')) {
-    try {
-      //if #opened doesn't exist
-      document
-        .querySelector('div>span:last-child')
-        .setAttribute('id', 'opened')
-        .catch(() => {
-          return true
-        })
-    } catch (e) {
-      //if tab doesn't exist(error handling)
-      if (!document.getElementsByTagName('span')[0]) {
-        newtab()
-      }
-    }
-  }
-})
-
 function newtab(title) {
   if (document.getElementById('opened')) {
     document.getElementById('opened').removeAttribute('id')
   }
-  document.getElementsByTagName('div')[0].innerHTML = `
-    ${document.getElementsByTagName('div')[0].innerHTML}
-    <span id="opened">
-      <a href="javascript:void(0)">${title}</a>
-      <a href="javascript:void(0)"></a>
+  document.getElementById('tabs').innerHTML = `
+    ${document.getElementById('tabs').innerHTML}
+    <span id="opened" class="tab">
+      <p>${title}</p>
+      <a href="#" class="close"><img src="assets/icons/x.svg" class="icon small" /></a>
     </span>
   `
   each()
   node.newtab()
+}
+
+if (node.loadExtension()) {
+  for (const id of node.loadExtension()) {
+    const template = document.getElementById('extension')
+    const content = template.content
+    const clone = document.importNode(content, true)
+    clone.getElementById('exicon').src = node.extensionInfo(id)[1]
+    clone.getElementById('exicon').alt = node.extensionInfo(id)[0]
+    document.getElementById('extensions').appendChild(clone)
+  }
 }

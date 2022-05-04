@@ -1,18 +1,24 @@
+'use strict'
+
 const { contextBridge, ipcRenderer } = require('electron')
 const fs = require('fs-extra')
+const Store = require('electron-store')
+const store = new Store()
 
 contextBridge.exposeInMainWorld('node', {
   context: () => {
     ipcRenderer.send('context')
   },
+  loadTheme: () => {
+    const theme = store.get('theme') ? store.get('theme') : 'light'
+    return [theme, window.matchMedia('(prefers-color-scheme: dark)').matches]
+  },
   loadLang: () => {
-    let obj = JSON.parse(
-      fs.readFileSync(`${__dirname}/../config/config.mncfg`, 'utf-8')
-    )
+    const lang = store.get('lang') ? store.get('lang') : 'ja'
     let langJson = JSON.parse(
-      fs.readFileSync(`${__dirname}/../i18n/${obj.lang}.json`, 'utf-8')
+      fs.readFileSync(`${__dirname}/../assets/i18n/${lang}.json`, 'utf-8')
     )
-    return [obj.lang, langJson]
+    return [lang, langJson]
   },
   getEngineURL: () => {
     let file = fs.readFileSync(`${__dirname}/../config/engines.mncfg`, 'utf-8')
@@ -27,5 +33,33 @@ contextBridge.exposeInMainWorld('node', {
   },
   removeExtension: (url) => {
     ipcRenderer.send('removeExtension', url)
+  },
+  changeSettings: (key, value) => {
+    store.set(key, value)
+  },
+  getSettings: (key) => {
+    return store.get(key)
+  },
+  loadExtension: () => {
+    if (fs.existsSync(`${__dirname}/../extensions/`)) {
+      const extensionsDir = fs.readdirSync(`${__dirname}/../extensions/`)
+      return extensionsDir
+    }
+    return []
+  },
+  extensionInfo: (id) => {
+    let manifest = JSON.parse(
+      fs.readFileSync(`${__dirname}/../extensions/${id}/manifest.json`, 'utf-8')
+    )
+    return [
+      manifest['name'],
+      `${__dirname}/../extensions/${id}/${manifest['icons']['128']}`,
+    ]
+  },
+  removeExtension: (id) => {
+    ipcRenderer.send(
+      'removeExtension',
+      `https://chrome.google.com/webstore/detail/example/${id}`
+    )
   },
 })

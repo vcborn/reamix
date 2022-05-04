@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>%not_found%</title>
+  <link rel="stylesheet" href="../assets/styles/fonts.css" />
+  <style>
+    * {
+      font-family: 'Noto Sans JP', 'Noto Sans SC', sans-serif;
+      position: relative;
+      top: 0;
+      margin: 0;
+      padding: 0;
+      border: none;
+      outline: none;
+      color: #000;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    html,
+    body {
+      height: 100%;
+      background-color: #efefef;
+    }
+
+    html.dark,
+    .dark body {
+      background-color: #222;
+    }
+
+    .main {
+      margin: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      font-family: 'Noto Sans JP', 'Noto Sans SC', sans-serif;
+    }
+
+    .logo {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+      font-weight: 300;
+      font-size: 3rem;
+    }
+
+    .dark .logo {
+      color: #fff;
+    }
+
+    .search {
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 60%;
+    }
+
+    input#word-search {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      background-color: #ddd;
+      transition-duration: 200ms;
+    }
+
+    .dark input#word-search {
+      background-color: #333;
+      color: #fff;
+    }
+
+    input#word-search:focus {
+      background-color: #fff;
+    }
+
+    .dark input#word-search:focus {
+      background-color: #444;
+    }
+
+    select,
+    input {
+      border-radius: 1rem;
+    }
+
+    .dark select {
+      color: #fff;
+      background-color: #333;
+    }
+
+    select {
+      padding: 0 0.5rem;
+      transition-duration: 200ms;
+    }
+
+    option,
+    option:hover {
+      background-color: #fff;
+    }
+
+    .dark option,
+    .dark option:hover {
+      color: #fff;
+      background-color: #222;
+    }
+
+    select:hover {
+      background-color: #ddd;
+    }
+
+    .dark select:hover {
+      background-color: #444;
+    }
+
+    .dark {
+      color: #fff;
+    }
+
+    .main {
+      margin: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main">
+    <h1>%not_found%</h1>
+    <p>%website% "<span></span>" %not_found_text%</p>
+  </div>
+</body>
+
+</html>

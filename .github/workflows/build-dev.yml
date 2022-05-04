@@ -33,35 +33,17 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build AppImage
+      - name: Build for Linux
         if: matrix.os == 'ubuntu-20.04'
         run: npx electron-builder --linux --publish never
-      - name: Build deb
-        if: matrix.os == 'ubuntu-20.04'
-        shell: bash
-        run: | 
-          sed -i -e "0,/appImage/ s/appImage/deb/" package.json
-          npx electron-builder --linux --publish never
-      - name: Build rpm
-        if: matrix.os == 'ubuntu-20.04'
-        shell: bash
-        run: | 
-          sed -i -e "0,/deb/ s/deb/rpm/" package.json
-          npx electron-builder --linux --publish never
 
       - name: Build for macOS
         if: matrix.os == 'macos-11'
         run: npx electron-builder --mac --publish never
 
-      - name: Build windows portable
+      - name: Build for Windows
         if: matrix.os == 'windows-2022'
         run: npx electron-builder --win --publish never
-      - name: Build windows setup
-        if: matrix.os == 'windows-2022'
-        shell: pwsh
-        run: | 
-          (gc .\package.json).Replace('"target": "portable"','"target": "nsis"') | Out-File package.json
-          npx electron-builder --win --publish never
       
       - name: Upload Windows Installer
         if: matrix.os == 'windows-2022'

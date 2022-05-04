@@ -1,15 +1,17 @@
+'use strict'
+
 const { contextBridge, ipcRenderer } = require('electron')
 const fs = require('fs-extra')
+const Store = require('electron-store')
+const store = new Store()
 
 contextBridge.exposeInMainWorld('node', {
   loadLang: () => {
-    let obj = JSON.parse(
-      fs.readFileSync(`${__dirname}/../config/config.mncfg`, 'utf-8')
-    )
+    const lang = store.get('lang') ? store.get('lang') : 'ja'
     let langJson = JSON.parse(
-      fs.readFileSync(`${__dirname}/../i18n/${obj.lang}.json`, 'utf-8')
+      fs.readFileSync(`${__dirname}/../assets/i18n/${lang}.json`, 'utf-8')
     )
-    return [obj.lang, langJson]
+    return [lang, langJson]
   },
   winClose: () => {
     //Close window
@@ -33,26 +35,33 @@ contextBridge.exposeInMainWorld('node', {
   },
   moveBrowser: (word, index) => {
     //Page navigation
-    let file = fs.readFileSync(`${__dirname}/../config/engines.mncfg`, 'utf-8')
-    let obj = JSON.parse(file)
-    let engine = obj.values[obj.engine]
+    const value = store.get('engine') ? store.get('engine') : 'google'
+    const engines = {
+      google: 'https://www.google.co.jp/search?q=',
+      'yahoo-jp': 'https://search.yahoo.co.jp/search?p=',
+      bing: 'https://www.bing.com/search?q=',
+      duckduckgo: 'https://duckduckgo.com/?q=',
+    }
+    const engine = engines[value]
+
     if (
       word.toLowerCase().substring(0, 6) == 'http:/' ||
       word.toLowerCase().substring(0, 7) == 'https:/'
     ) {
-      // for like "https://example.com" and "http://example.com"
       if (word.indexOf(' ') == -1) {
-        //if it's url
         ipcRenderer.send('moveView', word, index)
       } else {
-        //if it's not url
         ipcRenderer.send('moveView', engine + word, index)
       }
     } else if (word.indexOf(' ') == -1 && word.indexOf('.') != -1) {
-      //for like "example.com" and "example.com/example/"
       ipcRenderer.send('moveView', `http://${word}`, index)
+    } else if (
+      word.toLowerCase() === 'reamix://settings' ||
+      word.toLowerCase() === 'reamix://about' ||
+      word.toLowerCase() === 'reamix://extensions'
+    ) {
+      ipcRenderer.send('moveView', word, index)
     } else {
-      //LAST
       ipcRenderer.send('moveView', engine + word, index)
     }
   },
@@ -75,9 +84,12 @@ contextBridge.exposeInMainWorld('node', {
   dirName: () => {
     return __dirname
   },
-  optionsWindow: () => {
+  openSettings: () => {
     //open options (settings) window
-    ipcRenderer.send('options')
+    ipcRenderer.send('openSettings')
+  },
+  openExtensions: () => {
+    ipcRenderer.send('openExtensions')
   },
   newtab: () => {
     //create new tab
@@ -87,8 +99,30 @@ contextBridge.exposeInMainWorld('node', {
     //move tab
     ipcRenderer.send('tabMove', index)
   },
-  removeTab: (index, current) => {
+  removeTab: (index) => {
     //remove tab
-    ipcRenderer.send('removeTab', index, current)
+    ipcRenderer.send('removeTab', index)
+  },
+  loadExtension: () => {
+    if (fs.existsSync(`${__dirname}/../extensions/`)) {
+      const extensionsDir = fs.readdirSync(`${__dirname}/../extensions/`)
+      return extensionsDir
+    }
+    return []
+  },
+  extensionInfo: (id) => {
+    let manifest = JSON.parse(
+      fs.readFileSync(`${__dirname}/../extensions/${id}/manifest.json`, 'utf-8')
+    )
+    return [
+      manifest['name'],
+      `${__dirname}/../extensions/${id}/${manifest['icons']['128']}`,
+    ]
+  },
+  loadHistory: () => {
+    return store.get('history')
+  },
+  loadFavorites: () => {
+    return store.get('favorites')
   },
 })
