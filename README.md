@@ -39,4 +39,4 @@ The latest development build can be downloaded [here](https://nightly.link/vcbor
 
 ## License
 
-[monochrome License.](https://github.com/vcborn/reamix/blob/main/LICENCE)
+[monochrome License. v2.0.0](https://github.com/vcborn/reamix/blob/main/LICENCE)
