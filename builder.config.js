@@ -61,7 +61,7 @@ module.exports = {
       },
       {
         target: 'snap',
-        arch: ['x64', 'arm64'],
+        arch: ['x64'],
       },
     ],
   },
