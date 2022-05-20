@@ -39,5 +39,4 @@ The latest development build can be downloaded [here](https://nightly.link/vcbor
 
 ## License
 
-This project is dual-licensed under the [monochrome License. v2.0.0](https://github.com/vcborn/reamix/blob/main/LICENCE) and the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html).
-
+This project is dual-licensed under the [monochrome License v2.0.0](https://github.com/vcborn/reamix/blob/main/LICENCE.monochrome) and the [GPLv3](https://github.com/vcborn/reamix/blob/main/LICENCE.GPL-3.0).

@@ -40,4 +40,4 @@ VCLinuxに標準搭載。
 
 ## ライセンス
 
-[monochrome License.](https://github.com/vcborn/reamix/blob/main/LICENCE)
+このプロジェクトは [monochrome License v2.0.0](https://github.com/vcborn/reamix/blob/main/LICENCE.monochrome) と [GPLv3](https://github.com/vcborn/reamix/blob/main/LICENCE.GPL-3.0) のデュアルライセンスの下提供されています。

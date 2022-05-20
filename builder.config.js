@@ -59,7 +59,18 @@ module.exports = {
         target: 'rpm',
         arch: ['x64'],
       },
+      {
+        target: 'snap',
+        arch: ['x64', 'arm64'],
+      },
     ],
+  },
+  snap: {
+    artifactName: '${productName}_${version}_${arch}.${ext}',
+    summary: 'Simple and useful browser made by Electron',
+    title: 'Reamix',
+    category: 'Utility',
+    synopsis: 'Reamix ${version}',
   },
   appImage: {
     artifactName: '${productName}_${version}_${arch}.${ext}',

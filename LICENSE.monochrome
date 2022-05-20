@@ -1,6 +1,6 @@
 monochrome. License by monochrome.
 v.2.0.0
-Copyright 2022 © monochrome Project.
+Copyright 2022 © VCborn.
 
 # 前書き
 - このライセンスは、monochrome Project.およびthinkingなどのみが使用できるものではなく、全世界の誰もが利用できるライセンスになっています。
@@ -30,3 +30,38 @@ Copyright 2022 © monochrome Project.
 このライセンスを勝手に改変することはできませんが、他のライセンスと混合する場合などは、monochrome. Licenseが適用されている部分を以下の義務を果たした上で他のライセンスを優先してください。
 - ソフトウェアの作者とソフトウェアの名前、もしくはリポジトリを明記すること
 - ライセンス全文を含めること
+
+---
+
+monochrome. License by monochrome.
+v.2.0.0 in English (unofficial)
+Copyright 2022 © VCborn.
+
+# Preamble
+- This license is not only for use by the monochrome Project. and thinking, etc., but is available to everyone worldwide.
+- All of the terms and conditions set forth in this license apply equally to commercial and non-commercial use.
+
+# Apply
+To apply this license to software, etc., indicate that the monochrome. license is applied to the most demanding file of the software and display the link https://sorakime.github.io/mncr/license/2.0.0 . A shortened URL is acceptable. Also, include the full text of this License.
+
+# Based
+You are free to publish and develop derivative versions.
+However, if the majority of the source code is not changed and only the name is changed, the release is not permitted.
+
+## Publish
+When releasing a derived version of the software as stand-alone software, the source code must be disclosed and the repository of the derived source must be clearly indicated.
+When incorporating it into a product, etc., there is no obligation to disclose the source code, but the name and author of the derived software or the repository must be clearly indicated somewhere.
+Also, be sure to include the full text of the license.
+
+## License
+The license of any Derived Version may be more restrictive than the monochrome. License or the monochrome. License. However, the following obligations cannot be waived:
+- Indicate the software author and the name of the software or repository
+- Include the full license text
+
+# Redistribute
+Redistribution is free, but please be sure to clearly identify the author and the name of the software or repository, and include the full license when you distribute the software.
+
+# Modify
+You may not modify this license without permission, but if you wish to mix it with other licenses, for example, you must give priority to other licenses after fulfilling the following obligations for the portions covered by the monochrome. license.
+- Indicate the software author and the name of the software or repository
+- Include the full license text
