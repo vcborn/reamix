@@ -62,6 +62,12 @@ jobs:
           name: reamix-dev-${{ steps.vars.outputs.sha_short }}-macos-dmg
           path: release/${{ steps.extract_version.outputs.version }}/*.dmg
 
+      - name: Upload Snap
+        if: matrix.os == 'ubuntu-20.04'
+        uses: actions/upload-artifact@v3
+        with:
+          name: reamix-dev-${{ steps.vars.outputs.sha_short }}-linux-snap
+          path: release/${{ steps.extract_version.outputs.version }}/*.snap
       - name: Upload AppImage
         if: matrix.os == 'ubuntu-20.04'
         uses: actions/upload-artifact@v3
