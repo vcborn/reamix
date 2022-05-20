@@ -27,8 +27,8 @@ jobs:
       - name: Initialize
         if: matrix.os == 'ubuntu-20.04'
         run: |
-        sudo apt-get install --no-install-recommends -y rpm libopenjp2-tools
-        sudo snap install snapcraft --classic
+          sudo apt-get install --no-install-recommends -y rpm libopenjp2-tools
+          sudo snap install snapcraft --classic
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
