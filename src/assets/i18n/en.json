@@ -62,5 +62,6 @@
   "success_install": "Installed successfully",
   "success_remove": "Deleted successfully",
 
-  "adblock": "Ad blocker"
+  "adblock": "Ad blocker",
+  "deleteall": "Delete All History"
 }

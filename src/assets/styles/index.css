@@ -31,6 +31,7 @@ a {
 nav a {
   padding: 1px 3px;
   padding-top: 4px;
+  user-select: none;
 }
 a:hover {
   background-color: #bfbfbf;

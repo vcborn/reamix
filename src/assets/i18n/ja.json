@@ -62,5 +62,6 @@
   "success_install": "正常にインストールされました",
   "success_remove": "正常に削除されました",
 
-  "adblock": "広告ブロッカー"
+  "adblock": "広告ブロッカー",
+  "deleteall": "すべての履歴を削除"
 }

@@ -1,6 +1,6 @@
 {
   "name": "reamix",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "description": "A simple and convenient browser based on Electron.",
   "main": "main.js",
   "scripts": {
@@ -11,11 +11,11 @@
   "author": "VCborn <support@vcborn.com>",
   "homepage": "https://vcborn.com/services/reamix/",
   "devDependencies": {
-    "electron": "^18.2.0",
+    "electron": "^18.2.4",
     "electron-builder": "^23.0.3"
   },
   "dependencies": {
-    "@cliqz/adblocker-electron": "^1.23.7",
+    "@cliqz/adblocker-electron": "^1.23.8",
     "cross-fetch": "^3.1.5",
     "download-crx": "^1.1.0",
     "electron-chrome-extensions": "^3.9.0",

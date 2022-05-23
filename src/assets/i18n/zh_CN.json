@@ -47,5 +47,6 @@
   "dev": "开发",
   "dev_tools": "面向开发者的工具",
   "reamix_dev_tools": "Reamix面向开发者的工具",
-  "adblock": "广告屏蔽器"
+  "adblock": "广告屏蔽器",
+  "deleteall": "删除所有历史记录"
 }

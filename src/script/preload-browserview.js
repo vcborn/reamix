@@ -62,4 +62,15 @@ contextBridge.exposeInMainWorld('node', {
       `https://chrome.google.com/webstore/detail/example/${id}`
     )
   },
+  load: (name) => {
+    return store.get(name).reverse()
+  },
+  remove: (type, name, link) => {
+    let list = store.get(type)
+    const newlist = list.filter((n) => n[1] !== link)
+    store.set(type, newlist)
+  },
+  deleteAll: () => {
+    store.set('history', [])
+  },
 })

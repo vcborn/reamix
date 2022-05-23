@@ -45,20 +45,23 @@ contextBridge.exposeInMainWorld('node', {
     const engine = engines[value]
 
     if (
-      word.toLowerCase().substring(0, 6) == 'http:/' ||
-      word.toLowerCase().substring(0, 7) == 'https:/'
+      word.toLowerCase().substring(0, 6) === 'http:/' ||
+      word.toLowerCase().substring(0, 7) === 'https:/'
     ) {
-      if (word.indexOf(' ') == -1) {
+      if (word.indexOf(' ') === -1) {
         ipcRenderer.send('moveView', word, index)
       } else {
         ipcRenderer.send('moveView', engine + word, index)
       }
-    } else if (word.indexOf(' ') == -1 && word.indexOf('.') != -1) {
+    } else if (word.indexOf(' ') === -1 && word.indexOf('.') != -1) {
       ipcRenderer.send('moveView', `http://${word}`, index)
     } else if (
       word.toLowerCase() === 'reamix://settings' ||
       word.toLowerCase() === 'reamix://about' ||
-      word.toLowerCase() === 'reamix://extensions'
+      word.toLowerCase() === 'reamix://extensions' ||
+      word.toLowerCase() === 'reamix://favorites' ||
+      word.toLowerCase() === 'reamix://history' ||
+      word.toLowerCase() === 'reamix://downloads'
     ) {
       ipcRenderer.send('moveView', word, index)
     } else {
@@ -84,12 +87,8 @@ contextBridge.exposeInMainWorld('node', {
   dirName: () => {
     return __dirname
   },
-  openSettings: () => {
-    //open options (settings) window
-    ipcRenderer.send('openSettings')
-  },
-  openExtensions: () => {
-    ipcRenderer.send('openExtensions')
+  open: (name) => {
+    ipcRenderer.send('open', name)
   },
   newtab: () => {
     //create new tab
@@ -119,10 +118,7 @@ contextBridge.exposeInMainWorld('node', {
       `${__dirname}/../extensions/${id}/${manifest['icons']['128']}`,
     ]
   },
-  loadHistory: () => {
-    return store.get('history')
-  },
-  loadFavorites: () => {
-    return store.get('favorites')
+  saveFav: (name, link) => {
+    ipcRenderer.send('saveFav', name, link)
   },
 })

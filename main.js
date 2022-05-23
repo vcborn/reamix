@@ -27,7 +27,8 @@ const lang = store.get('lang') ? store.get('lang') : 'ja'
 let t = JSON.parse(
   fs.readFileSync(`${__dirname}/src/assets/i18n/${lang}.json`, 'utf-8')
 )
-//require('events').EventEmitter.defaultMaxListeners = 5000
+
+require('events').EventEmitter.defaultMaxListeners = 5000
 
 contextMenu({
   prepend: (defaultActions, parameters, browserWindow) => [
@@ -53,10 +54,10 @@ function newtab() {
       preload: `${__dirname}/src/script/preload-browserview.js`,
     },
   })
-  if (store.get('adblocker') == null) {
+  if (store.get('adblocker') === null) {
     store.set('adblocker', true)
   }
-  if (store.get('history') == null) {
+  if (store.get('history') === null) {
     store.set('history', [])
   }
   if (store.get('bookmarks') == null) {
@@ -105,12 +106,7 @@ function newtab() {
         .slice(0, 1) != '/'
     ) {
       win.webContents.executeJavaScript(
-        `document.getElementsByTagName('input')[0].value='${browserview.webContents
-          .getURL()
-          .substring(
-            browserview.webContents.getURL().indexOf('/') + 2,
-            browserview.webContents.getURL().length
-          )}'`
+        `document.getElementsByTagName('input')[0].value='${browserview.webContents.getURL()}'`
       )
     }
     win.webContents.executeJavaScript(
@@ -133,12 +129,7 @@ function newtab() {
         .slice(0, 1) != '/'
     ) {
       win.webContents.executeJavaScript(
-        `document.getElementsByTagName('input')[0].value='${browserview.webContents
-          .getURL()
-          .substring(
-            browserview.webContents.getURL().indexOf('/') + 2,
-            browserview.webContents.getURL().length
-          )}'`
+        `document.getElementsByTagName('input')[0].value='${browserview.webContents.getURL()}'`
       )
     }
 
@@ -228,7 +219,10 @@ async function nw() {
   })
 
   if (!app.isPackaged) {
-    win.webContents.openDevTools()
+    let devtools = null
+    devtools = new BrowserWindow()
+    win.webContents.setDevToolsWebContents(devtools.webContents)
+    win.webContents.openDevTools({ mode: 'detach' })
   }
 
   if (fs.existsSync(`${__dirname}/src/extensions/`)) {
@@ -275,6 +269,12 @@ ipcMain.on('moveView', (e, link, index) => {
     openPage('about')
   } else if (link === 'reamix://extensions') {
     openPage('extensions')
+  } else if (link === 'reamix://favorites') {
+    openPage('favorites')
+  } else if (link === 'reamix://history') {
+    openPage('history')
+  } else if (link === 'reamix://downloads') {
+    openPage('downloads')
   } else {
     const currentUA = win.webContents.getUserAgent()
     const chromeUA = currentUA
@@ -287,13 +287,13 @@ ipcMain.on('moveView', (e, link, index) => {
         win.webContents.executeJavaScript(
           `document.getElementsByTagName('input')[0].value='${bv[
             index
-          ].webContents
-            .getURL()
-            .substring(
-              bv[index].webContents.getURL().indexOf('/') + 2,
-              bv[index].webContents.getURL().length
-            )}'`
+          ].webContents.getURL()}'`
         )
+        history.push([
+          bv[index].webContents.getTitle(),
+          bv[index].webContents.getURL(),
+        ])
+        store.set('history', history)
         const webstore = new RegExp(
           /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
         )
@@ -353,11 +353,22 @@ ipcMain.on('moveView', (e, link, index) => {
           "The previous error is normal. It redirected to a page where the server couldn't be found."
         )
       })
-    history.push({ url: link, title: bv[index].webContents.getTitle() })
-    store.set('history', history)
+  }
+  if (
+    link !== '' &&
+    store.get('bookmarks').some((bookmark) => bookmark.includes(link))
+  ) {
+    win.webContents.executeJavaScript(`
+      document.getElementById('fav-icon').src = 'assets/icons/star-fill.svg'
+    `)
+  } else {
+    win.webContents.executeJavaScript(`
+      document.getElementById('fav-icon').src = 'assets/icons/star.svg'
+    `)
   }
 })
 ipcMain.on('windowClose', () => {
+  ipcMain.removeAllListeners()
   win.close()
 })
 ipcMain.on('windowMaximize', () => {
@@ -453,12 +464,9 @@ ipcMain.on('browserBack', (e, index) => {
       .slice(0, 1) != '/'
   ) {
     win.webContents.executeJavaScript(
-      `document.getElementsByTagName('input')[0].value='${bv[index].webContents
-        .getURL()
-        .substring(
-          bv[index].webContents.getURL().indexOf('/') + 2,
-          bv[index].webContents.getURL().length
-        )}'`
+      `document.getElementsByTagName('input')[0].value='${bv[
+        index
+      ].webContents.getURL()}'`
     )
   }
 })
@@ -483,7 +491,8 @@ ipcMain.on('moveToNewTab', (e, index) => {
   }
   `)
   win.webContents.executeJavaScript(`
-    document.getElementById('search').value = ""
+    document.getElementById('search').value = "";
+    document.getElementById('fav-icon').src = 'assets/icons/star.svg'
   `)
   if (
     (nativeTheme.shouldUseDarkColors && store.get('theme') === '') ||
@@ -505,12 +514,9 @@ ipcMain.on('tabMove', (e, i) => {
   win.setTopBrowserView(bv[index])
   win.webContents.executeJavaScript(`
     if ('${bv[index].webContents.getURL()}'.includes('https')) {
-      document.getElementById('search').value='${bv[index].webContents
-        .getURL()
-        .substring(
-          bv[index].webContents.getURL().indexOf('/') + 2,
-          bv[index].webContents.getURL().length
-        )}';
+      document.getElementById('search').value='${bv[
+        index
+      ].webContents.getURL()}';
     } else {
         document.getElementById('search').value='';
     }
@@ -528,11 +534,28 @@ ipcMain.on('removeTab', (e, i) => {
     return true
   }
 })
-ipcMain.on('openSettings', () => {
-  openPage('settings')
+ipcMain.on('open', (e, name) => {
+  openPage(name)
+  if (
+    store
+      .get('bookmarks')
+      .some((bookmark) => bookmark.includes(`reamix://${name}`))
+  ) {
+    win.webContents.executeJavaScript(`
+      document.getElementById('fav-icon').src = 'assets/icons/star-fill.svg'
+    `)
+  } else {
+    win.webContents.executeJavaScript(`
+      document.getElementById('fav-icon').src = 'assets/icons/star.svg'
+    `)
+  }
 })
-ipcMain.on('openExtensions', () => {
-  openPage('extensions')
+ipcMain.on('saveFav', (e, name, link) => {
+  const list = [name, link]
+  let fav = store.get('bookmarks')
+  fav.push(list)
+  console.log(fav)
+  store.set('bookmarks', fav)
 })
 
 const openPage = (name) => {

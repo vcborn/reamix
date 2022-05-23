@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>%history%</title>
+    <link rel="stylesheet" href="../assets/styles/fonts.css" />
+    <link rel="stylesheet" href="../assets/styles/settings.css">
+</head>
+
+<body>
+    <div class="main">
+        <h2>%history%</h2>
+        <button class="save" onclick="deleteAll()">%deleteall%</button>
+        <div id="list">
+            <template id="history">
+                <div id="col" class="col">
+                    <a href="#" class="delete">
+                        <img class="icon" src="../assets/icons/x.svg" alt="delete history" />
+                    </a>
+                    <a href="#" id="link">
+                        <h3 id="name">SiteTitle</h3>
+                        <p id="link-text" class="second">SiteLink</p>
+                    </a>
+                </div>
+            </template>
+        </div>
+    </div>
+    <script src="others.js"></script>
+</body>
+
+</html>

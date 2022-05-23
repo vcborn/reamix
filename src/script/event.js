@@ -14,17 +14,28 @@ function each() {
   })
   document.querySelectorAll('.close').forEach((i, item) => {
     i.addEventListener('click', (e) => {
-      let elements = document.querySelectorAll('.tab')
-      const element = i.parentNode
-      elements = [].slice.call(elements)
-      const index = elements.indexOf(element)
-      element.remove()
-      node.removeTab(index)
-      const lasttab = document.querySelector('.tab:last-child')
-      node.tabMove(-1)
-      setTimeout(() => {
-        lasttab.setAttribute('id', 'opened')
-      }, 1)
+      if (document.querySelectorAll('span.tab').length > 1) {
+        let elements = document.querySelectorAll('.tab')
+        const element = i.parentNode
+        elements = [].slice.call(elements)
+        const index = elements.indexOf(element)
+        element.remove()
+        node.removeTab(index)
+        const lasttab = document.querySelector('.tab:last-child')
+        node.tabMove(-1)
+        setTimeout(() => {
+          lasttab.setAttribute('id', 'opened')
+        }, 1)
+        if (
+          document.body.clientWidth * 0.8 >
+          document.getElementById('opened').clientWidth *
+            document.querySelectorAll('.tab').length
+        ) {
+          for (const tab of document.querySelectorAll('.tab')) {
+            tab.removeAttribute('style')
+          }
+        }
+      }
     })
   })
 }
@@ -51,6 +62,24 @@ function newtab(title) {
       <a href="#" class="close"><img src="assets/icons/x.svg" class="icon small" /></a>
     </span>
   `
+  if (
+    document.body.clientWidth * 0.8 <=
+    document.getElementById('opened').clientWidth *
+      document.querySelectorAll('.tab').length
+  ) {
+    for (const tab of document.querySelectorAll('.tab')) {
+      let sub =
+        4 -
+        (document.getElementById('opened').clientWidth *
+          document.querySelectorAll('.tab').length) /
+          ((65000 / (document.querySelectorAll('.tab').length * 100)) * 7.5)
+      if (sub <= 1.75) {
+        sub = 1.75
+      }
+      tab.removeAttribute('style')
+      tab.style = `padding:0.25rem ${sub}rem;`
+    }
+  }
   each()
   node.newtab()
 }
@@ -63,5 +92,14 @@ if (node.loadExtension()) {
     clone.getElementById('exicon').src = node.extensionInfo(id)[1]
     clone.getElementById('exicon').alt = node.extensionInfo(id)[0]
     document.getElementById('extensions').appendChild(clone)
+  }
+}
+
+function saveFav() {
+  if (document.getElementById('search').value) {
+    const link = document.getElementById('search').value
+    const name = document.querySelector('span#opened p').textContent
+    node.saveFav(name, link)
+    document.getElementById('fav-icon').src = 'assets/icons/star-fill.svg'
   }
 }

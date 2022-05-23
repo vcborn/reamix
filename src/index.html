@@ -13,11 +13,13 @@
     <nav>
       <a href="javascript:node.moveToNewTab(getCurrent())" title="%home%"><img src="assets/icons/home.svg"
           class="icon" /></a>
-      <a href="#" title="%bookmarks%"><img src="assets/icons/star.svg" class="icon" /></a>
-      <a href="#" title="%downloads%"><img src="assets/icons/download.svg" class="icon" /></a>
-      <a href="#" title="%history%"><img src="assets/icons/clock.svg" class="icon" /></a>
-      <a href="javascript:node.openSettings()" title="%settings%"><img src="assets/icons/gear.svg" class="icon" /></a>
-      <a href="javascript:node.openExtensions()" title="%extensions%"><img src="assets/icons/extension.svg"
+      <a href="javascript:node.open('favorites')" title="%bookmarks%"><img src="assets/icons/star.svg"
+          class="icon" /></a>
+      <a href="javascript:node.open('downloads')" title="%downloads%"><img src="assets/icons/download.svg"
+          class="icon" /></a>
+      <a href="javascript:node.open('history')" title="%history%"><img src="assets/icons/clock.svg" class="icon" /></a>
+      <a href="javascript:node.open('settings')" title="%settings%"><img src="assets/icons/gear.svg" class="icon" /></a>
+      <a href="javascript:node.open('extensions')" title="%extensions%"><img src="assets/icons/extension.svg"
           class="icon" /></a>
     </nav>
     <div>
@@ -48,7 +50,8 @@
         <a href="javascript:node.reloadBrowser(getCurrent())" title="%reload%"><img src="assets/icons/reload.svg"
             class="icon" /></a>
         <input id="search" type="text" placeholder="%search%" title="%search%" onkeydown="searchEnter(this)">
-        <a href="#" title="%bookmarks%"><img src="assets/icons/star.svg" class="icon" /></a>
+        <a href="javascript:saveFav()" title="%bookmarks%"><img src="assets/icons/star.svg" class="icon"
+            id="fav-icon" /></a>
         <a href="javascript:moveBrowser(getCurrent())" title="%move%"><img src="assets/icons/right.svg"
             class="icon" /></a>
         <div id="extensions">

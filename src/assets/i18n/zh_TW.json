@@ -47,5 +47,6 @@
   "dev": "開發",
   "dev_tools": "面向開發者的工具",
   "reamix_dev_tools": "Reamix面向開發者的工具",
-  "adblock": "廣告攔截器"
+  "adblock": "廣告攔截器",
+  "deleteall": "刪除所有歷史記錄"
 }
