@@ -37,7 +37,7 @@ a:hover {
   background-color: #bfbfbf;
 }
 body {
-  background-color: #efefef;
+  background-color: #fff;
   padding-bottom: 0;
   margin-bottom: 0;
   overflow: hidden;
@@ -48,7 +48,8 @@ main {
   justify-content: space-between;
 }
 nav {
-  margin-top: 13px;
+  background-color: #efefef;
+  padding-top: 13px;
   width: 42px;
   display: flex;
   flex-direction: column;
@@ -61,6 +62,7 @@ main > div {
   width: 100%;
 }
 main > div > header {
+  background-color: #efefef;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -128,7 +130,8 @@ main > div header .action {
   top: 5px;
 }
 .bar {
-  margin: 8px 1rem;
+  background-color: #efefef;
+  padding: 8px 1rem;
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
@@ -144,11 +147,13 @@ main > div header .action {
   padding: 0.25rem 0.5rem;
 }
 
-.dark body {
+.dark body main nav,
+.dark body main div .bar,
+.dark body main div header {
   background-color: #222;
-  border-bottom: 1px solid #333;
 }
-.dark body input {
+.dark body input,
+.dark nav {
   background-color: #fff1;
   color: #fff;
 }

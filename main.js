@@ -21,6 +21,7 @@ const { ElectronBlocker } = require('@cliqz/adblocker-electron')
 const fetch = require('cross-fetch')
 const Store = require('electron-store')
 const store = new Store()
+const path = require('path')
 index = 0
 
 const lang = store.get('lang') ? store.get('lang') : 'ja'
@@ -28,7 +29,7 @@ let t = JSON.parse(
   fs.readFileSync(`${__dirname}/src/assets/i18n/${lang}.json`, 'utf-8')
 )
 
-require('events').EventEmitter.defaultMaxListeners = 5000
+//require('events').EventEmitter.defaultMaxListeners = 5000
 
 contextMenu({
   prepend: (defaultActions, parameters, browserWindow) => [
@@ -218,6 +219,16 @@ async function nw() {
     },
   })
 
+  if (process.defaultApp) {
+    if (process.argv.length >= 2) {
+      app.setAsDefaultProtocolClient('reamix', process.execPath, [
+        path.resolve(process.argv[1]),
+      ])
+    }
+  } else {
+    app.setAsDefaultProtocolClient('reamix')
+  }
+
   if (!app.isPackaged) {
     let devtools = null
     devtools = new BrowserWindow()
@@ -255,7 +266,7 @@ app.on('activate', () => {
 })
 
 //ipc channels
-ipcMain.on('moveView', (e, link, index) => {
+ipcMain.handle('moveView', (e, link, index) => {
   let history = store.get('history')
   bv[index].webContents
     .executeJavaScript(`document.addEventListener('contextmenu',()=>{
@@ -367,20 +378,20 @@ ipcMain.on('moveView', (e, link, index) => {
     `)
   }
 })
-ipcMain.on('windowClose', () => {
+ipcMain.handle('windowClose', () => {
   ipcMain.removeAllListeners()
   win.close()
 })
-ipcMain.on('windowMaximize', () => {
+ipcMain.handle('windowMaximize', () => {
   win.maximize()
 })
-ipcMain.on('windowMinimize', () => {
+ipcMain.handle('windowMinimize', () => {
   win.minimize()
 })
-ipcMain.on('windowUnmaximize', () => {
+ipcMain.handle('windowUnmaximize', () => {
   win.unmaximize()
 })
-ipcMain.on('installExtension', (e, url) => {
+ipcMain.handle('installExtension', (e, url) => {
   const pattern =
     /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
   const id = pattern.exec(url)
@@ -402,7 +413,7 @@ ipcMain.on('installExtension', (e, url) => {
       })
     })
 })
-ipcMain.on('removeExtension', (e, url) => {
+ipcMain.handle('removeExtension', (e, url) => {
   const pattern =
     /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
   const id = pattern.exec(url)
@@ -416,17 +427,17 @@ ipcMain.on('removeExtension', (e, url) => {
     })
   })
 })
-ipcMain.on('windowMaxMin', () => {
+ipcMain.handle('windowMaxMin', () => {
   if (win.isMaximized() == true) {
     win.unmaximize()
   } else {
     win.maximize()
   }
 })
-ipcMain.on('moveViewBlank', (e, index) => {
+ipcMain.handle('moveViewBlank', (e, index) => {
   bv[index].webContents.loadURL(`file://${__dirname}/src/resource/blank.html`)
 })
-ipcMain.on('reloadBrowser', (e, index) => {
+ipcMain.handle('reloadBrowser', (e, index) => {
   bv[index].webContents.reload()
   bv[index].webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
@@ -452,7 +463,7 @@ ipcMain.on('reloadBrowser', (e, index) => {
     `)
   }
 })
-ipcMain.on('browserBack', (e, index) => {
+ipcMain.handle('browserBack', (e, index) => {
   bv[index].webContents.goBack()
   if (
     bv[index].webContents
@@ -470,13 +481,13 @@ ipcMain.on('browserBack', (e, index) => {
     )
   }
 })
-ipcMain.on('browserGoes', (e, index) => {
+ipcMain.handle('browserGoes', (e, index) => {
   bv[index].webContents.goForward()
 })
-ipcMain.on('getBrowserUrl', (e, index) => {
+ipcMain.handle('getBrowserUrl', (e, index) => {
   return bv[index].webContents.getURL()
 })
-ipcMain.on('moveToNewTab', (e, index) => {
+ipcMain.handle('moveToNewTab', (e, index) => {
   bv[index].webContents.loadURL(`${__dirname}/src/pages/home.html`)
   bv[index].webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
@@ -503,13 +514,13 @@ ipcMain.on('moveToNewTab', (e, index) => {
     `)
   }
 })
-ipcMain.on('context', () => {
+ipcMain.handle('context', () => {
   menu.popup()
 })
-ipcMain.on('newtab', () => {
+ipcMain.handle('newtab', () => {
   newtab()
 })
-ipcMain.on('tabMove', (e, i) => {
+ipcMain.handle('tabMove', (e, i) => {
   index = i < 0 ? 0 : i
   win.setTopBrowserView(bv[index])
   win.webContents.executeJavaScript(`
@@ -525,7 +536,7 @@ ipcMain.on('tabMove', (e, i) => {
      ].webContents.getTitle()} - Reamix';
      `)
 })
-ipcMain.on('removeTab', (e, i) => {
+ipcMain.handle('removeTab', (e, i) => {
   try {
     win.removeBrowserView(bv[i])
     bv[i].webContents.forcefullyCrashRenderer()
@@ -534,7 +545,7 @@ ipcMain.on('removeTab', (e, i) => {
     return true
   }
 })
-ipcMain.on('open', (e, name) => {
+ipcMain.handle('open', (e, name) => {
   openPage(name)
   if (
     store
@@ -550,7 +561,7 @@ ipcMain.on('open', (e, name) => {
     `)
   }
 })
-ipcMain.on('saveFav', (e, name, link) => {
+ipcMain.handle('saveFav', (e, name, link) => {
   const list = [name, link]
   let fav = store.get('bookmarks')
   fav.push(list)

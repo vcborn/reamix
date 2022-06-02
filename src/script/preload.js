@@ -15,23 +15,23 @@ contextBridge.exposeInMainWorld('node', {
   },
   winClose: () => {
     //Close window
-    ipcRenderer.send('windowClose')
+    ipcRenderer.invoke('windowClose')
   },
   winMinimize: () => {
     //Minimize Window
-    ipcRenderer.send('windowMinimize')
+    ipcRenderer.invoke('windowMinimize')
   },
   winMaximize: () => {
     //Maximize Window
-    ipcRenderer.send('windowMaximize')
+    ipcRenderer.invoke('windowMaximize')
   },
   winUnmaximize: () => {
     //Unmaximize Window
-    ipcRenderer.send('windowUnmaximize')
+    ipcRenderer.invoke('windowUnmaximize')
   },
   maxMin: () => {
     //Maximize or Minimize Window
-    ipcRenderer.send('windowMaxMin')
+    ipcRenderer.invoke('windowMaxMin')
   },
   moveBrowser: (word, index) => {
     //Page navigation
@@ -49,12 +49,12 @@ contextBridge.exposeInMainWorld('node', {
       word.toLowerCase().substring(0, 7) === 'https:/'
     ) {
       if (word.indexOf(' ') === -1) {
-        ipcRenderer.send('moveView', word, index)
+        ipcRenderer.invoke('moveView', word, index)
       } else {
-        ipcRenderer.send('moveView', engine + word, index)
+        ipcRenderer.invoke('moveView', engine + word, index)
       }
     } else if (word.indexOf(' ') === -1 && word.indexOf('.') != -1) {
-      ipcRenderer.send('moveView', `http://${word}`, index)
+      ipcRenderer.invoke('moveView', `http://${word}`, index)
     } else if (
       word.toLowerCase() === 'reamix://settings' ||
       word.toLowerCase() === 'reamix://about' ||
@@ -63,44 +63,44 @@ contextBridge.exposeInMainWorld('node', {
       word.toLowerCase() === 'reamix://history' ||
       word.toLowerCase() === 'reamix://downloads'
     ) {
-      ipcRenderer.send('moveView', word, index)
+      ipcRenderer.invoke('moveView', word, index)
     } else {
-      ipcRenderer.send('moveView', engine + word, index)
+      ipcRenderer.invoke('moveView', engine + word, index)
     }
   },
   moveToNewTab: (index) => {
     //move to new tab
-    ipcRenderer.send('moveToNewTab', index)
+    ipcRenderer.invoke('moveToNewTab', index)
   },
   reloadBrowser: (index) => {
     //reload current BrowserView
-    ipcRenderer.send('reloadBrowser', index)
+    ipcRenderer.invoke('reloadBrowser', index)
   },
   backBrowser: (index) => {
     //back current BrowserView
-    ipcRenderer.send('browserBack', index)
+    ipcRenderer.invoke('browserBack', index)
   },
   goBrowser: (index) => {
     //go current BrowserView
-    ipcRenderer.send('browserGoes', index)
+    ipcRenderer.invoke('browserGoes', index)
   },
   dirName: () => {
     return __dirname
   },
   open: (name) => {
-    ipcRenderer.send('open', name)
+    ipcRenderer.invoke('open', name)
   },
   newtab: () => {
     //create new tab
-    ipcRenderer.send('newtab')
+    ipcRenderer.invoke('newtab')
   },
   tabMove: (index) => {
     //move tab
-    ipcRenderer.send('tabMove', index)
+    ipcRenderer.invoke('tabMove', index)
   },
   removeTab: (index) => {
     //remove tab
-    ipcRenderer.send('removeTab', index)
+    ipcRenderer.invoke('removeTab', index)
   },
   loadExtension: () => {
     if (fs.existsSync(`${__dirname}/../extensions/`)) {
@@ -119,6 +119,6 @@ contextBridge.exposeInMainWorld('node', {
     ]
   },
   saveFav: (name, link) => {
-    ipcRenderer.send('saveFav', name, link)
+    ipcRenderer.invoke('saveFav', name, link)
   },
 })

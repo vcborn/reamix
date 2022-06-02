@@ -7,7 +7,7 @@ const store = new Store()
 
 contextBridge.exposeInMainWorld('node', {
   context: () => {
-    ipcRenderer.send('context')
+    ipcRenderer.invoke('context')
   },
   loadTheme: () => {
     const theme = store.get('theme') ? store.get('theme') : 'light'
@@ -26,13 +26,13 @@ contextBridge.exposeInMainWorld('node', {
     return obj.values[obj.engine]
   },
   openSettings: () => {
-    ipcRenderer.send('openSettings')
+    ipcRenderer.invoke('openSettings')
   },
   installExtension: (url) => {
-    ipcRenderer.send('installExtension', url)
+    ipcRenderer.invoke('installExtension', url)
   },
   removeExtension: (url) => {
-    ipcRenderer.send('removeExtension', url)
+    ipcRenderer.invoke('removeExtension', url)
   },
   changeSettings: (key, value) => {
     store.set(key, value)
@@ -57,7 +57,7 @@ contextBridge.exposeInMainWorld('node', {
     ]
   },
   removeExtension: (id) => {
-    ipcRenderer.send(
+    ipcRenderer.invoke(
       'removeExtension',
       `https://chrome.google.com/webstore/detail/example/${id}`
     )
