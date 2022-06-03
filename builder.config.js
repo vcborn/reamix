@@ -31,6 +31,10 @@ module.exports = {
         target: 'nsis',
         arch: ['x64'],
       },
+      {
+        target: 'appx',
+        arch: ['x64'],
+      },
     ],
     artifactName: '${productName}_${version}_setup.${ext}',
   },
@@ -41,6 +45,14 @@ module.exports = {
   },
   portable: {
     artifactName: '${productName}_${version}_portable.${ext}',
+  },
+  appx: {
+    artifactName: '${productName}_${version}_appx.${ext}',
+    identityName: '9563VCborn.Reamix',
+    applicationId: 'VCborn.Reamix',
+    publisherDisplayName: 'VCborn',
+    publisher: 'CN=B3A8E69F-3C5C-42C5-ABA9-66E62B6A401D',
+    languages: ['JA-JP', 'EN-US', 'ZH-CN'],
   },
   mac: {
     icon: 'src/assets/images/logo.icns',

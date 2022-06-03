@@ -54,6 +54,12 @@ jobs:
         with:
           name: reamix-dev-${{ steps.vars.outputs.sha_short }}-windows-portable
           path: release/${{ steps.extract_version.outputs.version }}/*_portable.exe
+      - name: Upload Windows AppX
+        if: matrix.os == 'windows-2022'
+        uses: actions/upload-artifact@v3
+        with:
+          name: reamix-dev-${{ steps.vars.outputs.sha_short }}-windows-appx
+          path: release/${{ steps.extract_version.outpus.version }}/*_appx.appx
 
       - name: Upload dmg
         if: matrix.os == 'macos-11'
