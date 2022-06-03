@@ -29,7 +29,7 @@ let t = JSON.parse(
   fs.readFileSync(`${__dirname}/src/assets/i18n/${lang}.json`, 'utf-8')
 )
 
-//require('events').EventEmitter.defaultMaxListeners = 5000
+require('events').EventEmitter.defaultMaxListeners = 5000
 
 contextMenu({
   prepend: (defaultActions, parameters, browserWindow) => [
@@ -152,8 +152,8 @@ function newtab() {
       browserview.webContents.insertCSS(`
         body,body>*, *{
           font-family: ${store.get(
-            'experimental.changedfont'
-          )},'Noto Sans JP'!important;
+        'experimental.changedfont'
+      )},'Noto Sans JP'!important;
         }`)
     }
   })
@@ -171,7 +171,7 @@ function newtab() {
   browserview.setBounds({ x: 40, y: 80, width: 960, height: 620 })
   browserview.setAutoResize({ width: true, height: true })
   browserview.setBackgroundColor('#ffffffff')
-  browserview.webContents.loadURL(`${__dirname}/src/pages/home.html`)
+  browserview.webContents.loadFile(`${__dirname}/src/pages/home.html`)
   browserview.webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
   if (node.loadLang()[0]) {
@@ -267,7 +267,7 @@ app.on('activate', () => {
 
 //ipc channels
 ipcMain.handle('moveView', (e, link, index) => {
-  let history = store.get('history')
+  let history = store.get('history') ? store.get('history') : []
   bv[index].webContents
     .executeJavaScript(`document.addEventListener('contextmenu',()=>{
     node.context();
@@ -291,7 +291,6 @@ ipcMain.handle('moveView', (e, link, index) => {
     const chromeUA = currentUA
       .replace(/reamix\/.*?.[0-9]\s/g, '')
       .replace(/Electron\/.*?.[0-9]\s/g, '')
-    bv[index].webContents.forcefullyCrashRenderer()
     bv[index].webContents
       .loadURL(link, { userAgent: chromeUA })
       .then(() => {
@@ -333,9 +332,10 @@ ipcMain.handle('moveView', (e, link, index) => {
           }
         }
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e)
         bv[index].webContents
-          .loadURL(`file://${__dirname}/src/pages/notfound.html`)
+          .loadFile(`${__dirname}/src/pages/notfound.html`)
           .then(() => {
             bv[index].webContents.executeJavaScript(`
               let page = document.documentElement.innerHTML;
@@ -488,7 +488,7 @@ ipcMain.handle('getBrowserUrl', (e, index) => {
   return bv[index].webContents.getURL()
 })
 ipcMain.handle('moveToNewTab', (e, index) => {
-  bv[index].webContents.loadURL(`${__dirname}/src/pages/home.html`)
+  bv[index].webContents.loadFile(`${__dirname}/src/pages/home.html`)
   bv[index].webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
   if (node.loadLang()[0]) {
@@ -526,14 +526,14 @@ ipcMain.handle('tabMove', (e, i) => {
   win.webContents.executeJavaScript(`
     if ('${bv[index].webContents.getURL()}'.includes('https')) {
       document.getElementById('search').value='${bv[
-        index
-      ].webContents.getURL()}';
+      index
+    ].webContents.getURL()}';
     } else {
         document.getElementById('search').value='';
     }
      document.getElementsByTagName('title')[0].innerText='${bv[
-       index
-     ].webContents.getTitle()} - Reamix';
+      index
+    ].webContents.getTitle()} - Reamix';
      `)
 })
 ipcMain.handle('removeTab', (e, i) => {
@@ -570,7 +570,7 @@ ipcMain.handle('saveFav', (e, name, link) => {
 })
 
 const openPage = (name) => {
-  bv[index].webContents.loadURL(`${__dirname}/src/pages/${name}.html`)
+  bv[index].webContents.loadFile(`${__dirname}/src/pages/${name}.html`)
   bv[index].webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
   if (node.loadLang()[0]) {
