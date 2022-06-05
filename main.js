@@ -625,11 +625,6 @@ let menu = Menu.buildFromTemplate([
         label: t['hide_others'],
       },
       {
-        role: 'reload',
-        label: t['restate'],
-        accelerator: 'CmdOrCtrl+Alt+R',
-      },
-      {
         label: t['quit'],
         role: 'quit',
         accelerator: 'CmdOrCtrl+Q',

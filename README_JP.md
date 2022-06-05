@@ -4,7 +4,7 @@
 
 ## 概要
 
-[Monot](https://github.com/Sorakime/monot)ベースのシンプルで便利なブラウザ。  
+[Monot](https://github.com/mncrp/monot)ベースのシンプルで便利なブラウザ。  
 VCLinuxに標準搭載。
 
 ## 機能

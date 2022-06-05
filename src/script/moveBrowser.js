@@ -14,7 +14,7 @@ function moveBrowser() {
 
 function searchEnter(e) {
   const word = e.value
-  if (window.event.key === 'Enter' && word != null) {
+  if (window.event.key === 'Enter' && word != null && !e.isComposing) {
     document.activeElement.blur()
     node.moveBrowser(word, getCurrent())
   }
