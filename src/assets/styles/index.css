@@ -136,6 +136,7 @@ main > div header .action {
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
+  height: 30px;
 }
 .bar a {
   padding: 0.125rem;

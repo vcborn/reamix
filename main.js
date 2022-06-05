@@ -48,7 +48,7 @@ contextMenu({
   ],
 })
 
-function newtab() {
+async function newtab() {
   let browserview = new BrowserView({
     webPreferences: {
       scrollBounce: true,
@@ -68,6 +68,13 @@ function newtab() {
     ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
       blocker.enableBlockingInSession(browserview.webContents.session)
     })
+    if (store.get("blockList")) {
+      try {
+        const blocker = await ElectronBlocker.fromLists(fetch, store.get("blockList"));
+      } catch(e) {
+        console.log(e)
+      }
+    }
   }
   browserview.webContents
     .executeJavaScript(`document.addEventListener('contextmenu',()=>{
@@ -575,6 +582,9 @@ ipcMain.handle('saveFav', (e, name, link) => {
 ipcMain.handle("restart", () => {
   app.relaunch()
   app.exit()
+})
+ipcMain.handle("setBlockList", (e, list) => {
+  store.set("blockList", list)
 })
 
 const openPage = (name) => {

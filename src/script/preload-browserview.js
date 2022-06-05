@@ -75,5 +75,8 @@ contextBridge.exposeInMainWorld('node', {
   },
   restart: () => {
     ipcRenderer.invoke("restart")
-  }
+  },
+  setBlockList: (list) => {
+    ipcRenderer.invoke("setBlockList", list)
+  },
 })

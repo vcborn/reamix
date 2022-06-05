@@ -52,7 +52,12 @@
                 <input type="checkbox" id="adblock" onchange="changeCheckbox('adblocker', this)" />
                 <span class="slider round"></span>
             </label>
+            <div>
+                <h5>ブロッカーリスト（1行に1つ）</h5>
+                <textarea id="blockList" rows="4" onchange="changeList()"></textarea>
+            </div>
         </div>
+        
     </div>
     <script src="settings.js"></script>
 </body>
