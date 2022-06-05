@@ -287,6 +287,7 @@ ipcMain.handle('moveView', (e, link, index) => {
   } else if (link === 'reamix://downloads') {
     openPage('downloads')
   } else {
+    // ユーザーエージェントの置き換え
     const currentUA = win.webContents.getUserAgent()
     const chromeUA = currentUA
       .replace(/reamix\/.*?.[0-9]\s/g, '')
