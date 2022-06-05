@@ -27,7 +27,7 @@ window.onload = function () {
     document.getElementById('adblock').setAttribute('checked', 'true')
   }
   const list = node.getSettings("blockList") ? node.getSettings("blockList").join('\n') : "";
-  document.getElementById("blockList").value = list;
+  document.getElementById("blockList").textContent = list;
 }
 
 const restartBrowser = () => {
