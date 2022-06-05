@@ -110,9 +110,12 @@ function newtab() {
         `document.getElementsByTagName('input')[0].value='${browserview.webContents.getURL()}'`
       )
     }
+    const title = browserview.webContents.getTitle()
+    const subed = title.length > 10 ? title.substring(0,10) + "..." : title
     win.webContents.executeJavaScript(
-      `document.getElementsByTagName('title')[0].innerText='${browserview.webContents.getTitle()} - Reamix';
-      document.getElementById('opened').getElementsByTagName('p')[0].innerText='${browserview.webContents.getTitle()}';`
+      `document.getElementsByTagName('title')[0].innerText='${title} - Reamix';
+      document.getElementById('opened').title='${title}';
+      document.getElementById('opened').getElementsByTagName('p')[0].innerText='${subed}';`
     )
   })
   browserview.webContents.on('did-stop-loading', () => {
@@ -568,6 +571,10 @@ ipcMain.handle('saveFav', (e, name, link) => {
   fav.push(list)
   console.log(fav)
   store.set('bookmarks', fav)
+})
+ipcMain.handle("restart", () => {
+  app.relaunch()
+  app.exit()
 })
 
 const openPage = (name) => {

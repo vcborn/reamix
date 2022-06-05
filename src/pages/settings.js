@@ -27,3 +27,7 @@ window.onload = function () {
     document.getElementById('adblock').setAttribute('checked', 'true')
   }
 }
+
+const restartBrowser = () => {
+  node.restart()
+}

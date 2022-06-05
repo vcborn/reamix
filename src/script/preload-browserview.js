@@ -73,4 +73,7 @@ contextBridge.exposeInMainWorld('node', {
   deleteAll: () => {
     store.set('history', [])
   },
+  restart: () => {
+    ipcRenderer.invoke("restart")
+  }
 })
