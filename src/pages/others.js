@@ -38,7 +38,11 @@ function remove(e, name) {
     elements = [].slice.call(elements)
     let index = elements.indexOf(element) === -1 ? 0 : elements.indexOf(element)
     document.querySelectorAll('#list>#col')[index].remove()
-    node.removeExtension(node.loadExtension()[index])
+    node.removeExtension(
+      `https://chrome.google.com/webstore/detail/example/${
+        node.loadExtension()[index]
+      }`
+    )
   } else if (name === 'bookmarks') {
     e.parentNode.remove()
     node.remove(

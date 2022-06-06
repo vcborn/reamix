@@ -152,8 +152,8 @@ function newtab() {
       browserview.webContents.insertCSS(`
         body,body>*, *{
           font-family: ${store.get(
-        'experimental.changedfont'
-      )},'Noto Sans JP'!important;
+            'experimental.changedfont'
+          )},'Noto Sans JP'!important;
         }`)
     }
   })
@@ -526,14 +526,14 @@ ipcMain.handle('tabMove', (e, i) => {
   win.webContents.executeJavaScript(`
     if ('${bv[index].webContents.getURL()}'.includes('https')) {
       document.getElementById('search').value='${bv[
-      index
-    ].webContents.getURL()}';
+        index
+      ].webContents.getURL()}';
     } else {
         document.getElementById('search').value='';
     }
      document.getElementsByTagName('title')[0].innerText='${bv[
-      index
-    ].webContents.getTitle()} - Reamix';
+       index
+     ].webContents.getTitle()} - Reamix';
      `)
 })
 ipcMain.handle('removeTab', (e, i) => {

@@ -12,7 +12,6 @@ const changeHome = () => {
 
 const changeCheckbox = (key, e) => {
   const value = e.checked
-  console.log(key, e.checked)
   node.changeSettings(key, value)
 }
 
