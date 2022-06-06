@@ -48,7 +48,7 @@ contextMenu({
   ],
 })
 
-function newtab() {
+async function newtab() {
   let browserview = new BrowserView({
     webPreferences: {
       scrollBounce: true,
@@ -68,6 +68,13 @@ function newtab() {
     ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
       blocker.enableBlockingInSession(browserview.webContents.session)
     })
+    if (store.get("blockList")) {
+      try {
+        const blocker = await ElectronBlocker.fromLists(fetch, store.get("blockList"));
+      } catch(e) {
+        console.log(e)
+      }
+    }
   }
   browserview.webContents
     .executeJavaScript(`document.addEventListener('contextmenu',()=>{
@@ -110,9 +117,12 @@ function newtab() {
         `document.getElementsByTagName('input')[0].value='${browserview.webContents.getURL()}'`
       )
     }
+    const title = browserview.webContents.getTitle()
+    const subed = title.length > 10 ? title.substring(0,10) + "..." : title
     win.webContents.executeJavaScript(
-      `document.getElementsByTagName('title')[0].innerText='${browserview.webContents.getTitle()} - Reamix';
-      document.getElementById('opened').getElementsByTagName('p')[0].innerText='${browserview.webContents.getTitle()}';`
+      `document.getElementsByTagName('title')[0].innerText='${title} - Reamix';
+      document.getElementById('opened').title='${title}';
+      document.getElementById('opened').getElementsByTagName('p')[0].innerText='${subed}';`
     )
   })
   browserview.webContents.on('did-stop-loading', () => {
@@ -287,6 +297,7 @@ ipcMain.handle('moveView', (e, link, index) => {
   } else if (link === 'reamix://downloads') {
     openPage('downloads')
   } else {
+    // ユーザーエージェントの置き換え
     const currentUA = win.webContents.getUserAgent()
     const chromeUA = currentUA
       .replace(/reamix\/.*?.[0-9]\s/g, '')
@@ -568,6 +579,13 @@ ipcMain.handle('saveFav', (e, name, link) => {
   console.log(fav)
   store.set('bookmarks', fav)
 })
+ipcMain.handle("restart", () => {
+  app.relaunch()
+  app.exit()
+})
+ipcMain.handle("setBlockList", (e, list) => {
+  store.set("blockList", list)
+})
 
 const openPage = (name) => {
   bv[index].webContents.loadFile(`${__dirname}/src/pages/${name}.html`)
@@ -615,11 +633,6 @@ let menu = Menu.buildFromTemplate([
       {
         role: 'hideothers',
         label: t['hide_others'],
-      },
-      {
-        role: 'reload',
-        label: t['restate'],
-        accelerator: 'CmdOrCtrl+Alt+R',
       },
       {
         label: t['quit'],

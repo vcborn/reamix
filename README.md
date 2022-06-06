@@ -3,7 +3,7 @@
 ![reamix](https://user-images.githubusercontent.com/39876629/161370659-bbe7ca7b-df8f-4e3e-bf39-8765b75395bf.jpg)
 ## Description
 
-A simple and convenient browser based on [Monot](https://github.com/Sorakime/monot).   
+A simple and convenient browser based on [Monot](https://github.com/mncrp/monot).   
 Comes standard with VCLinux.
 
 ## Features

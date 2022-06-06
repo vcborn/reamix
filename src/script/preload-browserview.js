@@ -98,4 +98,10 @@ contextBridge.exposeInMainWorld('node', {
       store.set('history', [])
     }
   },
+  restart: () => {
+    ipcRenderer.invoke("restart")
+  },
+  setBlockList: (list) => {
+    ipcRenderer.invoke("setBlockList", list)
+  },
 })

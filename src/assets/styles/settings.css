@@ -37,7 +37,7 @@ ul {
   margin-top: 1rem;
   margin-bottom: 0.25rem;
 }
-.main h4 {
+.main h4, .main h5 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
@@ -61,6 +61,8 @@ select option {
 }
 
 button.save {
+  margin-top:0.75rem;
+  margin-bottom:0.75rem;
   background-color: #2196f3;
   border-radius: 1rem;
   color: #fff;
@@ -149,12 +151,14 @@ input:checked + .slider:before {
 }
 
 .dark input,
-.dark select {
+.dark select,
+.dark textarea {
   color: #fff;
   background-color: #333;
 }
 .dark input:focus,
-.dark select:hover {
+.dark select:hover,
+.dark textarea:hover {
   background-color: #444;
 }
 .dark option,
@@ -162,6 +166,12 @@ input:checked + .slider:before {
   background-color: #222;
 }
 
+textarea {
+  border-radius: 1rem;
+  padding: 0.75rem;
+  width: 600px;
+  transition-duration: 200ms;
+}
 h2 {
   margin-bottom: 1rem;
 }
