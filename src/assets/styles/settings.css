@@ -30,28 +30,35 @@ ul {
   margin-left: 2rem;
 }
 
+p {
+  margin-bottom: 1rem;
+}
+
 .main {
   margin: 2rem;
 }
 .main h3 {
   margin-top: 1rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 1rem;
 }
-.main h4, .main h5 {
+.main h4,
+.main h5 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
 input {
-  border-radius: 1rem;
-  padding: 0.25rem 0.5rem;
+  margin-right: 0.5rem;
+  border-radius: 0.5rem;
+  padding: 0.35rem 1.25rem;
   transition-duration: 200ms;
 }
 
 select {
-  border-radius: 1rem;
-  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  padding: 0.35rem 1.25rem;
   transition-duration: 200ms;
+  cursor: pointer;
 }
 select:hover {
   background-color: #ccc;
@@ -61,24 +68,23 @@ select option {
 }
 
 button.save {
-  margin-top:0.75rem;
-  margin-bottom:0.75rem;
+  cursor: pointer;
   background-color: #2196f3;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   color: #fff;
-  padding: 0.25rem 0.75rem;
-  margin-left: 0.5rem;
+  padding: 0.5rem 1.25rem;
   transition-duration: 200ms;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 button.save:hover {
-  background-color: #1871b8;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 
 .switch {
   position: relative;
   display: inline-block;
   width: 60px;
-  height: 27px;
+  height: 25px;
 }
 
 .switch input {
@@ -102,8 +108,8 @@ button.save:hover {
 .slider:before {
   position: absolute;
   content: '';
-  height: 19px;
-  width: 19px;
+  height: 18px;
+  width: 18px;
   left: 4px;
   bottom: 4px;
   background-color: white;
@@ -167,7 +173,7 @@ input:checked + .slider:before {
 }
 
 textarea {
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   padding: 0.75rem;
   width: 600px;
   transition-duration: 200ms;

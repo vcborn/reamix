@@ -99,9 +99,15 @@ contextBridge.exposeInMainWorld('node', {
     }
   },
   restart: () => {
-    ipcRenderer.invoke("restart")
+    ipcRenderer.invoke('restart')
   },
   setBlockList: (list) => {
-    ipcRenderer.invoke("setBlockList", list)
+    ipcRenderer.invoke('setBlockList', list)
+  },
+  setFullscreen: () => {
+    ipcRenderer.invoke('setFullscreen')
+  },
+  exitFullscreen: () => {
+    ipcRenderer.invoke('exitFullscreen')
   },
 })

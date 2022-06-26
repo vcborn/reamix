@@ -68,10 +68,13 @@ async function newtab() {
     ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
       blocker.enableBlockingInSession(browserview.webContents.session)
     })
-    if (store.get("blockList")) {
+    if (store.get('blockList')) {
       try {
-        const blocker = await ElectronBlocker.fromLists(fetch, store.get("blockList"));
-      } catch(e) {
+        const blocker = await ElectronBlocker.fromLists(
+          fetch,
+          store.get('blockList')
+        )
+      } catch (e) {
         console.log(e)
       }
     }
@@ -100,6 +103,56 @@ async function newtab() {
       node.context();
     })`)
   })
+  browserview.webContents.on('update-target-url', () => {
+    bv[index].webContents.executeJavaScript(`
+          document.addEventListener('fullscreenchange', () => {
+          if (document.fullscreenElement) {
+            node.setFullscreen()
+          } else {
+            node.exitFullscreen()
+          }
+        })`)
+    const link = browserview.webContents.getURL()
+    const webstore = new RegExp(
+      /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
+    )
+    if (webstore.test(link)) {
+      const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
+      if (extensionsDir.includes(webstore.exec(link)[1])) {
+        bv[index].webContents.executeJavaScript(`
+          const button = '<style>a[aria-label="Reamix から削除"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix から削除"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix から削除" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix から削除</div></div></div></div>';
+          setTimeout(function(){
+            document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
+            document.getElementById("install").addEventListener('click', function(){
+              node.removeExtension(location.href);
+            })
+          }, 3000);
+        `)
+      } else {
+        bv[index].webContents.executeJavaScript(`
+          const button = '<style>a[aria-label="Reamix に追加"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix に追加"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix に追加" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix に追加</div></div></div></div>';
+          setTimeout(function(){
+            document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
+            document.getElementById("install").addEventListener('click', function(){
+              node.installExtension(location.href);
+            })
+          }, 3000);
+        `)
+      }
+    }
+    if (
+      link !== '' &&
+      store.get('bookmarks').some((bookmark) => bookmark.includes(link))
+    ) {
+      win.webContents.executeJavaScript(`
+        document.getElementById('fav-icon').src = 'assets/icons/star-fill.svg'
+      `)
+    } else {
+      win.webContents.executeJavaScript(`
+        document.getElementById('fav-icon').src = 'assets/icons/star.svg'
+      `)
+    }
+  })
   browserview.webContents.on('did-finish-load', () => {
     win.webContents.executeJavaScript(
       `document.getElementsByClassName('loading')[0].setAttribute('id','loaded')`
@@ -118,7 +171,7 @@ async function newtab() {
       )
     }
     const title = browserview.webContents.getTitle()
-    const subed = title.length > 10 ? title.substring(0,10) + "..." : title
+    const subed = title.length > 10 ? title.substring(0, 10) + '...' : title
     win.webContents.executeJavaScript(
       `document.getElementsByTagName('title')[0].innerText='${title} - Reamix';
       document.getElementById('opened').title='${title}';
@@ -308,7 +361,7 @@ ipcMain.handle('moveView', (e, link, index) => {
         win.webContents.executeJavaScript(
           `document.getElementsByTagName('input')[0].value='${bv[
             index
-          ].webContents.getURL()}'`
+          ].webContents.getURL()};'`
         )
         history.push([
           bv[index].webContents.getTitle(),
@@ -392,6 +445,19 @@ ipcMain.handle('moveView', (e, link, index) => {
 ipcMain.handle('windowClose', () => {
   ipcMain.removeAllListeners()
   win.close()
+})
+ipcMain.handle('setFullscreen', () => {
+  const { screen } = require('electron')
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const { width, height } = primaryDisplay.size
+  win.webContents.insertCSS('html{display: none}')
+  bv[index].setBounds({ x: 0, y: 0, width: width, height: height })
+  bv[index].setAutoResize({ width: true, height: true })
+})
+ipcMain.handle('exitFullscreen', () => {
+  win.webContents.insertCSS('html{display: block}')
+  bv[index].setBounds({ x: 40, y: 80, width: 960, height: 620 })
+  bv[index].setAutoResize({ width: true, height: true })
 })
 ipcMain.handle('windowMaximize', () => {
   win.maximize()
@@ -576,15 +642,14 @@ ipcMain.handle('saveFav', (e, name, link) => {
   const list = [name, link]
   let fav = store.get('bookmarks')
   fav.push(list)
-  console.log(fav)
   store.set('bookmarks', fav)
 })
-ipcMain.handle("restart", () => {
+ipcMain.handle('restart', () => {
   app.relaunch()
   app.exit()
 })
-ipcMain.handle("setBlockList", (e, list) => {
-  store.set("blockList", list)
+ipcMain.handle('setBlockList', (e, list) => {
+  store.set('blockList', list)
 })
 
 const openPage = (name) => {
@@ -717,7 +782,6 @@ let menu = Menu.buildFromTemplate([
         label: t['dev_tools'],
         accelerator: 'F12',
         click: () => {
-          console.log(index)
           bv[index].webContents.toggleDevTools()
         },
       },
