@@ -5,3 +5,4 @@ src/extensions/*
 !.gitkeep
 *.code-workspace
 release/2*
+.DS_Store
