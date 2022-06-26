@@ -59,6 +59,13 @@ module.exports = {
     target: ['dmg'],
     artifactName: '${productName}_${version}_x86_64.${ext}',
   },
+  dmg: {
+    background: "src/assets/images/background.tiff",
+    window: {
+        width: 540,
+        height: 380
+    }
+  },
   linux: {
     icon: 'src/assets/images/logo.icns',
     target: [
