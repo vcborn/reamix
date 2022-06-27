@@ -42,6 +42,7 @@ module.exports = {
     oneClick: false,
     allowToChangeInstallationDirectory: true,
     deleteAppDataOnUninstall: false,
+    uninstallDisplayName: '${productName}',
   },
   portable: {
     artifactName: '${productName}_${version}_portable.${ext}',

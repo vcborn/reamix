@@ -608,10 +608,10 @@ ipcMain.handle('tabMove', (e, i) => {
     } else {
         document.getElementById('search').value='';
     }
-     document.getElementsByTagName('title')[0].innerText='${bv[
-       index
-     ].webContents.getTitle()} - Reamix';
-     `)
+    document.getElementsByTagName('title')[0].innerText='${bv[
+      index
+    ].webContents.getTitle()} - Reamix';
+    `)
 })
 ipcMain.handle('removeTab', (e, i) => {
   try {
