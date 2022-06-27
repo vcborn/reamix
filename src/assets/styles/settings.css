@@ -44,7 +44,7 @@ p:not(.second) {
 .main h4,
 .main h5 {
   margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 input {

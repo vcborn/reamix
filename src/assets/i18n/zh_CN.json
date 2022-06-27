@@ -18,7 +18,7 @@
   "website": "网站缩略图",
   "not_found_text": "未找到。请在确认互联网连接后，再次浏览网站。",
   "settings": "设置",
-  "settings_note": "重新启动后会反映设置。",
+  "settings_note": "一些设置在重启后会得到反映。",
   "wallpaper": "壁纸",
   "custom": "自定义",
   "language": "语言",
@@ -51,6 +51,7 @@
   "adblock": "广告屏蔽器",
   "filter_lists": "过滤器列表（每行一个）",
   "customize": "定制",
+  "suggest": "建议（仅限谷歌）",
   "background": "背景图像URL",
   "deleteall": "删除所有历史记录"
 }

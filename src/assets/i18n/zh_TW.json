@@ -18,7 +18,7 @@
   "website": "網站縮略圖",
   "not_found_text": "未找到。 請在確認互聯網連接後，再次瀏覽網站。",
   "settings": "設定",
-  "settings_note": "重新啟動後會反映設定。",
+  "settings_note": "一些設置在重啟後會得到反映。",
   "wallpaper": "桌面",
   "custom": "自定義",
   "language": "語言",
@@ -51,6 +51,7 @@
   "adblock": "廣告攔截器",
   "filter_lists": "過濾器列表（每行一個）",
   "customize": "定制",
+  "suggest": "建議（僅限谷歌）",
   "background": "背景圖像URL",
   "deleteall": "刪除所有歷史記錄"
 }

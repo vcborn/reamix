@@ -12,6 +12,8 @@ Comes standard with VCLinux.
 - Support for Chrome extensions
 - Built-in Ad Blocker
 - Convenient UI
+- Search Suggest (Google Only)
+- Custom Backgroud Image
 
 ## Screenshots
 
@@ -29,8 +31,6 @@ Comes standard with VCLinux.
 - <kbd>F12</kbd> - Open Developer Tools
 - <kbd>Alt</kbd> + <kbd>F12</kbd> - Open Browser Developer Tools
 - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>S</kbd> - Open Settings
-
-Moving tabs is not supported, but is expected to be supported in later version.
 
 ## Download
 

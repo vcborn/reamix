@@ -22,7 +22,7 @@
   "not_found_text": "は見つかりませんでした。インターネット接続をご確認の上、もう一度ウェブサイトをご参照ください。",
 
   "settings": "設定",
-  "settings_note": "設定は再起動後に反映されます。",
+  "settings_note": "いくつかの設定は再起動後に反映されます。",
   "wallpaper": "壁紙",
   "custom": "カスタム",
   "language": "言語",
@@ -66,6 +66,7 @@
   "adblock": "広告ブロッカー",
   "filter_lists": "フィルターリスト（1行に1つ）",
   "customize": "カスタマイズ",
+  "suggest": "サジェスト（Googleのみ）",
   "background": "背景画像URL",
   "deleteall": "すべての履歴を削除"
 }

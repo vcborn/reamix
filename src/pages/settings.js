@@ -22,13 +22,15 @@ const changeCheckbox = (key, e) => {
 
 window.onload = function () {
   const lang = node.getSettings('lang') ? node.getSettings('lang') : 'ja'
-  const adblocker = node.getSettings('adblocker')
   document
     .getElementById('lang')
     .querySelector(`option[value='${lang}']`)
     .setAttribute('selected', 'selected')
-  if (adblocker) {
+  if (node.getSettings('adblocker')) {
     document.getElementById('adblock').setAttribute('checked', 'true')
+  }
+  if (node.getSettings('suggest')) {
+    document.getElementById('suggest').setAttribute('checked', 'true')
   }
   const list = node.getSettings('blockList')
     ? node.getSettings('blockList').join('\n')

@@ -22,7 +22,7 @@
   "not_found_text": "was not found. Please check your internet connection and try the website again.",
 
   "settings": "Settings",
-  "settings_note": "Settings are reflected after restart.",
+  "settings_note": "Some settings are reflected after restart.",
   "wallpaper": "Wallpaper",
   "custom": "Custom",
   "language": "Language",
@@ -66,6 +66,7 @@
   "adblock": "Ad blocker",
   "filter_lists": "Filter list (one per line)",
   "customize": "Customize",
+  "suggest": "Suggestions (Google Only)",
   "background": "Background Image URL",
   "deleteall": "Delete All History"
 }

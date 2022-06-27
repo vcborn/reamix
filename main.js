@@ -23,7 +23,6 @@ const Store = require('electron-store')
 const store = new Store()
 const path = require('path')
 index = 0
-let w, h
 
 const lang = store.get('lang') ? store.get('lang') : 'ja'
 let t = JSON.parse(
@@ -58,6 +57,9 @@ async function newtab() {
   })
   if (store.get('adblocker') === null) {
     store.set('adblocker', true)
+  }
+  if (store.get('suggest') === null) {
+    store.set('suggest', true)
   }
   if (store.get('history') === null) {
     store.set('history', [])
