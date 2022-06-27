@@ -15,8 +15,14 @@ if (document.getElementById('extension') && node.loadExtension()) {
     const content = template.content
     const clone = document.importNode(content, true)
     clone.getElementById('name').innerText = bookmark[0]
-    clone.getElementById('link-text').innerText = bookmark[1]
+    clone.getElementById('link-text').innerText =
+      bookmark[1].length >= 30
+        ? bookmark[1].substring(0, 30) + '...'
+        : bookmark[1]
     clone.getElementById('link').href = bookmark[1]
+    clone.getElementById(
+      'favicon'
+    ).src = `https://www.google.com/s2/favicons?domain=${bookmark[1]}&sz=128`
     document.getElementById('list').appendChild(clone)
   }
 } else if (document.getElementById('history') && node.load('history')) {
@@ -25,8 +31,12 @@ if (document.getElementById('extension') && node.loadExtension()) {
     const content = template.content
     const clone = document.importNode(content, true)
     clone.getElementById('name').innerText = row[0]
-    clone.getElementById('link-text').innerText = row[1]
+    clone.getElementById('link-text').innerText =
+      row[1].length >= 50 ? row[1].substring(0, 50) + '...' : row[1]
     clone.getElementById('link').href = row[1]
+    clone.getElementById(
+      'favicon'
+    ).src = `https://www.google.com/s2/favicons?domain=${row[1]}&sz=128`
     document.getElementById('list').appendChild(clone)
   }
 }

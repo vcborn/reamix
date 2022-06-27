@@ -23,6 +23,7 @@ const Store = require('electron-store')
 const store = new Store()
 const path = require('path')
 index = 0
+let w, h
 
 const lang = store.get('lang') ? store.get('lang') : 'ja'
 let t = JSON.parse(
@@ -452,12 +453,11 @@ ipcMain.handle('setFullscreen', () => {
   const { width, height } = primaryDisplay.size
   win.webContents.insertCSS('html{display: none}')
   bv[index].setBounds({ x: 0, y: 0, width: width, height: height })
-  bv[index].setAutoResize({ width: true, height: true })
 })
 ipcMain.handle('exitFullscreen', () => {
   win.webContents.insertCSS('html{display: block}')
   bv[index].setBounds({ x: 40, y: 80, width: 960, height: 620 })
-  bv[index].setAutoResize({ width: true, height: true })
+  win.setSize(1000, 700)
 })
 ipcMain.handle('windowMaximize', () => {
   win.maximize()

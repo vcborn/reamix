@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>%settings%</title>
     <link rel="stylesheet" href="../assets/styles/fonts.css" />
-    <link rel="stylesheet" href="../assets/styles/settings.css" />
+    <link rel="stylesheet" href="../assets/styles/settings.min.css" />
 </head>
 
 <body>
@@ -45,6 +45,10 @@
                 <option value="yahoo">Yahoo</option>
             </select>
         </div>
+        <h3>%customize%</h3>
+        <h4>%background%</h4>
+        <input type="text" id="background" style="width:280px" />
+        <button class="save" onclick="changeBG()">%save%</button>
         <h3>%extensions%</h3>
         <h4>%adblock%</h4>
         <div>
@@ -53,11 +57,11 @@
                 <span class="slider round"></span>
             </label>
             <div>
-                <h5>ブロッカーリスト（1行に1つ）</h5>
+                <h5>%filter_lists%</h5>
                 <textarea id="blockList" rows="4" onchange="changeList()"></textarea>
             </div>
         </div>
-        
+
     </div>
     <script src="settings.js"></script>
 </body>

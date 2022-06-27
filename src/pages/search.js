@@ -1,5 +1,12 @@
 'use strict'
 
+if (node.getSettings('background')) {
+  document.body.style.backgroundImage = `url("${node.getSettings(
+    'background'
+  )}")`
+  document.body.style.backgroundSize = 'cover'
+}
+
 function wordSearch(e) {
   const engine =
     document.getElementById('engine').options[

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>%bookmarks%</title>
     <link rel="stylesheet" href="../assets/styles/fonts.css" />
-    <link rel="stylesheet" href="../assets/styles/settings.css">
+    <link rel="stylesheet" href="../assets/styles/settings.min.css">
 </head>
 
 <body>
@@ -18,8 +18,11 @@
                         <img class="icon delete" src="../assets/icons/x.svg" alt="delete bookmark" />
                     </a>
                     <a href="#" id="link">
-                        <h3 id="name">SiteTitle</h3>
-                        <p id="link-text" class="second">SiteLink</p>
+                        <img id="favicon" src="#" onerror="this.onerror=null; this.src='../assets/icons/file.svg'" />
+                        <div>
+                            <h3 id="name">SiteTitle</h3>
+                            <p id="link-text" class="second">SiteLink</p>
+                        </div>
                     </a>
                 </div>
             </template>

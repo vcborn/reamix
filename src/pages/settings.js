@@ -10,6 +10,11 @@ const changeHome = () => {
   node.changeSettings('home', value)
 }
 
+const changeBG = () => {
+  const value = document.getElementById('background').value
+  node.changeSettings('background', value)
+}
+
 const changeCheckbox = (key, e) => {
   const value = e.checked
   node.changeSettings(key, value)
@@ -29,6 +34,11 @@ window.onload = function () {
     ? node.getSettings('blockList').join('\n')
     : ''
   document.getElementById('blockList').textContent = list
+
+  window.setTimeout(function () {
+    document.getElementById('home').value = node.getSettings('home')
+    document.getElementById('background').value = node.getSettings('background')
+  }, 100)
 }
 
 const restartBrowser = () => {

@@ -64,5 +64,8 @@
   "success_remove": "Deleted successfully",
 
   "adblock": "Ad blocker",
+  "filter_lists": "Filter list (one per line)",
+  "customize": "Customize",
+  "background": "Background Image URL",
   "deleteall": "Delete All History"
 }
