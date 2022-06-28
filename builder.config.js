@@ -11,6 +11,9 @@ module.exports = {
     output: 'release/${version}',
     buildResources: 'resources',
   },
+  electronDownload: {
+    mirror: 'https://github.com/castlabs/electron-releases/releases/download/v',
+  },
   files: [
     '!.git',
     '!.dist',
@@ -61,11 +64,11 @@ module.exports = {
     artifactName: '${productName}_${version}_x86_64.${ext}',
   },
   dmg: {
-    background: "src/assets/images/background.tiff",
+    background: 'src/assets/images/background.tiff',
     window: {
-        width: 540,
-        height: 380
-    }
+      width: 540,
+      height: 380,
+    },
   },
   linux: {
     icon: 'src/assets/images/logo.icns',
