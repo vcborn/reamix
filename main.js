@@ -2,6 +2,7 @@
 
 const {
   app,
+  components,
   BrowserWindow,
   BrowserView,
   dialog,
@@ -326,7 +327,10 @@ async function nw() {
   }
 }
 
-app.on('ready', nw)
+app.whenReady().then(async () => {
+  await components.whenReady()
+  nw()
+})
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
@@ -524,7 +528,6 @@ ipcMain.handle('reloadBrowser', (e, index) => {
   bv[index].webContents.reload()
   bv[index].webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
-  document.documentElement.innerHTML = "";
   if (node.loadLang()[0]) {
     Object.keys(node.loadLang()[1]).forEach((item) => {
       page = page.replace(

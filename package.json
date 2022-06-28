@@ -12,7 +12,7 @@
   "author": "VCborn <support@vcborn.com>",
   "homepage": "https://vcborn.com/services/reamix/",
   "devDependencies": {
-    "electron": "^19.0.6",
+    "electron": "github:castlabs/electron-releases#v19.0.6+wvcus",
     "electron-builder": "^23.1.0"
   },
   "dependencies": {
