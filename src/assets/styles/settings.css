@@ -9,6 +9,19 @@
   --white-hover: #ccc;
 }
 
+::-webkit-scrollbar {
+  width: 14px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 * {
   font-family: 'Noto Sans JP', 'Noto Sans SC', sans-serif;
   position: relative;
