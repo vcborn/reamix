@@ -14,6 +14,7 @@ Comes standard with VCLinux.
 - Convenient UI
 - Auto Suggest
 - Custom Backgroud Image
+- Custom CSS
 
 ## Screenshots
 
@@ -28,6 +29,7 @@ Comes standard with VCLinux.
 - <kbd>Ctrl</kbd> + <kbd>R</kbd> - Reload
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> - Go Back
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> - Go Forward
+- <kbd>Ctrl</kbd> + <kbd>W</kbd> - Close Current Tab / Close Window
 - <kbd>F12</kbd> - Open Developer Tools
 - <kbd>Alt</kbd> + <kbd>F12</kbd> - Open Browser Developer Tools
 - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>S</kbd> - Open Settings

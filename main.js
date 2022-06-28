@@ -612,7 +612,7 @@ ipcMain.handle('newtab', () => {
   newtab()
 })
 ipcMain.handle('tabMove', (e, i) => {
-  index = i < 0 ? 0 : i
+  index = i < 0 ? bv.length - 1 : i
   win.setTopBrowserView(bv[index])
   win.webContents.executeJavaScript(`
     if ('${bv[index].webContents.getURL()}'.includes('https')) {
@@ -743,6 +743,29 @@ let menu = Menu.buildFromTemplate([
         accelerator: 'CmdOrCtrl+Alt+X',
         click: () => {
           bv[index].webContents.goForward()
+        },
+      },
+      {
+        label: t['close_tab'],
+        accelerator: 'CmdOrCtrl+W',
+        click: () => {
+          win.webContents.executeJavaScript(`
+            if (document.querySelectorAll('span.tab').length > 1) {
+              let elements = document.querySelectorAll('.tab')
+              const element = document.getElementById('opened')
+              elements = [].slice.call(elements)
+              const index = elements.indexOf(element)
+              element.remove()
+              node.removeTab(index)
+              const lasttab = document.querySelector('.tab:last-child')
+              node.tabMove(-1)
+              setTimeout(() => {
+                lasttab.setAttribute('id', 'opened')
+              }, 1)
+            } else {
+              node.winClose()
+            }
+          `)
         },
       },
     ],

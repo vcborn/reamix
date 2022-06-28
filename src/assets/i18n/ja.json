@@ -13,6 +13,7 @@
   "minimize": "最小化",
   "maximize": "最大化",
   "close": "閉じる",
+  "close_tab": "現在のタブを閉じる",
   "restart": "再起動",
 
   "search_word": "検索する単語を入力",

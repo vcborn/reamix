@@ -12,6 +12,7 @@
   "minimize": "最小化",
   "maximize": "最大化",
   "close": "關閉",
+  "close_tab": "關閉當前標籤",
   "restart": "重新啟動",
   "search_word": "輸入要蒐索的單詞",
   "not_found": "找不到伺服器",
