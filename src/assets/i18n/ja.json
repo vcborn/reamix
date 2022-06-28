@@ -66,7 +66,7 @@
   "adblock": "広告ブロッカー",
   "filter_lists": "フィルターリスト（1行に1つ）",
   "customize": "カスタマイズ",
-  "suggest": "サジェスト（Googleのみ）",
+  "suggest": "自動サジェスト",
   "background": "背景画像URL",
   "deleteall": "すべての履歴を削除"
 }

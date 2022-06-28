@@ -51,7 +51,7 @@
   "adblock": "廣告攔截器",
   "filter_lists": "過濾器列表（每行一個）",
   "customize": "定制",
-  "suggest": "建議（僅限谷歌）",
+  "suggest": "自動建議",
   "background": "背景圖像URL",
   "deleteall": "刪除所有歷史記錄"
 }

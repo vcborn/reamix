@@ -12,7 +12,7 @@ Comes standard with VCLinux.
 - Support for Chrome extensions
 - Built-in Ad Blocker
 - Convenient UI
-- Search Suggest (Google Only)
+- Auto Suggest
 - Custom Backgroud Image
 
 ## Screenshots
@@ -26,7 +26,7 @@ Comes standard with VCLinux.
 - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + R</kbd> - Restart
 - <kbd>Ctrl</kbd> + <kbd>Q</kbd> - Quit
 - <kbd>Ctrl</kbd> + <kbd>R</kbd> - Reload
-- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + Z</kbd> - Go Back
+- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> - Go Back
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> - Go Forward
 - <kbd>F12</kbd> - Open Developer Tools
 - <kbd>Alt</kbd> + <kbd>F12</kbd> - Open Browser Developer Tools

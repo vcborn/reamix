@@ -13,7 +13,7 @@ VCLinuxに標準搭載。
 - Chrome拡張機能をサポート
 - 広告ブロック機能
 - 使いやすいUI
-- サジェスト（Googleのみ）
+- 自動サジェスト
 - カスタム背景画像
 
 ## スクリーンショット
@@ -27,7 +27,7 @@ VCLinuxに標準搭載。
 - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + R</kbd> - 再起動
 - <kbd>Ctrl</kbd> + <kbd>Q</kbd> - 終了
 - <kbd>Ctrl</kbd> + <kbd>R</kbd> - 再読み込み
-- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + Z</kbd> - 戻る
+- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> - 戻る
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> - 進む
 - <kbd>F12</kbd> - 開発者ツールを開く
 - <kbd>Alt</kbd> + <kbd>F12</kbd> - ブラウザ用開発者ツールを開く

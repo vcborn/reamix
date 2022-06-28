@@ -51,7 +51,7 @@
   "adblock": "广告屏蔽器",
   "filter_lists": "过滤器列表（每行一个）",
   "customize": "定制",
-  "suggest": "建议（仅限谷歌）",
+  "suggest": "自动建议",
   "background": "背景图像URL",
   "deleteall": "删除所有历史记录"
 }

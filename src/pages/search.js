@@ -40,27 +40,92 @@ async function wordSearch(e) {
       childNode.parentNode.removeChild(childNode)
     }
 
-    const parser = new DOMParser()
-    const suggest = await fetch(
-      `https://clients1.google.com/complete/search?output=toolbar&q=${word}`
-    )
-    const suggestions = parser.parseFromString(
-      await suggest.text(),
-      'application/xml'
-    )
-    const nodes = suggestions.documentElement.getElementsByTagName('suggestion')
-    for (let i = 0; i < (nodes.length > 5 ? 5 : nodes.length); i++) {
-      const text = suggestions.documentElement
-        .getElementsByTagName('suggestion')
-        [i].getAttribute('data')
-      const template = document.getElementById('suggest')
-      const content = template.content
-      const clone = document.importNode(content, true)
-      clone.getElementById('text').innerText = text
-      clone.getElementById(
-        'link'
-      ).href = `https://www.google.com/search?q=${text}`
-      document.getElementById('suggestions').appendChild(clone)
+    if (engine === 'google') {
+      const parser = new DOMParser()
+      const suggest = await fetch(
+        `https://clients1.google.com/complete/search?output=toolbar&q=${word}`
+      )
+      const suggestions = parser.parseFromString(
+        await suggest.text(),
+        'application/xml'
+      )
+      const nodes =
+        suggestions.documentElement.getElementsByTagName('suggestion')
+      for (let i = 0; i < (nodes.length > 5 ? 5 : nodes.length); i++) {
+        const text = suggestions.documentElement
+          .getElementsByTagName('suggestion')
+          [i].getAttribute('data')
+        const template = document.getElementById('suggest')
+        const content = template.content
+        const clone = document.importNode(content, true)
+        clone.getElementById('text').innerText = text
+        clone.getElementById(
+          'link'
+        ).href = `https://www.google.com/search?q=${text}`
+        document.getElementById('suggestions').appendChild(clone)
+      }
+    } else if (engine === 'bing') {
+      const suggest = await fetch(
+        `https://api.bing.com/qsonhs.aspx?mkt=ja-JP&q=${word}`
+      )
+      const suggestions = (await suggest.json())['AS']['Results'][0][
+        'Suggests'
+      ].map((obj) => obj.Txt)
+      for (
+        let i = 0;
+        i < (suggestions.length > 5 ? 5 : suggestions.length);
+        i++
+      ) {
+        const text = suggestions[i]
+        const template = document.getElementById('suggest')
+        const content = template.content
+        const clone = document.importNode(content, true)
+        clone.getElementById('text').innerText = text
+        clone.getElementById(
+          'link'
+        ).href = `https://www.bing.com/search?q=${text}`
+        document.getElementById('suggestions').appendChild(clone)
+      }
+    } else if (engine === 'yahoo-jp') {
+      const suggest = await fetch(
+        `https://n-assist-search.yahooapis.jp/SuggestSearchService/V5/webassistSearch?&eappid=bHh.tC2tmbwFomQjckAooTOC6x5ys6w7R3gXULbUAbqEzHo9..iAG5RUgtk7CV7ui5noLQjmw3RaB9pw7vn1Db8fgr4GdNS73YEk6GRiy8kE2AhUcYfRcdqb_q7XUWPoN5WKwr3ziDVtEWNyApS7&query=${word}`
+      )
+      const suggestions = (await suggest.json())['Result'].map(
+        (obj) => obj.Suggest
+      )
+      for (
+        let i = 0;
+        i < (suggestions.length > 5 ? 5 : suggestions.length);
+        i++
+      ) {
+        const text = suggestions[i]
+        const template = document.getElementById('suggest')
+        const content = template.content
+        const clone = document.importNode(content, true)
+        clone.getElementById('text').innerText = text
+        clone.getElementById(
+          'link'
+        ).href = `https://search.yahoo.co.jp/search?p=${text}`
+        document.getElementById('suggestions').appendChild(clone)
+      }
+    } else {
+      const suggest = await fetch(`https://duckduckgo.com/ac/?q=${word}`)
+      const suggestions = (await suggest.json()).map((obj) => obj.phrase)
+      for (
+        let i = 0;
+        i < (suggestions.length > 5 ? 5 : suggestions.length);
+        i++
+      ) {
+        const text = suggestions[i]
+        const template = document.getElementById('suggest')
+        const content = template.content
+        const clone = document.importNode(content, true)
+        clone.getElementById('text').innerText = text
+        clone.getElementById(
+          'link'
+        ).href = `https://search.yahoo.co.jp/search?p=${text}`
+        document.getElementById('suggestions').appendChild(clone)
+      }
     }
   }
 }
