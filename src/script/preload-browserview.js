@@ -58,6 +58,16 @@ contextBridge.exposeInMainWorld('node', {
       return store.get(key)
     }
   },
+  openCustomCSS: () => {
+    if (window.location.href.includes('file:///')) {
+      ipcRenderer.invoke('openCustomCSS')
+    }
+  },
+  openCustomSettingCSS: () => {
+    if (window.location.href.includes('file:///')) {
+      ipcRenderer.invoke('openCustomSettingCSS')
+    }
+  },
   loadExtension: () => {
     if (window.location.href.includes('file:///')) {
       if (fs.existsSync(`${__dirname}/../extensions/`)) {

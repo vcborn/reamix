@@ -33,6 +33,7 @@
   "force_dark": "強制暗模式",
   "change_fonts": "更改字體",
   "input_fonts": "輸入要修改的字體名稱",
+  "open": "開放",
   "view": "顯示",
   "fullscreen": "全屏顯示",
   "hide": "隱藏",
@@ -53,5 +54,7 @@
   "customize": "定制",
   "suggest": "自動建議",
   "background": "背景圖像URL",
-  "deleteall": "刪除所有歷史記錄"
+  "deleteall": "刪除所有歷史記錄",
+  "custom_css": "自定義CSS(UI)",
+  "custom_css_setting": "自定義CSS(設置等)"
 }

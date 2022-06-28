@@ -1,3 +1,12 @@
+:root {
+  --main-bg-color: #efefef;
+  --main-bg-color-dark: #222;
+  --primary-color: #2196f3;
+  --primary-color-dark: #555;
+  --white: #fff;
+  --white-hover: #bfbfbf;
+}
+
 * {
   font-family: 'Noto Sans JP', 'Noto Sans SC', sans-serif;
   position: relative;
@@ -34,10 +43,10 @@ nav a {
   user-select: none;
 }
 a:hover {
-  background-color: #bfbfbf;
+  background-color: var(--white-hover);
 }
 body {
-  background-color: #fff;
+  background-color: var(--white);
   padding-bottom: 0;
   margin-bottom: 0;
   overflow: hidden;
@@ -48,7 +57,7 @@ main {
   justify-content: space-between;
 }
 nav {
-  background-color: #efefef;
+  background-color: var(--main-bg-color);
   padding-top: 13px;
   width: 42px;
   display: flex;
@@ -62,7 +71,7 @@ main > div {
   width: 100%;
 }
 main > div > header {
-  background-color: #efefef;
+  background-color: var(--main-bg-color);
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -113,16 +122,16 @@ main > div header .action {
   transition-duration: 200ms;
 }
 .dark .tab {
-  background-color: #222;
-  border-bottom: 2px solid #555;
-  color: #fff;
+  background-color: var(--main-bg-color-dark);
+  border-bottom: 2px solid var(--primary-color-dark);
+  color: var(--white);
 }
 .dark .tab#opened {
   background-color: #333;
 }
 .tab#opened {
-  background-color: #fff;
-  border-bottom: 2px solid #1664c9;
+  background-color: var(--white);
+  border-bottom: 2px solid var(--primary-color);
 }
 .tab .close {
   position: absolute;
@@ -130,7 +139,7 @@ main > div header .action {
   top: 5px;
 }
 .bar {
-  background-color: #efefef;
+  background-color: var(--main-bg-color);
   padding: 8px 1rem;
   display: flex;
   flex-direction: row;
@@ -151,12 +160,12 @@ main > div header .action {
 .dark body main nav,
 .dark body main div .bar,
 .dark body main div header {
-  background-color: #222;
+  background-color: var(--main-bg-color-dark);
 }
 .dark body input,
 .dark nav {
-  background-color: #fff1;
-  color: #fff;
+  background-color: var(--white) 1;
+  color: var(--white);
 }
 
 .icon {

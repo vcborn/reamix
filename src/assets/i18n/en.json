@@ -38,6 +38,7 @@
   "change_fonts": "Change Font",
   "input_fonts": "Enter the name of the font to be changed here",
 
+  "open": "Open",
   "view": "View",
   "fullscreen": "Toggle Full Screen",
   "hide": "Hide",
@@ -68,5 +69,7 @@
   "customize": "Customize",
   "suggest": "Auto Suggest",
   "background": "Background Image URL",
-  "deleteall": "Delete All History"
+  "deleteall": "Delete All History",
+  "custom_css": "Custom CSS (UI)",
+  "custom_css_setting": "Custom CSS (Settings, etc.)"
 }

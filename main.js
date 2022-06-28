@@ -9,6 +9,7 @@ const {
   Menu,
   nativeTheme,
   session,
+  shell,
 } = require('electron')
 const contextMenu = require('electron-context-menu')
 const fs = require('fs-extra')
@@ -107,7 +108,7 @@ async function newtab() {
     })`)
   })
   browserview.webContents.on('update-target-url', () => {
-    bv[index].webContents.executeJavaScript(`
+    browserview.webContents.executeJavaScript(`
           document.addEventListener('fullscreenchange', () => {
           if (document.fullscreenElement) {
             node.setFullscreen()
@@ -116,33 +117,6 @@ async function newtab() {
           }
         })`)
     const link = browserview.webContents.getURL()
-    const webstore = new RegExp(
-      /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
-    )
-    if (webstore.test(link)) {
-      const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
-      if (extensionsDir.includes(webstore.exec(link)[1])) {
-        bv[index].webContents.executeJavaScript(`
-          const button = '<style>a[aria-label="Reamix から削除"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix から削除"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix から削除" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix から削除</div></div></div></div>';
-          setTimeout(function(){
-            document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
-            document.getElementById("install").addEventListener('click', function(){
-              node.removeExtension(location.href);
-            })
-          }, 3000);
-        `)
-      } else {
-        bv[index].webContents.executeJavaScript(`
-          const button = '<style>a[aria-label="Reamix に追加"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix に追加"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix に追加" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix に追加</div></div></div></div>';
-          setTimeout(function(){
-            document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
-            document.getElementById("install").addEventListener('click', function(){
-              node.installExtension(location.href);
-            })
-          }, 3000);
-        `)
-      }
-    }
     if (
       link !== '' &&
       store.get('bookmarks').some((bookmark) => bookmark.includes(link))
@@ -230,6 +204,34 @@ async function newtab() {
       `document.getElementsByTagName('title')[0].innerText='${t} - Reamix';
       document.querySelector('#opened>p').innerText='${t}';`
     )
+    const link = browserview.webContents.getURL()
+    const webstore = new RegExp(
+      /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
+    )
+    if (webstore.test(link)) {
+      const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
+      if (extensionsDir.includes(webstore.exec(link)[1])) {
+        browserview.webContents.executeJavaScript(`
+          const button = '<style>a[aria-label="Reamix から削除"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix から削除"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix から削除" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix から削除</div></div></div></div>';
+          setTimeout(function(){
+            document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
+            document.getElementById("install").addEventListener('click', function(){
+              node.removeExtension(location.href);
+            })
+          }, 3000);
+        `)
+      } else {
+        browserview.webContents.executeJavaScript(`
+          const button = '<style>a[aria-label="Reamix に追加"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix に追加"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix に追加" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix に追加</div></div></div></div>';
+          setTimeout(function(){
+            document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
+            document.getElementById("install").addEventListener('click', function(){
+              node.installExtension(location.href);
+            })
+          }, 3000);
+        `)
+      }
+    }
   })
   index = bv.length
   bv.push(browserview)
@@ -240,6 +242,7 @@ async function newtab() {
   browserview.webContents.loadFile(`${__dirname}/src/pages/home.html`)
   browserview.webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
+  document.documentElement.innerHTML = "";
   if (node.loadLang()[0]) {
     Object.keys(node.loadLang()[1]).forEach((item) => {
       page = page.replace(
@@ -406,6 +409,7 @@ ipcMain.handle('moveView', (e, link, index) => {
           .then(() => {
             bv[index].webContents.executeJavaScript(`
               let page = document.documentElement.innerHTML;
+              document.documentElement.innerHTML = "";
               if (node.loadLang()[0]) {
                 Object.keys(node.loadLang()[1]).forEach((item) => {
                   page = page.replace(
@@ -520,6 +524,7 @@ ipcMain.handle('reloadBrowser', (e, index) => {
   bv[index].webContents.reload()
   bv[index].webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
+  document.documentElement.innerHTML = "";
   if (node.loadLang()[0]) {
     Object.keys(node.loadLang()[1]).forEach((item) => {
       page = page.replace(
@@ -566,10 +571,17 @@ ipcMain.handle('browserGoes', (e, index) => {
 ipcMain.handle('getBrowserUrl', (e, index) => {
   return bv[index].webContents.getURL()
 })
+ipcMain.handle('openCustomCSS', () => {
+  shell.openPath(path.join(__dirname, 'src/assets/styles/custom.css'))
+})
+ipcMain.handle('openCustomSettingCSS', () => {
+  shell.openPath(path.join(__dirname, 'src/assets/styles/custom_setting.css'))
+})
 ipcMain.handle('moveToNewTab', (e, index) => {
   bv[index].webContents.loadFile(`${__dirname}/src/pages/home.html`)
   bv[index].webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
+  document.documentElement.innerHTML = "";
   if (node.loadLang()[0]) {
     Object.keys(node.loadLang()[1]).forEach((item) => {
       page = page.replace(
@@ -658,6 +670,7 @@ const openPage = (name) => {
   bv[index].webContents.loadFile(`${__dirname}/src/pages/${name}.html`)
   bv[index].webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
+  document.documentElement.innerHTML = "";
   if (node.loadLang()[0]) {
     Object.keys(node.loadLang()[1]).forEach((item) => {
       page = page.replace(

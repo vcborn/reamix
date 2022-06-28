@@ -1,3 +1,14 @@
+:root {
+  --settings-bg-color: #dfdfdf;
+  --settings-bg-color-dark: #222;
+  --primary-color: #2196f3;
+  --primary-color-hover: #1871b8;
+  --primary-color-dark: #333;
+  --primary-color-dark-hover: #444;
+  --white: #fff;
+  --white-hover: #ccc;
+}
+
 * {
   font-family: 'Noto Sans JP', 'Noto Sans SC', sans-serif;
   position: relative;
@@ -12,18 +23,18 @@
 }
 
 html {
-  background-color: #dfdfdf;
+  background-color: var(--settings-bg-color);
 }
 html.dark {
-  background-color: #222;
+  background-color: var(--settings-bg-color-dark);
 }
 
 a {
-  color: #2196f3;
+  color: var(--primary-color);
   transition-duration: 200ms;
 }
 a:hover {
-  color: #1871b8;
+  color: var(--primary-color-hover);
 }
 
 ul {
@@ -61,17 +72,17 @@ select {
   cursor: pointer;
 }
 select:hover {
-  background-color: #ccc;
+  background-color: var(--white-hover);
 }
 select option {
-  background-color: #fff;
+  background-color: var(--white);
 }
 
 button.save {
   cursor: pointer;
-  background-color: #2196f3;
+  background-color: var(--primary-color);
   border-radius: 0.5rem;
-  color: #fff;
+  color: var(--white);
   padding: 0.5rem 1.25rem;
   transition-duration: 200ms;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -100,7 +111,7 @@ button.save:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--white-hover);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -118,11 +129,11 @@ button.save:hover {
 }
 
 input:checked + .slider {
-  background-color: #2196f3;
+  background-color: var(--primary-color);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196f3;
+  box-shadow: 0 0 1px var(--primary-color);
 }
 
 input:checked + .slider:before {
@@ -153,23 +164,23 @@ input:checked + .slider:before {
 }
 
 .dark {
-  color: #fff;
+  color: var(--white);
 }
 
 .dark input,
 .dark select,
 .dark textarea {
-  color: #fff;
-  background-color: #333;
+  color: var(--white);
+  background-color: var(--primary-color-dark);
 }
 .dark input:focus,
 .dark select:hover,
 .dark textarea:hover {
-  background-color: #444;
+  background-color: var(--primary-color-dark-hover);
 }
 .dark option,
 .dark option:hover {
-  background-color: #222;
+  background-color: var(--settings-bg-color-dark);
 }
 
 textarea {
