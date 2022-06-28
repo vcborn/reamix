@@ -11,24 +11,6 @@ module.exports = {
     output: 'release/${version}',
     buildResources: 'resources',
   },
-  electronDownload: {
-    mirror: 'https://github.com/castlabs/electron-releases/releases/download/v',
-    platform: 'win32',
-  },
-  electronDownload: {
-    mirror: 'https://github.com/castlabs/electron-releases/releases/download/v',
-    platform: 'darwin',
-  },
-  electronDownload: {
-    mirror: 'https://github.com/electron/electron/releases/download/v',
-    platform: 'linux',
-    version: '19.0.6',
-  },
-  electronDownload: {
-    mirror: 'https://github.com/electron/electron/releases/download/v',
-    platform: 'mas',
-    version: '19.0.6',
-  },
   files: [
     '!.git',
     '!.dist',
