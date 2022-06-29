@@ -192,3 +192,10 @@ main > div header .action {
   width: 22px;
   padding: 0.5rem 0;
 }
+img[src=''] {
+  display: none;
+}
+img#favicon {
+  width: 18px;
+  margin-right: 0.25rem;
+}

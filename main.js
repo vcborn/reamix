@@ -153,7 +153,10 @@ async function newtab() {
     win.webContents.executeJavaScript(
       `document.getElementsByTagName('title')[0].innerText='${title} - Reamix';
       document.getElementById('opened').title='${title}';
-      document.getElementById('opened').getElementsByTagName('p')[0].innerText='${subed}';`
+      document.getElementById('opened').getElementsByTagName('p')[0].innerText='${subed}';
+      if (!'${browserview.webContents.getURL()}'.startsWith('file:///')) {
+        document.getElementById('opened').getElementsByTagName('img')[0].src='https://www.google.com/s2/favicons?domain=${browserview.webContents.getURL()}&sz=128';
+      }`
     )
   })
   browserview.webContents.on('did-stop-loading', () => {

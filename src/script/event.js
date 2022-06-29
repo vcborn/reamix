@@ -78,6 +78,7 @@ function newtab(title) {
   document.getElementById('tabs').innerHTML = `
     ${document.getElementById('tabs').innerHTML}
     <span id="opened" class="tab" draggable="true">
+      <img id="favicon" src="" />
       <p>${title}</p>
       <a href="#" class="close"><img src="assets/icons/x.svg" class="icon small" /></a>
     </span>
