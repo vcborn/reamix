@@ -11,6 +11,26 @@ function each() {
       i.setAttribute('id', 'opened')
       node.tabMove(getCurrent())
     })
+    i.addEventListener('dragstart', () => {
+      if (document.getElementById('opened')) {
+        document.getElementById('opened').removeAttribute('id')
+      }
+      i.setAttribute('id', 'opened')
+    })
+    i.addEventListener('drop', (e) => {
+      let before = getCurrent()
+      let open = document.getElementById('opened')
+      let rect = i.getBoundingClientRect()
+      if (e.clientX - rect.left < i.clientWidth / 2) {
+        i.insertAdjacentElement('beforebegin', open)
+      } else {
+        i.insertAdjacentElement('afterend', open)
+      }
+      node.moveTab(before, getCurrent())
+    })
+    i.addEventListener('dragover', (e) => {
+      e.preventDefault()
+    })
   })
   document.querySelectorAll('.close').forEach((i, item) => {
     i.addEventListener('click', (e) => {
@@ -57,7 +77,7 @@ function newtab(title) {
   }
   document.getElementById('tabs').innerHTML = `
     ${document.getElementById('tabs').innerHTML}
-    <span id="opened" class="tab">
+    <span id="opened" class="tab" draggable="true">
       <p>${title}</p>
       <a href="#" class="close"><img src="assets/icons/x.svg" class="icon small" /></a>
     </span>

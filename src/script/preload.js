@@ -94,6 +94,9 @@ contextBridge.exposeInMainWorld('node', {
     //create new tab
     ipcRenderer.invoke('newtab')
   },
+  moveTab: (before, after) => {
+    ipcRenderer.invoke('moveTab', before, after)
+  },
   tabMove: (index) => {
     //move tab
     ipcRenderer.invoke('tabMove', index)

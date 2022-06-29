@@ -630,6 +630,21 @@ ipcMain.handle('tabMove', (e, i) => {
     ].webContents.getTitle()} - Reamix';
     `)
 })
+ipcMain.handle('moveTab', (e, before, after) => {
+  if (before > after) {
+    let current = bv[before]
+    for (let i = 0; i < before - after; i++) {
+      bv[before - i] = bv[before - i - 1]
+    }
+    bv[after] = current
+  } else if (after > before) {
+    let current = bv[before]
+    for (let i = 0; i < after - before; i++) {
+      bv[before + i] = bv[before + i + 1]
+    }
+    bv[after] = current
+  }
+})
 ipcMain.handle('removeTab', (e, i) => {
   try {
     win.removeBrowserView(bv[i])
