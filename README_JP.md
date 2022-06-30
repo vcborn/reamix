@@ -1,5 +1,14 @@
 # Reamix
 
+<table>
+<tbody>
+  <tr>
+    <td><a href="https://github.com/vcborn/reamix#readme">English</a></td>
+    <td><a href="https://github.com/vcborn/reamix/blob/main/README_JP.md">日本語</a></td>
+  </tr>
+  </tbody>
+</table>
+
 ![reamix](https://user-images.githubusercontent.com/39876629/161370659-bbe7ca7b-df8f-4e3e-bf39-8765b75395bf.jpg)
 
 ## 概要

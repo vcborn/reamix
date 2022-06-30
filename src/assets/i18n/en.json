@@ -13,7 +13,8 @@
   "minimize": "Minimize",
   "maximize": "Maximize",
   "close": "Close",
-  "close_tab": "Close Current Tab",
+  "open_tab": "Open a new tab",
+  "close_tab": "Close the current tab",
   "restart": "Restart",
 
   "search_word": "Enter a word to search for",

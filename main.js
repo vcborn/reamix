@@ -20,6 +20,7 @@ let bv = []
 const unzip = require('unzip-crx-3')
 const downloadCRX = require('download-crx')
 const { ElectronBlocker } = require('@cliqz/adblocker-electron')
+const { ElectronChromeExtensions } = require('electron-chrome-extensions')
 const fetch = require('cross-fetch')
 const Store = require('electron-store')
 const store = new Store()
@@ -332,6 +333,7 @@ async function nw() {
 
 app.whenReady().then(async () => {
   await components.whenReady()
+  const extensions = new ElectronChromeExtensions()
   nw()
 })
 app.on('window-all-closed', () => {
@@ -619,6 +621,7 @@ ipcMain.handle('newtab', () => {
 })
 ipcMain.handle('tabMove', (e, i) => {
   index = i < 0 ? bv.length - 1 : i
+  bv[index].webContents.removeAllListeners()
   win.setTopBrowserView(bv[index])
   win.webContents.executeJavaScript(`
     if ('${bv[index].webContents.getURL()}'.includes('https')) {
@@ -764,6 +767,15 @@ let menu = Menu.buildFromTemplate([
         accelerator: 'CmdOrCtrl+Alt+X',
         click: () => {
           bv[index].webContents.goForward()
+        },
+      },
+      {
+        label: t['open_tab'],
+        accelerator: 'CmdOrCtrl+T',
+        click: () => {
+          win.webContents.executeJavaScript(`
+          newtab('Home');
+          `)
         },
       },
       {

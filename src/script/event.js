@@ -45,16 +45,16 @@ function each() {
         node.tabMove(-1)
         setTimeout(() => {
           lasttab.setAttribute('id', 'opened')
-        }, 1)
-        if (
-          document.body.clientWidth * 0.8 >
-          document.getElementById('opened').clientWidth *
-            document.querySelectorAll('.tab').length
-        ) {
-          for (const tab of document.querySelectorAll('.tab')) {
-            tab.removeAttribute('style')
+          if (
+            document.body.clientWidth * 0.8 >
+            document.getElementById('opened').clientWidth *
+              document.querySelectorAll('.tab').length
+          ) {
+            for (const tab of document.querySelectorAll('.tab')) {
+              tab.removeAttribute('style')
+            }
           }
-        }
+        }, 1)
       }
     })
   })
