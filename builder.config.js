@@ -54,6 +54,7 @@ module.exports = {
     publisherDisplayName: 'VCborn',
     publisher: 'CN=B3A8E69F-3C5C-42C5-ABA9-66E62B6A401D',
     languages: ['JA-JP', 'EN-US', 'ZH-CN'],
+    setBuildNumber: true,
   },
   mac: {
     icon: 'src/assets/images/logo.icns',
