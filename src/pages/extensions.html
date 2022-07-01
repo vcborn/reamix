@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>%extensions%</title>
+    <link rel="stylesheet" href="../assets/styles/fonts.css" />
+    <link rel="stylesheet" href="../assets/styles/settings.min.css">
+</head>
+
+<body>
+    <div class="main">
+        <h2>%extensions%</h2>
+        <div id="list">
+            <template id="extension">
+                <div id="col">
+                    <img id="icon" src="#" alt="Extension Icon" />
+                    <h3 id="name">Extension Name</h3>
+                    <a href="javascript:removeExtension(this)">
+                        <img class="icon" src="../assets/icons/x.svg" alt="delete extension" />
+                    </a>
+                </div>
+            </template>
+        </div>
+    </div>
+    <script src="others.js"></script>
+</body>
+
+</html>

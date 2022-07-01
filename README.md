@@ -9,62 +9,46 @@
   </tbody>
 </table>
 
-![reamix](https://user-images.githubusercontent.com/39876629/160284567-22120f26-9e13-49ee-84ee-4992c6dd42bd.png)
-
-| About Reamix |                                                                        |
-| :--------- | :--------------------------------------------------------------------- |
-| Name       | Reamix                                                                 |
-| Version | v1.0.0 Beta 6                                                           |
-| Release     | 2021/11/23                                                |
-| License | [monochrome License.](https://www.monochrome.tk/mncr/license) |
-| Language       | Japanese, English                                                     |
-
+![reamix](https://user-images.githubusercontent.com/39876629/161370659-bbe7ca7b-df8f-4e3e-bf39-8765b75395bf.jpg)
 ## Description
 
-A customized Monot browser being produced by [monochrome.](https://www.monochrome.tk/mncr/)  
-A browser that comes standard with VCLinux.
+A simple and convenient browser based on [Monot](https://github.com/mncrp/monot).   
+Comes standard with VCLinux.
 
-## Difference
-The following features have been added to **Reamix only**.
+## Features
 - i18n
 - Theme switching
-- Bug fixes
-- More convenient UI
+- Support for Chrome extensions
+- Built-in Ad Blocker
+- Convenient UI
+- Auto Suggest
+- Custom Backgroud Image
+- Custom CSS
 
 ## Screenshots
 
-All operate in dark mode. Light mode is also fully supported.
+![Startup Screen](https://user-images.githubusercontent.com/39876629/161370714-5b56e181-48d3-46a3-8b7a-9bf07b880a73.png)
 
-![Screen immediately after startup](https://user-images.githubusercontent.com/39876629/160284910-0c1e28d9-e04c-4d73-9b5d-e09040753f31.png)
-Screen immediately after startup
-
-![Actual browsing of the website](https://user-images.githubusercontent.com/39876629/160284937-348bb44a-2a69-4ee5-9da5-2ab597ed1019.png)
-Actual browsing of the website
+![Browsing](https://user-images.githubusercontent.com/39876629/161370735-018fa8e1-bd31-45bc-9466-6b91436ace88.png)
 
 ## Shortcuts
-
-| Shortcut List               |                  |
-| :--------------------------- | :--------------------- |
-| About Reamix                | Ctrl(Cmd) + Alt + A    |
-| Hide                         | Ctrl(Cmd) + H?         |
-| Hide others                     | Ctrl(Cmd) + Shift + H? |
-| Restart                      | Ctrl(Cmd) + Alt + R    |
-| Quit                         | Ctrl(Cmd) + Q          |
-| Reload                   | Ctrl(Dmd) + R          |
-| Go back                         | Ctrl(Cmd) + Shift + Z  |
-| Go forward                         | Ctrl(Cmd) + Shift + X  |
-| Developer Tools | F12                    |
-| Reamix Developer Tools    | Alt + F12              |
-| Settings               | Ctrl(Cmd) + Alt + S    |
-
-Moving tabs is not supported, but is expected to be supported in the official version.
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd> - About Reamix
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + R</kbd> - Restart
+- <kbd>Ctrl</kbd> + <kbd>Q</kbd> - Quit
+- <kbd>Ctrl</kbd> + <kbd>R</kbd> - Reload
+- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> - Go Back
+- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> - Go Forward
+- <kbd>Ctrl</kbd> + <kbd>T</kbd> - Open A New Tab
+- <kbd>Ctrl</kbd> + <kbd>W</kbd> - Close The Current Tab / Close Window
+- <kbd>F12</kbd> - Open Developer Tools
+- <kbd>Alt</kbd> + <kbd>F12</kbd> - Open Browser Developer Tools
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>S</kbd> - Open Settings
 
 ## Download
 
 You can download it [here](https://vcborn.com/services/reamix/).  
 The latest development build can be downloaded [here](https://nightly.link/vcborn/reamix/workflows/build-dev/dev).
 
----
+## License
 
-Copyright &copy; 2021 VCborn.  
-Reamix is released under the [monochrome License](https://www.monochrome.tk/mncr/license).
+This project is dual-licensed under the [monochrome License v2.0.0](https://github.com/vcborn/reamix/blob/main/LICENCE.monochrome) and the [GPLv3](https://github.com/vcborn/reamix/blob/main/LICENCE.GPL-3.0).

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Home</title>
+  <link rel="stylesheet" href="../assets/styles/fonts.css" />
+  <style>
+    * {
+      font-family: 'Noto Sans JP', 'Noto Sans SC', sans-serif;
+      position: relative;
+      top: 0;
+      margin: 0;
+      padding: 0;
+      border: none;
+      outline: none;
+      color: #000;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    html,
+    body {
+      height: 100%;
+      background-color: #efefef;
+      position: relative;
+      overflow-y: hidden;
+    }
+
+    html.dark,
+    .dark body {
+      background-color: #222;
+    }
+
+    .main {
+      margin: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      font-family: 'Noto Sans JP', 'Noto Sans SC', sans-serif;
+    }
+
+    .logo {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+      font-weight: 300;
+      font-size: 3rem;
+    }
+
+    .dark .logo {
+      color: #fff;
+    }
+
+    .search {
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 60%;
+    }
+
+    .suggest {
+      position: absolute;
+      left: 20%;
+      width: 46%;
+      top: calc(50% + 4.5rem);
+    }
+
+    .suggest ul {
+      background-color: #ddd;
+      border-radius: 1rem;
+      list-style-type: none;
+    }
+
+    .suggest li a {
+      transition-duration: 300ms;
+      border-radius: 1rem;
+    }
+
+    .suggest li a:hover {
+      background-color: #fff;
+    }
+
+    input#word-search {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      background-color: #ddd;
+      transition-duration: 200ms;
+    }
+
+    .dark input#word-search {
+      background-color: #333;
+      color: #fff;
+    }
+
+    input#word-search:focus {
+      background-color: #fff;
+    }
+
+    .dark input#word-search:focus {
+      background-color: #444;
+    }
+
+    select,
+    input {
+      border-radius: 1rem;
+    }
+
+    .dark select {
+      color: #fff;
+      background-color: #333;
+    }
+
+    select {
+      padding: 0 0.5rem;
+      transition-duration: 200ms;
+    }
+
+    option,
+    option:hover {
+      background-color: #fff;
+    }
+
+    .dark option,
+    .dark option:hover {
+      color: #fff;
+      background-color: #222;
+    }
+
+    select:hover {
+      background-color: #ddd;
+    }
+
+    .dark select:hover {
+      background-color: #444;
+    }
+
+    .dark .suggest ul {
+      background-color: #333;
+    }
+
+    .dark .suggest span {
+      color: white;
+    }
+
+    .dark .suggest ul li a:hover {
+      background-color: #444;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main">
+    <div class="logo">
+      <img src="../assets/images/logo.png" style="width:70px" />
+      Reamix
+    </div>
+    <div class="search">
+      <select id="engine">
+        <option value="google">Google</option>
+        <option value="yahoo-jp">Yahoo Japan</option>
+        <option value="bing">Bing</option>
+        <option value="duckduckgo">DuckDuckGo</option>
+      </select>
+      <input id="word-search" type="text" placeholder="%search_word%" onkeyup="wordSearch(this)" />
+    </div>
+    <div class="suggest">
+      <ul id="suggestions">
+        <template id="suggest">
+          <li>
+            <a href="#" id="link" style="display: flex; align-items:center; gap: 1rem; padding: 0.5rem 1rem;">
+              <img src="../assets/icons/search.svg" style="width: 15px; height: 15px;" />
+              <span id="text">suggest</span>
+            </a>
+          </li>
+        </template>
+      </ul>
+    </div>
+  </div>
+  <script src="search.js"></script>
+</body>
+
+</html>

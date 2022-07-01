@@ -9,62 +9,47 @@
   </tbody>
 </table>
 
-![reamix](https://user-images.githubusercontent.com/39876629/160284567-22120f26-9e13-49ee-84ee-4992c6dd42bd.png)
-
-| Reamixについて |                                                                        |
-| :--------- | :--------------------------------------------------------------------- |
-| 名前       | Reamix                                                                 |
-| バージョン | v1.0.0 Beta 6                                                           |
-| 公開日     | 2021年11月23日                                                     |
-| ライセンス | [monochrome License.](https://www.monochrome.tk/mncr/license) |
-| 言語       | 日本語、英語                                                            |
+![reamix](https://user-images.githubusercontent.com/39876629/161370659-bbe7ca7b-df8f-4e3e-bf39-8765b75395bf.jpg)
 
 ## 概要
 
-[monochrome.](https://www.monochrome.tk/mncr/)が制作中のMonotをカスタマイズしたブラウザ。  
+[Monot](https://github.com/mncrp/monot)ベースのシンプルで便利なブラウザ。  
 VCLinuxに標準搭載。
 
-## Monotとの違い
-以下の機能は**Reamix独自**の機能です。
+## 機能
 - 多言語対応
 - テーマ切り替え
-- バグ修正
-- さらに使いやすいUI
+- Chrome拡張機能をサポート
+- 広告ブロック機能
+- 使いやすいUI
+- 自動サジェスト
+- カスタム背景画像
+- カスタムCSS
 
 ## スクリーンショット
 
-すべてダークモードで動作しています。ライトモードも完全に対応しています。
+![起動画面](https://user-images.githubusercontent.com/39876629/161370714-5b56e181-48d3-46a3-8b7a-9bf07b880a73.png)
 
-![起動直後の画面](https://user-images.githubusercontent.com/39876629/160284910-0c1e28d9-e04c-4d73-9b5d-e09040753f31.png)
-起動直後の画面
-
-![実際にウェブサイトを閲覧している様子](https://user-images.githubusercontent.com/39876629/160284937-348bb44a-2a69-4ee5-9da5-2ab597ed1019.png)
-実際にウェブサイトを閲覧している様子
+![ブラウジング](https://user-images.githubusercontent.com/39876629/161370735-018fa8e1-bd31-45bc-9466-6b91436ace88.png)
 
 ## ショートカット
-
-| ショートカット               | キー一覧               |
-| :--------------------------- | :--------------------- |
-| Reamix について              | Ctrl(Cmd) + Alt + A    |
-| 隠す                         | Ctrl(Cmd) + H?         |
-| 他を隠す                     | Ctrl(Cmd) + Shift + H? |
-| 再起動?                      | Ctrl(Cmd) + Alt + R    |
-| 終了                         | Ctrl(Cmd) + Q          |
-| 再読み込み                   | Ctrl(Dmd) + R          |
-| 戻る                         | Ctrl(Cmd) + Shift + Z  |
-| 進む                         | Ctrl(Cmd) + Shift + X  |
-| Web サイトの開発者向けツール | F12                    |
-| Reamix の開発者向けツール    | Alt + F12              |
-| 設定ウィンドウ               | Ctrl(Cmd) + Alt + S    |
-
-タブの移動には対応していませんが、正式版では対応する見通しです。
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd> - Reamixについて
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + R</kbd> - 再起動
+- <kbd>Ctrl</kbd> + <kbd>Q</kbd> - 終了
+- <kbd>Ctrl</kbd> + <kbd>R</kbd> - 再読み込み
+- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> - 戻る
+- <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> - 進む
+- <kbd>Ctrl</kbd> + <kbd>T</kbd> - 新規タブを開く
+- <kbd>Ctrl</kbd> + <kbd>W</kbd> - タブを閉じる / ウィンドウを閉じる
+- <kbd>F12</kbd> - 開発者ツールを開く
+- <kbd>Alt</kbd> + <kbd>F12</kbd> - ブラウザ用開発者ツールを開く
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>S</kbd> - 設定を開く
 
 ## ダウンロード
 
 [こちら](https://vcborn.com/services/reamix/)からダウンロードできます。  
 開発版ビルドは[こちら](https://nightly.link/vcborn/reamix/workflows/build-dev/dev)からダウンロードできます。
 
----
+## ライセンス
 
-Copyright &copy; 2021 VCborn.  
-Reamix is released under the [monochrome License](https://www.monochrome.tk/mncr/license).
+このプロジェクトは [monochrome License v2.0.0](https://github.com/vcborn/reamix/blob/main/LICENCE.monochrome) と [GPLv3](https://github.com/vcborn/reamix/blob/main/LICENCE.GPL-3.0) のデュアルライセンスの下提供されています。

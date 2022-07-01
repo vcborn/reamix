@@ -1,66 +1,90 @@
+'use strict'
+
 const {
   app,
+  components,
   BrowserWindow,
   BrowserView,
   dialog,
   ipcMain,
   Menu,
   nativeTheme,
+  session,
+  shell,
 } = require('electron')
 const contextMenu = require('electron-context-menu')
-const fs = require('fs')
-let win, setting
-var index
-var bv = []
-let viewY = 66
+const fs = require('fs-extra')
+let win
+let index
+let bv = []
+const unzip = require('unzip-crx-3')
+const downloadCRX = require('download-crx')
+const { ElectronBlocker } = require('@cliqz/adblocker-electron')
+const { ElectronChromeExtensions } = require('electron-chrome-extensions')
+const fetch = require('cross-fetch')
+const Store = require('electron-store')
+const store = new Store()
+const path = require('path')
 index = 0
 
-require('events').EventEmitter.defaultMaxListeners = 50
+const lang = store.get('lang') ? store.get('lang') : 'ja'
+let t = JSON.parse(
+  fs.readFileSync(`${__dirname}/src/assets/i18n/${lang}.json`, 'utf-8')
+)
+
+require('events').EventEmitter.defaultMaxListeners = 5000
 
 contextMenu({
   prepend: (defaultActions, parameters, browserWindow) => [
     {
-      label: '戻る',
+      label: t['back'],
       click: () => {
         bv[index].webContents.goBack()
       },
     },
     {
-      label: '進む',
+      label: t['forward'],
       click: () => {
         bv[index].webContents.goForward()
-      },
-    },
-    {
-      label: '設定',
-      click: () => {
-        setting = new BrowserWindow({
-          width: 760,
-          height: 480,
-          minWidth: 300,
-          minHeight: 270,
-          autoHideMenuBar: true,
-          webPreferences: {
-            preload: `${__dirname}/src/setting/preload.js`,
-            scrollBounce: true,
-          },
-        })
-        setting.loadFile(`${__dirname}/src/setting/index.html`)
       },
     },
   ],
 })
 
-//creating new tab function
-function newtab() {
-  let winSize = win.getSize()
-  //create new tab
+async function newtab() {
   let browserview = new BrowserView({
     webPreferences: {
       scrollBounce: true,
       preload: `${__dirname}/src/script/preload-browserview.js`,
     },
   })
+  if (store.get('adblocker') === null) {
+    store.set('adblocker', true)
+  }
+  if (store.get('suggest') === null) {
+    store.set('suggest', true)
+  }
+  if (store.get('history') === null) {
+    store.set('history', [])
+  }
+  if (store.get('bookmarks') == null) {
+    store.set('bookmarks', [])
+  }
+  if (store.get('adblocker')) {
+    ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+      blocker.enableBlockingInSession(browserview.webContents.session)
+    })
+    if (store.get('blockList')) {
+      try {
+        const blocker = await ElectronBlocker.fromLists(
+          fetch,
+          store.get('blockList')
+        )
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }
   browserview.webContents
     .executeJavaScript(`document.addEventListener('contextmenu',()=>{
     node.context();
@@ -72,50 +96,45 @@ function newtab() {
     })`)
   })
 
-  //window's behavior
   win.on('closed', () => {
     win = null
-  })
-  win.on('maximize', () => {
-    winSize = win.getContentSize()
-    browserview.setBounds({
-      x: 0,
-      y: viewY,
-      width: winSize[0],
-      height: winSize[1] - viewY + 3,
-    })
-  })
-  win.on('unmaximize', () => {
-    winSize = win.getContentSize()
-    browserview.setBounds({
-      x: 0,
-      y: viewY,
-      width: winSize[0],
-      height: winSize[1] - viewY,
-    })
-  })
-  win.on('enter-full-screen', () => {
-    winSize = win.getContentSize()
-    browserview.setBounds({
-      x: 0,
-      y: viewY,
-      width: winSize[0],
-      height: winSize[1] - viewY + 2,
-    })
   })
 
   browserview.webContents.on('did-start-loading', () => {
     win.webContents.executeJavaScript(
-      "document.getElementsByTagName('yomikomi-bar')[0].setAttribute('id','loading')"
+      "document.getElementsByClassName('loading')[0].setAttribute('id','loading')"
     )
     browserview.webContents
       .executeJavaScript(`document.addEventListener('contextmenu',()=>{
       node.context();
     })`)
   })
+  browserview.webContents.on('update-target-url', () => {
+    browserview.webContents.executeJavaScript(`
+          document.addEventListener('fullscreenchange', () => {
+          if (document.fullscreenElement) {
+            node.setFullscreen()
+          } else {
+            node.exitFullscreen()
+          }
+        })`)
+    const link = browserview.webContents.getURL()
+    if (
+      link !== '' &&
+      store.get('bookmarks').some((bookmark) => bookmark.includes(link))
+    ) {
+      win.webContents.executeJavaScript(`
+        document.getElementById('fav-icon').src = 'assets/icons/star-fill.svg'
+      `)
+    } else {
+      win.webContents.executeJavaScript(`
+        document.getElementById('fav-icon').src = 'assets/icons/star.svg'
+      `)
+    }
+  })
   browserview.webContents.on('did-finish-load', () => {
     win.webContents.executeJavaScript(
-      `document.getElementsByTagName('yomikomi-bar')[0].setAttribute('id','loaded')`
+      `document.getElementsByClassName('loading')[0].setAttribute('id','loaded')`
     )
     if (
       browserview.webContents
@@ -127,25 +146,25 @@ function newtab() {
         .slice(0, 1) != '/'
     ) {
       win.webContents.executeJavaScript(
-        `document.getElementsByTagName('input')[0].value='${browserview.webContents
-          .getURL()
-          .substring(
-            browserview.webContents.getURL().indexOf('/') + 2,
-            browserview.webContents.getURL().length
-          )}'`
+        `document.getElementsByTagName('input')[0].value='${browserview.webContents.getURL()}'`
       )
     }
+    const title = browserview.webContents.getTitle()
+    const subed = title.length > 10 ? title.substring(0, 10) + '...' : title
     win.webContents.executeJavaScript(
-      `document.getElementsByTagName('title')[0].innerText='${browserview.webContents.getTitle()} - Reamix';
-      document.getElementById('opened').getElementsByTagName('a')[0].innerText='${browserview.webContents.getTitle()}';`
+      `document.getElementsByTagName('title')[0].innerText='${title} - Reamix';
+      document.getElementById('opened').title='${title}';
+      document.getElementById('opened').getElementsByTagName('p')[0].innerText='${subed}';
+      if (!'${browserview.webContents.getURL()}'.startsWith('file:///')) {
+        document.getElementById('opened').getElementsByTagName('img')[0].src='https://www.google.com/s2/favicons?domain=${browserview.webContents.getURL()}&sz=128';
+      }`
     )
   })
   browserview.webContents.on('did-stop-loading', () => {
     win.webContents.executeJavaScript(
-      "document.getElementsByTagName('yomikomi-bar')[0].removeAttribute('id')"
+      "document.getElementsByClassName('loading')[0].removeAttribute('id')"
     )
 
-    //ifの条件が糞長いのが気になる。これはただただアドレスバーにURL出力してるだけ。
     if (
       browserview.webContents
         .getURL()
@@ -156,21 +175,12 @@ function newtab() {
         .slice(0, 1) != '/'
     ) {
       win.webContents.executeJavaScript(
-        `document.getElementsByTagName('input')[0].value='${browserview.webContents
-          .getURL()
-          .substring(
-            browserview.webContents.getURL().indexOf('/') + 2,
-            browserview.webContents.getURL().length
-          )}'`
+        `document.getElementsByTagName('input')[0].value='${browserview.webContents.getURL()}'`
       )
     }
 
     //強制ダークモード(Force-Dark)
-    if (
-      JSON.parse(
-        fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-      ).experiments.forceDark == true
-    ) {
+    if (store.get('experimental.forcedark')) {
       browserview.webContents.insertCSS(`
         *{
           background-color: #202020!important;
@@ -183,18 +193,12 @@ function newtab() {
         }`)
     }
     //フォント変更
-    if (
-      JSON.parse(
-        fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-      ).experiments.fontChange == true
-    ) {
+    if (store.get('experimental.changedfont')) {
       browserview.webContents.insertCSS(`
         body,body>*, *{
-          font-family: ${
-            JSON.parse(
-              fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-            ).experiments.changedfont
-          },'Noto Sans JP'!important;
+          font-family: ${store.get(
+            'experimental.changedfont'
+          )},'Noto Sans JP'!important;
         }`)
     }
   })
@@ -203,22 +207,47 @@ function newtab() {
   browserview.webContents.on('page-title-updated', (e, t) => {
     win.webContents.executeJavaScript(
       `document.getElementsByTagName('title')[0].innerText='${t} - Reamix';
-      document.getElementsByTagName('span')[getCurrent()].getElementsByTagName('a')[0].innerText='${t}';`
+      document.querySelector('#opened>p').innerText='${t}';`
     )
+    const link = browserview.webContents.getURL()
+    const webstore = new RegExp(
+      /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
+    )
+    if (webstore.test(link)) {
+      const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
+      if (extensionsDir.includes(webstore.exec(link)[1])) {
+        browserview.webContents.executeJavaScript(`
+          const button = '<style>a[aria-label="Reamix から削除"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix から削除"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix から削除" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix から削除</div></div></div></div>';
+          setTimeout(function(){
+            document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
+            document.getElementById("install").addEventListener('click', function(){
+              node.removeExtension(location.href);
+            })
+          }, 3000);
+        `)
+      } else {
+        browserview.webContents.executeJavaScript(`
+          const button = '<style>a[aria-label="Reamix に追加"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix に追加"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix に追加" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix に追加</div></div></div></div>';
+          setTimeout(function(){
+            document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
+            document.getElementById("install").addEventListener('click', function(){
+              node.installExtension(location.href);
+            })
+          }, 3000);
+        `)
+      }
+    }
   })
   index = bv.length
   bv.push(browserview)
   win.addBrowserView(browserview)
-  browserview.setBounds({
-    x: 0,
-    y: viewY,
-    width: winSize[0],
-    height: winSize[1] - viewY,
-  })
+  browserview.setBounds({ x: 40, y: 80, width: 960, height: 620 })
   browserview.setAutoResize({ width: true, height: true })
-  browserview.webContents.loadURL(`file://${__dirname}/src/resource/index.html`)
+  browserview.setBackgroundColor('#ffffffff')
+  browserview.webContents.loadFile(`${__dirname}/src/pages/home.html`)
   browserview.webContents.executeJavaScript(`
   let page = document.documentElement.innerHTML;
+  document.documentElement.innerHTML = "";
   if (node.loadLang()[0]) {
     Object.keys(node.loadLang()[1]).forEach((item) => {
       page = page.replace(
@@ -230,12 +259,8 @@ function newtab() {
   }
   `)
   if (
-    (nativeTheme.shouldUseDarkColors &&
-      JSON.parse(
-        fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-      ).theme === '') ||
-    JSON.parse(fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8'))
-      .theme === 'dark'
+    (nativeTheme.shouldUseDarkColors && store.get('theme') === '') ||
+    store.get('theme') === 'dark'
   ) {
     win.webContents.executeJavaScript(`
       document.documentElement.classList.add("dark");
@@ -249,8 +274,7 @@ function newtab() {
   `)
 }
 
-function nw() {
-  //create window
+async function nw() {
   win = new BrowserWindow({
     width: 1000,
     height: 700,
@@ -268,41 +292,50 @@ function nw() {
       preload: `${__dirname}/src/script/preload.js`,
     },
   })
-  win.loadFile(`${__dirname}/src/index.html`)
-  //create tab
-  newtab()
-  let configObj = JSON.parse(
-    fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-  )
-  if (configObj.startup == true) {
-    configObj.startup = false
-    function exists(path) {
+
+  if (process.defaultApp) {
+    if (process.argv.length >= 2) {
+      app.setAsDefaultProtocolClient('reamix', process.execPath, [
+        path.resolve(process.argv[1]),
+      ])
+    }
+  } else {
+    app.setAsDefaultProtocolClient('reamix')
+  }
+
+  if (!app.isPackaged) {
+    let devtools = null
+    devtools = new BrowserWindow()
+    win.webContents.setDevToolsWebContents(devtools.webContents)
+    win.webContents.openDevTools({ mode: 'detach' })
+  }
+
+  if (fs.existsSync(`${__dirname}/src/extensions/`)) {
+    const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
+
+    for (const extension of extensionsDir) {
       try {
-        fs.readFileSync(path, 'utf-8')
-        return true
+        await session.defaultSession.loadExtension(
+          `${__dirname}/src/extensions/${extension}`
+        )
       } catch (e) {
-        return false
+        dialog.showErrorBox('Error', `${e}`)
       }
     }
-    if (exists(`/mncr/applications.mncfg`)) {
-      let obj = JSON.parse(fs.readFileSync(`/mncr/applications.mncfg`, 'utf-8'))
-      obj.monot = ['v1.0.0-beta.6.2', '6']
-      fs.writeFileSync(`/mncr/applications.mncfg`, JSON.stringify(obj))
-    } else {
-      fs.mkdir('/mncr/', () => {
-        return true
-      })
-      let obj = { monot: ['v1.0.0-beta.6.2', '6'] }
-      fs.writeFileSync(`/mncr/applications.mncfg`, JSON.stringify(obj))
-    }
-    fs.writeFileSync(
-      `${__dirname}/src/config/config.mncfg`,
-      JSON.stringify(configObj)
-    )
+  }
+
+  win.loadFile(`${__dirname}/src/index.html`)
+  newtab()
+  if (store.get('startup') == true) {
+    store.set('startup', false)
   }
 }
 
-app.on('ready', nw)
+app.whenReady().then(async () => {
+  await components.whenReady()
+  const extensions = new ElectronChromeExtensions()
+  nw()
+})
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
@@ -311,34 +344,81 @@ app.on('activate', () => {
 })
 
 //ipc channels
-ipcMain.on('moveView', (e, link, index) => {
+ipcMain.handle('moveView', (e, link, index) => {
+  let history = store.get('history') ? store.get('history') : []
   bv[index].webContents
     .executeJavaScript(`document.addEventListener('contextmenu',()=>{
     node.context();
   })`)
-  if (link == '') {
+  if (link === '') {
     return true
+  } else if (link === 'reamix://settings') {
+    openPage('settings')
+  } else if (link === 'reamix://about') {
+    openPage('about')
+  } else if (link === 'reamix://extensions') {
+    openPage('extensions')
+  } else if (link === 'reamix://favorites') {
+    openPage('favorites')
+  } else if (link === 'reamix://history') {
+    openPage('history')
+  } else if (link === 'reamix://downloads') {
+    openPage('downloads')
   } else {
+    // ユーザーエージェントの置き換え
+    const currentUA = win.webContents.getUserAgent()
+    const chromeUA = currentUA
+      .replace(/reamix\/.*?.[0-9]\s/g, '')
+      .replace(/Electron\/.*?.[0-9]\s/g, '')
     bv[index].webContents
-      .loadURL(link)
+      .loadURL(link, { userAgent: chromeUA })
       .then(() => {
         win.webContents.executeJavaScript(
           `document.getElementsByTagName('input')[0].value='${bv[
             index
-          ].webContents
-            .getURL()
-            .substring(
-              bv[index].webContents.getURL().indexOf('/') + 2,
-              bv[index].webContents.getURL().length
-            )}'`
+          ].webContents.getURL()};'`
         )
+        history.push([
+          bv[index].webContents.getTitle(),
+          bv[index].webContents.getURL(),
+        ])
+        store.set('history', history)
+        const webstore = new RegExp(
+          /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
+        )
+        if (webstore.test(link)) {
+          const extensionsDir = fs.readdirSync(`${__dirname}/src/extensions/`)
+          if (extensionsDir.includes(webstore.exec(link)[1])) {
+            bv[index].webContents.executeJavaScript(`
+              const button = '<style>a[aria-label="Reamix から削除"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix から削除"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix から削除" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix から削除</div></div></div></div>';
+              setTimeout(function(){
+                document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
+                document.getElementById("install").addEventListener('click', function(){
+                  node.removeExtension(location.href);
+                })
+              }, 1000);
+            `)
+          } else {
+            bv[index].webContents.executeJavaScript(`
+              const button = '<style>a[aria-label="Reamix に追加"]{border:0;-webkit-border-radius:4px;border-radius:4px;-webkit-box-shadow:none;box-shadow:none;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;font:500 14px Google Sans,Arial,sans-serif;height:36px;letter-spacing:.25px;padding:0;text-shadow:none;text-transform:none;user-select:none;padding:0;background-color:#1a73e8;background-image:none;border-color:#2d53af;display:inline-block}a[aria-label="Reamix に追加"]:hover{background:#174ea6;box-shadow:0 2px 1px -1px rgb(26 115 232 / 20%), 0 1px 1px 0 rgb(26 115 232 / 14%), 0 1px 3px 0 rgb(26 115 232 / 12%)}</style><a role="button" id="install" aria-label="Reamix に追加" tabindex="0"><div style="display:inline-block;width:100%;height:100%"><div style="margin:0 24px;align-items:center;display:flex;height:100%;justify-content:center;white-space:nowrap"><div style="max-width:270px;overflow:hidden;max-height:30px" class="webstore-test-button-label">Reamix に追加</div></div></div></div>';
+              setTimeout(function(){
+                document.querySelector('div[itemtype="http://schema.org/WebApplication"]>div:nth-child(3)>div:nth-of-type(2)').insertAdjacentHTML("afterbegin", button);
+                document.getElementById("install").addEventListener('click', function(){
+                  node.installExtension(location.href);
+                })
+              }, 1000);
+            `)
+          }
+        }
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e)
         bv[index].webContents
-          .loadURL(`file://${__dirname}/src/resource/server-notfound.html`)
+          .loadFile(`${__dirname}/src/pages/notfound.html`)
           .then(() => {
             bv[index].webContents.executeJavaScript(`
               let page = document.documentElement.innerHTML;
+              document.documentElement.innerHTML = "";
               if (node.loadLang()[0]) {
                 Object.keys(node.loadLang()[1]).forEach((item) => {
                   page = page.replace(
@@ -351,39 +431,131 @@ ipcMain.on('moveView', (e, link, index) => {
               document.getElementsByTagName('span')[0].innerText='${link.toLowerCase()}';
           var requiredUrl='${link}';
         `)
+            if (
+              (nativeTheme.shouldUseDarkColors && store.get('theme') === '') ||
+              store.get('theme') === 'dark'
+            ) {
+              bv[index].webContents.executeJavaScript(`
+            document.documentElement.classList.add("dark");
+          `)
+            }
           })
         console.log(
           "The previous error is normal. It redirected to a page where the server couldn't be found."
         )
       })
   }
+  if (
+    link !== '' &&
+    store.get('bookmarks').some((bookmark) => bookmark.includes(link))
+  ) {
+    win.webContents.executeJavaScript(`
+      document.getElementById('fav-icon').src = 'assets/icons/star-fill.svg'
+    `)
+  } else {
+    win.webContents.executeJavaScript(`
+      document.getElementById('fav-icon').src = 'assets/icons/star.svg'
+    `)
+  }
 })
-ipcMain.on('windowClose', () => {
+ipcMain.handle('windowClose', () => {
+  ipcMain.removeAllListeners()
   win.close()
 })
-ipcMain.on('windowMaximize', () => {
+ipcMain.handle('setFullscreen', () => {
+  const { screen } = require('electron')
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const { width, height } = primaryDisplay.size
+  win.webContents.insertCSS('html{display: none}')
+  bv[index].setBounds({ x: 0, y: 0, width: width, height: height })
+})
+ipcMain.handle('exitFullscreen', () => {
+  win.webContents.insertCSS('html{display: block}')
+  bv[index].setBounds({ x: 40, y: 80, width: 960, height: 620 })
+  win.setSize(1000, 700)
+})
+ipcMain.handle('windowMaximize', () => {
   win.maximize()
 })
-ipcMain.on('windowMinimize', () => {
+ipcMain.handle('windowMinimize', () => {
   win.minimize()
 })
-ipcMain.on('windowUnmaximize', () => {
+ipcMain.handle('windowUnmaximize', () => {
   win.unmaximize()
 })
-ipcMain.on('windowMaxMin', () => {
+ipcMain.handle('installExtension', (e, url) => {
+  const pattern =
+    /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
+  const id = pattern.exec(url)
+  downloadCRX
+    .download(url, `${__dirname}/src/extensions/`, id[1])
+    .then((filePath) => {
+      unzip(filePath).then(async () => {
+        await session.defaultSession.loadExtension(
+          `${__dirname}/src/extensions/${id[1]}`,
+          { allowFileAccess: true }
+        )
+        fs.unlinkSync(`${__dirname}/src/extensions/${id[1]}.crx`)
+        dialog.showMessageBox(null, {
+          type: 'info',
+          icon: './src/image/logo.png',
+          title: t['extensions'],
+          message: t['success_install'],
+        })
+      })
+    })
+})
+ipcMain.handle('removeExtension', (e, url) => {
+  const pattern =
+    /^https?:\/\/chrome.google.com\/webstore\/.+?\/([a-z]{32})(?=[\/#?]|$)/
+  const id = pattern.exec(url)
+  fs.remove(`${__dirname}/src/extensions/${id[1]}`, (err) => {
+    if (err) throw err
+    dialog.showMessageBox(null, {
+      type: 'info',
+      icon: './src/image/logo.png',
+      title: t['extensions'],
+      message: t['success_remove'],
+    })
+  })
+})
+ipcMain.handle('windowMaxMin', () => {
   if (win.isMaximized() == true) {
     win.unmaximize()
   } else {
     win.maximize()
   }
 })
-ipcMain.on('moveViewBlank', (e, index) => {
+ipcMain.handle('moveViewBlank', (e, index) => {
   bv[index].webContents.loadURL(`file://${__dirname}/src/resource/blank.html`)
 })
-ipcMain.on('reloadBrowser', (e, index) => {
+ipcMain.handle('reloadBrowser', (e, index) => {
   bv[index].webContents.reload()
+  bv[index].webContents.executeJavaScript(`
+  let page = document.documentElement.innerHTML;
+  if (node.loadLang()[0]) {
+    Object.keys(node.loadLang()[1]).forEach((item) => {
+      page = page.replace(
+        new RegExp('%' + item + '%', 'g'),
+        node.loadLang()[1][item]
+      )
+      document.documentElement.innerHTML = page
+    })
+  }
+  `)
+  if (
+    (nativeTheme.shouldUseDarkColors && store.get('theme') === '') ||
+    store.get('theme') === 'dark'
+  ) {
+    win.webContents.executeJavaScript(`
+      document.documentElement.classList.add("dark");
+    `)
+    bv[index].webContents.executeJavaScript(`
+      document.documentElement.classList.add("dark");
+    `)
+  }
 })
-ipcMain.on('browserBack', (e, index) => {
+ipcMain.handle('browserBack', (e, index) => {
   bv[index].webContents.goBack()
   if (
     bv[index].webContents
@@ -395,86 +567,156 @@ ipcMain.on('browserBack', (e, index) => {
       .slice(0, 1) != '/'
   ) {
     win.webContents.executeJavaScript(
-      `document.getElementsByTagName('input')[0].value='${bv[index].webContents
-        .getURL()
-        .substring(
-          bv[index].webContents.getURL().indexOf('/') + 2,
-          bv[index].webContents.getURL().length
-        )}'`
+      `document.getElementsByTagName('input')[0].value='${bv[
+        index
+      ].webContents.getURL()}'`
     )
   }
 })
-ipcMain.on('browserGoes', (e, index) => {
+ipcMain.handle('browserGoes', (e, index) => {
   bv[index].webContents.goForward()
 })
-ipcMain.on('getBrowserUrl', (e, index) => {
+ipcMain.handle('getBrowserUrl', (e, index) => {
   return bv[index].webContents.getURL()
 })
-ipcMain.on('moveToNewTab', (e, index) => {
-  bv[index].webContents.loadURL(`${__dirname}/src/resource/index.html`)
+ipcMain.handle('openCustomCSS', () => {
+  shell.openPath(path.join(__dirname, 'src/assets/styles/custom.css'))
 })
-ipcMain.on('context', () => {
+ipcMain.handle('openCustomSettingCSS', () => {
+  shell.openPath(path.join(__dirname, 'src/assets/styles/custom_setting.css'))
+})
+ipcMain.handle('moveToNewTab', (e, index) => {
+  bv[index].webContents.loadFile(`${__dirname}/src/pages/home.html`)
+  bv[index].webContents.executeJavaScript(`
+  let page = document.documentElement.innerHTML;
+  document.documentElement.innerHTML = "";
+  if (node.loadLang()[0]) {
+    Object.keys(node.loadLang()[1]).forEach((item) => {
+      page = page.replace(
+        new RegExp('%' + item + '%', 'g'),
+        node.loadLang()[1][item]
+      )
+      document.documentElement.innerHTML = page
+    })
+  }
+  `)
+  win.webContents.executeJavaScript(`
+    document.getElementById('search').value = "";
+    document.getElementById('fav-icon').src = 'assets/icons/star.svg'
+  `)
+  if (
+    (nativeTheme.shouldUseDarkColors && store.get('theme') === '') ||
+    store.get('theme') === 'dark'
+  ) {
+    bv[index].webContents.executeJavaScript(`
+      document.documentElement.classList.add("dark");
+    `)
+  }
+})
+ipcMain.handle('context', () => {
   menu.popup()
 })
-ipcMain.on('newtab', () => {
+ipcMain.handle('newtab', () => {
   newtab()
 })
-ipcMain.on('tabMove', (e, i) => {
-  index = i < 0 ? 0 : i
+ipcMain.handle('tabMove', (e, i) => {
+  index = i < 0 ? bv.length - 1 : i
+  bv[index].webContents.removeAllListeners()
   win.setTopBrowserView(bv[index])
   win.webContents.executeJavaScript(`
-     document.getElementById('search').value='${bv[index].webContents
-       .getURL()
-       .substring(
-         bv[index].webContents.getURL().indexOf('/') + 2,
-         bv[index].webContents.getURL().length
-       )}';
-     document.getElementsByTagName('title')[0].innerText='${bv[
-       index
-     ].webContents.getTitle()} - Reamix';
-     `)
+    if ('${bv[index].webContents.getURL()}'.includes('https')) {
+      document.getElementById('search').value='${bv[
+        index
+      ].webContents.getURL()}';
+    } else {
+        document.getElementById('search').value='';
+    }
+    document.getElementsByTagName('title')[0].innerText='${bv[
+      index
+    ].webContents.getTitle()} - Reamix';
+    `)
 })
-ipcMain.on('removeTab', (e, i, c) => {
+ipcMain.handle('moveTab', (e, before, after) => {
+  if (before > after) {
+    let current = bv[before]
+    for (let i = 0; i < before - after; i++) {
+      bv[before - i] = bv[before - i - 1]
+    }
+    bv[after] = current
+  } else if (after > before) {
+    let current = bv[before]
+    for (let i = 0; i < after - before; i++) {
+      bv[before + i] = bv[before + i + 1]
+    }
+    bv[after] = current
+  }
+})
+ipcMain.handle('removeTab', (e, i) => {
   try {
-    console.log('delete', i)
-    console.log('current', c)
     win.removeBrowserView(bv[i])
-    bv[i].webContents.destroy()
+    bv[i].webContents.forcefullyCrashRenderer()
     bv.splice(i, 1)
   } catch (e) {
     return true
   }
 })
-ipcMain.on('openSettings', () => {
-  setting = new BrowserWindow({
-    width: 760,
-    height: 480,
-    minWidth: 300,
-    minHeight: 270,
-    icon: `${__dirname}/src/image/logo.ico`,
-    autoHideMenuBar: true,
-    webPreferences: {
-      preload: `${__dirname}/src/setting/preload.js`,
-      scrollBounce: true,
-    },
-  })
-  setting.loadFile(`${__dirname}/src/setting/index.html`)
+ipcMain.handle('open', (e, name) => {
+  openPage(name)
   if (
-    JSON.parse(fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8'))
-      .experiments.forceDark == true
+    store
+      .get('bookmarks')
+      .some((bookmark) => bookmark.includes(`reamix://${name}`))
   ) {
-    setting.webContents.executeJavaScript(
-      `document.querySelectorAll('input[type="checkbox"]')[0].checked=true`
-    )
+    win.webContents.executeJavaScript(`
+      document.getElementById('fav-icon').src = 'assets/icons/star-fill.svg'
+    `)
+  } else {
+    win.webContents.executeJavaScript(`
+      document.getElementById('fav-icon').src = 'assets/icons/star.svg'
+    `)
   }
 })
+ipcMain.handle('saveFav', (e, name, link) => {
+  const list = [name, link]
+  let fav = store.get('bookmarks')
+  fav.push(list)
+  store.set('bookmarks', fav)
+})
+ipcMain.handle('restart', () => {
+  app.relaunch()
+  app.exit()
+})
+ipcMain.handle('setBlockList', (e, list) => {
+  store.set('blockList', list)
+})
 
-let obj = JSON.parse(
-  fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-)
-let t = JSON.parse(
-  fs.readFileSync(`${__dirname}/src/i18n/${obj.lang}.json`, 'utf-8')
-)
+const openPage = (name) => {
+  bv[index].webContents.loadFile(`${__dirname}/src/pages/${name}.html`)
+  bv[index].webContents.executeJavaScript(`
+  let page = document.documentElement.innerHTML;
+  document.documentElement.innerHTML = "";
+  if (node.loadLang()[0]) {
+    Object.keys(node.loadLang()[1]).forEach((item) => {
+      page = page.replace(
+        new RegExp('%' + item + '%', 'g'),
+        node.loadLang()[1][item]
+      )
+      document.documentElement.innerHTML = page
+    })
+  }
+  `)
+  win.webContents.executeJavaScript(`
+    document.getElementById('search').value = "reamix://${name}"
+  `)
+  if (
+    (nativeTheme.shouldUseDarkColors && store.get('theme') === '') ||
+    store.get('theme') === 'dark'
+  ) {
+    bv[index].webContents.executeJavaScript(`
+      document.documentElement.classList.add("dark");
+    `)
+  }
+}
 
 let menu = Menu.buildFromTemplate([
   {
@@ -495,11 +737,6 @@ let menu = Menu.buildFromTemplate([
       {
         role: 'hideothers',
         label: t['hide_others'],
-      },
-      {
-        role: 'reload',
-        label: t['restate'],
-        accelerator: 'CmdOrCtrl+Alt+R',
       },
       {
         label: t['quit'],
@@ -532,6 +769,38 @@ let menu = Menu.buildFromTemplate([
           bv[index].webContents.goForward()
         },
       },
+      {
+        label: t['open_tab'],
+        accelerator: 'CmdOrCtrl+T',
+        click: () => {
+          win.webContents.executeJavaScript(`
+          newtab('Home');
+          `)
+        },
+      },
+      {
+        label: t['close_tab'],
+        accelerator: 'CmdOrCtrl+W',
+        click: () => {
+          win.webContents.executeJavaScript(`
+            if (document.querySelectorAll('span.tab').length > 1) {
+              let elements = document.querySelectorAll('.tab')
+              const element = document.getElementById('opened')
+              elements = [].slice.call(elements)
+              const index = elements.indexOf(element)
+              element.remove()
+              node.removeTab(index)
+              const lasttab = document.querySelector('.tab:last-child')
+              node.tabMove(-1)
+              setTimeout(() => {
+                lasttab.setAttribute('id', 'opened')
+              }, 1)
+            } else {
+              node.winClose()
+            }
+          `)
+        },
+      },
     ],
   },
   {
@@ -558,48 +827,21 @@ let menu = Menu.buildFromTemplate([
         label: t['about'],
         accelerator: 'CmdOrCtrl+Alt+A',
         click: () => {
-          dialog.showMessageBox(null, {
-            type: 'info',
-            icon: './src/image/logo.png',
-            title: t['about'],
-            message: t['about'],
-            detail: `Reamix v1.0.0-beta.6.2
-バージョン: 1.0.0-beta.6.2
-開発者: VCborn
-
-リポジトリ: https://github.com/vcborn/reamix
-公式サイト: https://vcborn.com/services/reamix
-
-Copyright 2021 vcborn.`,
-          })
+          openPage('about')
         },
       },
       {
         label: t['settings'],
         accelerator: 'CmdOrCtrl+Alt+S',
         click: () => {
-          setting = new BrowserWindow({
-            width: 760,
-            height: 480,
-            minWidth: 300,
-            minHeight: 270,
-            icon: `${__dirname}/src/image/logo.ico`,
-            autoHideMenuBar: true,
-            webPreferences: {
-              preload: `${__dirname}/src/setting/preload.js`,
-              scrollBounce: true,
-            },
-          })
-          setting.loadFile(`${__dirname}/src/setting/index.html`)
-          if (
-            JSON.parse(
-              fs.readFileSync(`${__dirname}/src/config/config.mncfg`, 'utf-8')
-            ).experiments.forceDark == true
-          ) {
-            setting.webContents.executeJavaScript(
-              `document.querySelectorAll('input[type="checkbox"]')[0].checked=true`
-            )
-          }
+          openPage('settings')
+        },
+      },
+      {
+        label: t['extensions'],
+        accelerator: 'CmdOrCtrl+Alt+E',
+        click: () => {
+          openPage('extensions')
         },
       },
     ],
@@ -611,7 +853,6 @@ Copyright 2021 vcborn.`,
         label: t['dev_tools'],
         accelerator: 'F12',
         click: () => {
-          console.log(index)
           bv[index].webContents.toggleDevTools()
         },
       },

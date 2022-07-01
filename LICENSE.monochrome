@@ -1,0 +1,67 @@
+monochrome. License by monochrome.
+v.2.0.0
+Copyright 2022 © VCborn.
+
+# 前書き
+- このライセンスは、monochrome Project.およびthinkingなどのみが使用できるものではなく、全世界の誰もが利用できるライセンスになっています。
+- このライセンスで定められている規約は、すべて商用、非商用問わず同じことが課されます。
+
+# 適用
+ソフトウェアなどにこのライセンスを適用するためには、ソフトウェアの最も需要なファイルにmonochrome. Licenseが適用されていることを示し、https://sorakime.github.io/mncr/license/2.0.0 のリンクを表示すること。短縮URLでも構いません。また、このライセンスの全文を含めること。
+
+# 派生
+派生バージョンの公開は自由ですし、開発も自由です。
+しかし、ソースコードの大半を変更せず、名称のみの変更となる場合は公開を認められません。
+
+## 公開
+それの派生バージョンを単体ソフトウェアなどとして公開する場合、ソースコードを必ず公開すること、派生元のリポジトリを必ず明記した形で行うこと。
+製品などに組み込む場合は、ソースコード公開の義務はなしとするが、どこかで派生元のソフトウェアの名前と作者、もしくはリポジトリを必ず明記すること。
+また、必ずこのライセンス全文を含めること。
+
+## ライセンス
+派生バージョンのライセンスは、monochrome. Licenseかmonochrome. License以上に厳しいものとすることがでいます。ただし、以下に記す義務は免除できないものとする。
+- ソフトウェアの作者とソフトウェアの名前、もしくはリポジトリを明記すること
+- ライセンス全文を含めること
+
+# 二次配布
+二次配布は自由ですが、行う際は必ずそのソフトウェアの作者とソフトウェアの名前、もしくはリポジトリをわかりやすく明記することと、配布する際にライセンス全文を含めて配布してください。
+
+# 改変
+このライセンスを勝手に改変することはできませんが、他のライセンスと混合する場合などは、monochrome. Licenseが適用されている部分を以下の義務を果たした上で他のライセンスを優先してください。
+- ソフトウェアの作者とソフトウェアの名前、もしくはリポジトリを明記すること
+- ライセンス全文を含めること
+
+---
+
+monochrome. License by monochrome.
+v.2.0.0 in English (unofficial)
+Copyright 2022 © VCborn.
+
+# Preamble
+- This license is not only for use by the monochrome Project. and thinking, etc., but is available to everyone worldwide.
+- All of the terms and conditions set forth in this license apply equally to commercial and non-commercial use.
+
+# Apply
+To apply this license to software, etc., indicate that the monochrome. license is applied to the most demanding file of the software and display the link https://sorakime.github.io/mncr/license/2.0.0 . A shortened URL is acceptable. Also, include the full text of this License.
+
+# Based
+You are free to publish and develop derivative versions.
+However, if the majority of the source code is not changed and only the name is changed, the release is not permitted.
+
+## Publish
+When releasing a derived version of the software as stand-alone software, the source code must be disclosed and the repository of the derived source must be clearly indicated.
+When incorporating it into a product, etc., there is no obligation to disclose the source code, but the name and author of the derived software or the repository must be clearly indicated somewhere.
+Also, be sure to include the full text of the license.
+
+## License
+The license of any Derived Version may be more restrictive than the monochrome. License or the monochrome. License. However, the following obligations cannot be waived:
+- Indicate the software author and the name of the software or repository
+- Include the full license text
+
+# Redistribute
+Redistribution is free, but please be sure to clearly identify the author and the name of the software or repository, and include the full license when you distribute the software.
+
+# Modify
+You may not modify this license without permission, but if you wish to mix it with other licenses, for example, you must give priority to other licenses after fulfilling the following obligations for the portions covered by the monochrome. license.
+- Indicate the software author and the name of the software or repository
+- Include the full license text

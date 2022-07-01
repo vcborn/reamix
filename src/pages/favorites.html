@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>%bookmarks%</title>
+    <link rel="stylesheet" href="../assets/styles/fonts.css" />
+    <link rel="stylesheet" href="../assets/styles/settings.min.css">
+</head>
+
+<body>
+    <div class="main">
+        <h2>%bookmarks%</h2>
+        <div id="list">
+            <template id="bookmarks">
+                <div id="col" class="col">
+                    <a href="#" onclick="remove(this, 'bookmarks')">
+                        <img class="icon delete" src="../assets/icons/x.svg" alt="delete bookmark" />
+                    </a>
+                    <a href="#" id="link">
+                        <img id="favicon" src="#" onerror="this.onerror=null; this.src='../assets/icons/file.svg'" />
+                        <div>
+                            <h3 id="name">SiteTitle</h3>
+                            <p id="link-text" class="second">SiteLink</p>
+                        </div>
+                    </a>
+                </div>
+            </template>
+        </div>
+    </div>
+    <script src="others.js"></script>
+</body>
+
+</html>

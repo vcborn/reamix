@@ -1,72 +1,29 @@
 {
   "name": "reamix",
-  "version": "1.0.0-beta6.2",
-  "description": "Monot-based browser",
+  "version": "2.0.0",
+  "description": "A simple and convenient browser based on Electron.",
   "main": "main.js",
+  "license": "GPL-3.0",
   "scripts": {
-    "test": "npx electron --trace-warnings .",
-    "build": "npx electron-builder",
-    "makeEnv": "src\\environment.cmd"
+    "dev": "npx electron .",
+    "build": "npx electron-builder --config builder.config.js --publish never",
+    "setup": "src\\environment.cmd"
   },
   "author": "VCborn <support@vcborn.com>",
   "homepage": "https://vcborn.com/services/reamix/",
-  "license": "monochrome",
   "devDependencies": {
-    "electron": "^17.2.0",
-    "electron-builder": "^22.14.13"
-  },
-  "build": {
-    "appId": "com.vcborn.reamix",
-    "productName": "reamix",
-    "files": [
-      "!.git",
-      "!.dist",
-      "node_modules",
-      "src",
-      "main.js",
-      "package-lock.json",
-      "package.json"
-    ],
-    "asar": false,
-    "win": {
-      "icon": "src/image/logo.ico",
-      "target": "portable",
-      "legalTrademarks": "Copyright 2021 VCborn"
-    },
-    "nsis": {
-      "artifactName": "${productName}_${version}_setup.${ext}",
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "installerIcon": "src/image/logo.ico"
-    },
-    "portable": {
-      "artifactName": "${productName}_${version}_portable.${ext}"
-    },
-    "mac": {
-      "icon": "src/image/logo.icns",
-      "target": "dmg"
-    },
-    "linux": {
-      "icon": "src/image/icon.icns",
-      "target": "appImage"
-    },
-    "appImage": {
-      "artifactName": "${productName}_${version}_${arch}.${ext}",
-      "category": "Utility",
-      "synopsis": "Reamix v1.0.0-beta6.2"
-    },
-    "deb": {
-      "artifactName": "${productName}_${version}_${arch}.${ext}",
-      "category": "Utility",
-      "synopsis": "Reamix v1.0.0-beta6.2"
-    },
-    "rpm": {
-      "artifactName": "${productName}-${version}.${arch}.${ext}",
-      "category": "Utility",
-      "synopsis": "Reamix v1.0.0-beta6.2"
-    }
+    "electron": "^19.0.6",
+    "electron-builder": "^23.1.0"
   },
   "dependencies": {
-    "electron-context-menu": "^3.1.2"
+    "@cliqz/adblocker-electron": "^1.23.8",
+    "cross-fetch": "^3.1.5",
+    "download-crx": "^1.1.0",
+    "electron-chrome-extensions": "^3.9.0",
+    "electron-context-menu": "^3.3.0",
+    "electron-extensions": "^7.0.0-beta.3",
+    "electron-store": "^8.0.2",
+    "fs-extra": "^10.1.0",
+    "unzip-crx-3": "^0.2.0"
   }
 }

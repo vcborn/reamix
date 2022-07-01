@@ -1,0 +1,201 @@
+:root {
+  --main-bg-color: #efefef;
+  --main-bg-color-dark: #222;
+  --primary-color: #2196f3;
+  --primary-color-dark: #555;
+  --white: #fff;
+  --white-hover: #bfbfbf;
+}
+
+* {
+  font-family: 'Noto Sans JP', 'Noto Sans SC', sans-serif;
+  position: relative;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  z-index: 100;
+}
+html,
+body,
+#root,
+main {
+  height: 100%;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+script,
+style {
+  display: none !important;
+  width: 0;
+  height: 0;
+}
+a {
+  border-radius: 0.5rem;
+  transition-duration: 200ms;
+}
+nav a {
+  padding: 1px 3px;
+  padding-top: 4px;
+  user-select: none;
+}
+a:hover {
+  background-color: var(--white-hover);
+}
+body {
+  background-color: var(--white);
+  padding-bottom: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+nav {
+  background-color: var(--main-bg-color);
+  padding-top: 13px;
+  width: 42px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+main > div {
+  width: 100%;
+}
+main > div > header {
+  background-color: var(--main-bg-color);
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  -webkit-app-region: drag;
+}
+.group {
+  display: flex;
+  align-items: center;
+}
+.group > a {
+  height: 20px;
+  padding: 0.25rem;
+}
+.tabs {
+  display: flex;
+  align-items: center;
+}
+.action a {
+  padding: 0.25rem 0.5rem;
+}
+main > div > header > *,
+main > div > .bar > * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-app-region: none;
+}
+main > div header .action {
+  margin-top: 5px;
+  margin-right: 5px;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: end;
+}
+.tabs a {
+  padding: 0 0.25rem;
+}
+.tab {
+  display: flex;
+  position: relative;
+  align-items: center;
+  background-color: #ccc;
+  border-bottom: 2px solid #aaa;
+  padding: 0.25rem 4rem;
+  margin-right: 0.25rem;
+  transition-duration: 200ms;
+}
+.dark .tab {
+  background-color: var(--main-bg-color-dark);
+  border-bottom: 2px solid var(--primary-color-dark);
+  color: var(--white);
+}
+.dark .tab#opened {
+  background-color: #333;
+}
+.tab#opened {
+  background-color: var(--white);
+  border-bottom: 2px solid var(--primary-color);
+}
+.tab .close {
+  position: absolute;
+  right: 7px;
+  top: 5px;
+}
+.bar {
+  background-color: var(--main-bg-color);
+  padding: 8px 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  height: 30px;
+}
+.bar a {
+  padding: 0.25rem;
+  height: 20px;
+}
+.bar input {
+  border-radius: 1rem;
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+}
+
+.dark body main nav,
+.dark body main div .bar,
+.dark body main div header {
+  background-color: var(--main-bg-color-dark);
+}
+.dark body input,
+.dark nav {
+  background-color: var(--white) 1;
+  color: var(--white);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+.icon.small {
+  width: 15px;
+  height: 15px;
+}
+.dark .icon {
+  filter: invert(1);
+}
+#extensions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+#extensions a {
+  display: flex;
+  align-items: center;
+}
+#extensions a #exicon {
+  width: 22px;
+  padding: 0.5rem 0;
+}
+img[src=''] {
+  display: none;
+}
+img#favicon {
+  width: 18px;
+  margin-right: 0.25rem;
+}
