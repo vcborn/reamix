@@ -59,7 +59,7 @@ module.exports = {
   mac: {
     icon: 'src/assets/images/logo.icns',
     target: ['dmg'],
-    artifactName: '${productName}_${version}_x86_64.${ext}',
+    artifactName: '${productName}_${version}_${arch}.${ext}',
   },
   dmg: {
     background: 'src/assets/images/background.tiff',
@@ -106,6 +106,6 @@ module.exports = {
   rpm: {
     artifactName: '${productName}-${version}.${arch}.${ext}',
     category: 'Utility',
-    synopsis: 'Reamix v1.0.0-beta6.2',
+    synopsis: 'Reamix v2.0.0',
   },
 }
