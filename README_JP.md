@@ -39,6 +39,7 @@ VCLinuxに標準搭載。
 - <kbd>Ctrl</kbd> + <kbd>R</kbd> - 再読み込み
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> - 戻る
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> - 進む
+- <kbd>Ctrl</kbd> + <kbd>T</kbd> - 新規タブを開く
 - <kbd>Ctrl</kbd> + <kbd>W</kbd> - タブを閉じる / ウィンドウを閉じる
 - <kbd>F12</kbd> - 開発者ツールを開く
 - <kbd>Alt</kbd> + <kbd>F12</kbd> - ブラウザ用開発者ツールを開く

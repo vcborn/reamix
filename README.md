@@ -38,7 +38,8 @@ Comes standard with VCLinux.
 - <kbd>Ctrl</kbd> + <kbd>R</kbd> - Reload
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> - Go Back
 - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> - Go Forward
-- <kbd>Ctrl</kbd> + <kbd>W</kbd> - Close Current Tab / Close Window
+- <kbd>Ctrl</kbd> + <kbd>T</kbd> - Open A New Tab
+- <kbd>Ctrl</kbd> + <kbd>W</kbd> - Close The Current Tab / Close Window
 - <kbd>F12</kbd> - Open Developer Tools
 - <kbd>Alt</kbd> + <kbd>F12</kbd> - Open Browser Developer Tools
 - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>S</kbd> - Open Settings
