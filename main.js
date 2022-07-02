@@ -578,10 +578,32 @@ ipcMain.handle('getBrowserUrl', (e, index) => {
   return bv[index].webContents.getURL()
 })
 ipcMain.handle('openCustomCSS', () => {
-  shell.openPath(path.join(__dirname, 'src/assets/styles/custom.css'))
+  if (fs.existsSync(path.join(app.getPath('userData'), 'custom.css'))) {
+    shell.openPath(path.join(app.getPath('userData'), 'custom.css'))
+  } else {
+    fs.writeFile(
+      path.join(app.getPath('userData'), 'custom.css'),
+      `/*
+This is a CSS file to customize Reamix. 
+It is applied to tabs and icons and not to pages such as settings.
+*/`
+    )
+    shell.openPath(path.join(app.getPath('userData'), 'custom.css'))
+  }
 })
 ipcMain.handle('openCustomSettingCSS', () => {
-  shell.openPath(path.join(__dirname, 'src/assets/styles/custom_setting.css'))
+  if (fs.existsSync(path.join(app.getPath('userData'), 'custom_setting.css'))) {
+    shell.openPath(path.join(app.getPath('userData'), 'custom_setting.css'))
+  } else {
+    fs.writeFile(
+      path.join(app.getPath('userData'), 'custom_setting.css'),
+      `/*
+This is a CSS file to customize Reamix. 
+It is applied to tabs and icons and not to pages such as settings.
+*/`
+    )
+    shell.openPath(path.join(app.getPath('userData'), 'custom_setting.css'))
+  }
 })
 ipcMain.handle('moveToNewTab', (e, index) => {
   bv[index].webContents.loadFile(`${__dirname}/src/pages/home.html`)
