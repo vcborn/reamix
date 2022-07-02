@@ -2,6 +2,16 @@
 
 each()
 
+async function css() {
+  if (await node.getPath()) {
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = (await node.getPath()) + '/custom.css'
+    document.head.appendChild(link)
+  }
+}
+css()
+
 function each() {
   document.querySelectorAll('.tab').forEach((i, item) => {
     i.addEventListener('click', () => {

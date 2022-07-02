@@ -78,3 +78,13 @@ function deleteAll() {
   }
   node.deleteAll()
 }
+
+async function css() {
+  if (await node.getPath()) {
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = (await node.getPath()) + '/custom_setting.css'
+    document.head.appendChild(link)
+  }
+}
+css()

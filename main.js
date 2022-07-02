@@ -69,6 +69,26 @@ async function newtab() {
   if (store.get('bookmarks') == null) {
     store.set('bookmarks', [])
   }
+  if (!fs.existsSync(path.join(app.getPath('userData'), 'custom.css'))) {
+    fs.writeFile(
+      path.join(app.getPath('userData'), 'custom.css'),
+      `/*
+This is a CSS file to customize Reamix. 
+It is applied to tabs and icons and not to pages such as settings.
+*/`
+    )
+  }
+  if (
+    !fs.existsSync(path.join(app.getPath('userData'), 'custom_setting.css'))
+  ) {
+    fs.writeFile(
+      path.join(app.getPath('userData'), 'custom_setting.css'),
+      `/*
+This is a CSS file to customize Reamix. 
+These apply to pages such as Home, Settings and Extensions.
+*/`
+    )
+  }
   if (store.get('adblocker')) {
     ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
       blocker.enableBlockingInSession(browserview.webContents.session)
@@ -577,33 +597,14 @@ ipcMain.handle('browserGoes', (e, index) => {
 ipcMain.handle('getBrowserUrl', (e, index) => {
   return bv[index].webContents.getURL()
 })
+ipcMain.handle('cssPath', () => {
+  return app.getPath('userData')
+})
 ipcMain.handle('openCustomCSS', () => {
-  if (fs.existsSync(path.join(app.getPath('userData'), 'custom.css'))) {
-    shell.openPath(path.join(app.getPath('userData'), 'custom.css'))
-  } else {
-    fs.writeFile(
-      path.join(app.getPath('userData'), 'custom.css'),
-      `/*
-This is a CSS file to customize Reamix. 
-It is applied to tabs and icons and not to pages such as settings.
-*/`
-    )
-    shell.openPath(path.join(app.getPath('userData'), 'custom.css'))
-  }
+  shell.openPath(path.join(app.getPath('userData'), 'custom.css'))
 })
 ipcMain.handle('openCustomSettingCSS', () => {
-  if (fs.existsSync(path.join(app.getPath('userData'), 'custom_setting.css'))) {
-    shell.openPath(path.join(app.getPath('userData'), 'custom_setting.css'))
-  } else {
-    fs.writeFile(
-      path.join(app.getPath('userData'), 'custom_setting.css'),
-      `/*
-This is a CSS file to customize Reamix. 
-It is applied to tabs and icons and not to pages such as settings.
-*/`
-    )
-    shell.openPath(path.join(app.getPath('userData'), 'custom_setting.css'))
-  }
+  shell.openPath(path.join(app.getPath('userData'), 'custom_setting.css'))
 })
 ipcMain.handle('moveToNewTab', (e, index) => {
   bv[index].webContents.loadFile(`${__dirname}/src/pages/home.html`)
