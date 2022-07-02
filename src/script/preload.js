@@ -124,4 +124,7 @@ contextBridge.exposeInMainWorld('node', {
   saveFav: (name, link) => {
     ipcRenderer.invoke('saveFav', name, link)
   },
+  getPath: () => {
+    return ipcRenderer.invoke('cssPath')
+  },
 })
