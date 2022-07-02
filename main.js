@@ -2,7 +2,6 @@
 
 const {
   app,
-  components,
   BrowserWindow,
   BrowserView,
   dialog,
@@ -332,7 +331,6 @@ async function nw() {
 }
 
 app.whenReady().then(async () => {
-  await components.whenReady()
   const extensions = new ElectronChromeExtensions()
   nw()
 })
