@@ -252,7 +252,16 @@ These apply to pages such as Home, Settings and Extensions.
   index = bv.length
   bv.push(browserview)
   win.addBrowserView(browserview)
-  browserview.setBounds({ x: 40, y: 80, width: 960, height: 620 })
+  if (bv[0].getBounds().x !== 0) {
+    browserview.setBounds({
+      x: 40,
+      y: 80,
+      width: bv[0].getBounds().width,
+      height: bv[0].getBounds().height,
+    })
+  } else {
+    browserview.setBounds({ x: 40, y: 80, width: 960, height: 620 })
+  }
   browserview.setAutoResize({ width: true, height: true })
   browserview.setBackgroundColor('#ffffffff')
   browserview.webContents.loadFile(`${__dirname}/src/pages/home.html`)
