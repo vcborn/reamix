@@ -257,15 +257,14 @@ These apply to pages such as Home, Settings and Extensions.
   browserview.setBackgroundColor('#ffffffff')
   browserview.webContents.loadFile(`${__dirname}/src/pages/home.html`)
   browserview.webContents.executeJavaScript(`
-  let page = document.documentElement.innerHTML;
-  document.documentElement.innerHTML = "";
+  let page = document.body.innerHTML;
   if (node.loadLang()[0]) {
     Object.keys(node.loadLang()[1]).forEach((item) => {
       page = page.replace(
         new RegExp('%' + item + '%', 'g'),
         node.loadLang()[1][item]
       )
-      document.documentElement.innerHTML = page
+      document.body.innerHTML = page
     })
   }
   `)
@@ -427,15 +426,14 @@ ipcMain.handle('moveView', (e, link, index) => {
           .loadFile(`${__dirname}/src/pages/notfound.html`)
           .then(() => {
             bv[index].webContents.executeJavaScript(`
-              let page = document.documentElement.innerHTML;
-              document.documentElement.innerHTML = "";
+              let page = document.body.innerHTML;
               if (node.loadLang()[0]) {
                 Object.keys(node.loadLang()[1]).forEach((item) => {
                   page = page.replace(
                     new RegExp('%' + item + '%', 'g'),
                     node.loadLang()[1][item]
                   )
-                  document.documentElement.innerHTML = page
+                  document.body.innerHTML = page
                 })
               }
               document.getElementsByTagName('span')[0].innerText='${link.toLowerCase()}';
@@ -446,7 +444,7 @@ ipcMain.handle('moveView', (e, link, index) => {
               store.get('theme') === 'dark'
             ) {
               bv[index].webContents.executeJavaScript(`
-            document.documentElement.classList.add("dark");
+            document.body.classList.add("dark");
           `)
             }
           })
@@ -530,14 +528,14 @@ ipcMain.handle('moveViewBlank', (e, index) => {
 ipcMain.handle('reloadBrowser', (e, index) => {
   bv[index].webContents.reload()
   bv[index].webContents.executeJavaScript(`
-  let page = document.documentElement.innerHTML;
+  let page = document.body.innerHTML;
   if (node.loadLang()[0]) {
     Object.keys(node.loadLang()[1]).forEach((item) => {
       page = page.replace(
         new RegExp('%' + item + '%', 'g'),
         node.loadLang()[1][item]
       )
-      document.documentElement.innerHTML = page
+      document.body.innerHTML = page
     })
   }
   `)
@@ -589,15 +587,14 @@ ipcMain.handle('openCustomSettingCSS', () => {
 ipcMain.handle('moveToNewTab', (e, index) => {
   bv[index].webContents.loadFile(`${__dirname}/src/pages/home.html`)
   bv[index].webContents.executeJavaScript(`
-  let page = document.documentElement.innerHTML;
-  document.documentElement.innerHTML = "";
+  let page = document.body.innerHTML;
   if (node.loadLang()[0]) {
     Object.keys(node.loadLang()[1]).forEach((item) => {
       page = page.replace(
         new RegExp('%' + item + '%', 'g'),
         node.loadLang()[1][item]
       )
-      document.documentElement.innerHTML = page
+      document.body.innerHTML = page
     })
   }
   `)
@@ -694,15 +691,14 @@ ipcMain.handle('setBlockList', (e, list) => {
 const openPage = (name) => {
   bv[index].webContents.loadFile(`${__dirname}/src/pages/${name}.html`)
   bv[index].webContents.executeJavaScript(`
-  let page = document.documentElement.innerHTML;
-  document.documentElement.innerHTML = "";
+  let page = document.body.innerHTML;
   if (node.loadLang()[0]) {
     Object.keys(node.loadLang()[1]).forEach((item) => {
       page = page.replace(
         new RegExp('%' + item + '%', 'g'),
         node.loadLang()[1][item]
       )
-      document.documentElement.innerHTML = page
+      document.body.innerHTML = page
     })
   }
   `)
