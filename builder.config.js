@@ -42,7 +42,7 @@ module.exports = {
     oneClick: false,
     allowToChangeInstallationDirectory: true,
     deleteAppDataOnUninstall: false,
-    uninstallDisplayName: '${productName}',
+    uninstallDisplayName: 'Reamix',
   },
   portable: {
     artifactName: '${productName}_${version}_portable.${ext}',
@@ -106,6 +106,6 @@ module.exports = {
   rpm: {
     artifactName: '${productName}-${version}.${arch}.${ext}',
     category: 'Utility',
-    synopsis: 'Reamix v2.0.0',
+    synopsis: 'Reamix v${version}',
   },
 }

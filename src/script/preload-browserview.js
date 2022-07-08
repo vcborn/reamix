@@ -114,12 +114,6 @@ contextBridge.exposeInMainWorld('node', {
   setBlockList: (list) => {
     ipcRenderer.invoke('setBlockList', list)
   },
-  setFullscreen: () => {
-    ipcRenderer.invoke('setFullscreen')
-  },
-  exitFullscreen: () => {
-    ipcRenderer.invoke('exitFullscreen')
-  },
   getPath: () => {
     if (window.location.href.includes('file:///')) {
       return ipcRenderer.invoke('cssPath')

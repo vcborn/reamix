@@ -1,6 +1,6 @@
 {
   "name": "reamix",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A simple and convenient browser based on Electron.",
   "main": "main.js",
   "license": "GPL-3.0",

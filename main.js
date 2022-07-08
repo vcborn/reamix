@@ -129,14 +129,6 @@ These apply to pages such as Home, Settings and Extensions.
     })`)
   })
   browserview.webContents.on('update-target-url', () => {
-    browserview.webContents.executeJavaScript(`
-          document.addEventListener('fullscreenchange', () => {
-          if (document.fullscreenElement) {
-            node.setFullscreen()
-          } else {
-            node.exitFullscreen()
-          }
-        })`)
     const link = browserview.webContents.getURL()
     if (
       link !== '' &&
@@ -479,18 +471,6 @@ ipcMain.handle('moveView', (e, link, index) => {
 ipcMain.handle('windowClose', () => {
   ipcMain.removeAllListeners()
   win.close()
-})
-ipcMain.handle('setFullscreen', () => {
-  const { screen } = require('electron')
-  const primaryDisplay = screen.getPrimaryDisplay()
-  const { width, height } = primaryDisplay.size
-  win.webContents.insertCSS('html{display: none}')
-  bv[index].setBounds({ x: 0, y: 0, width: width, height: height })
-})
-ipcMain.handle('exitFullscreen', () => {
-  win.webContents.insertCSS('html{display: block}')
-  bv[index].setBounds({ x: 40, y: 80, width: 960, height: 620 })
-  win.setSize(1000, 700)
 })
 ipcMain.handle('windowMaximize', () => {
   win.maximize()
@@ -881,7 +861,7 @@ let menu = Menu.buildFromTemplate([
         label: t['reamix_dev_tools'],
         accelerator: 'Alt+F12',
         click: () => {
-          win.webContents.toggleDevTools()
+          win.webContents.toggleDevTools({ mode: 'undocked' })
         },
       },
     ],
