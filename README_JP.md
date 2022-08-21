@@ -11,6 +11,12 @@
 
 ![reamix](https://user-images.githubusercontent.com/39876629/161370659-bbe7ca7b-df8f-4e3e-bf39-8765b75395bf.jpg)
 
+## アーカイブ
+
+このプロジェクトは一時開発停止中です。  
+2.0リリースに際し心無い意見が多い（と感じた）のと開発人員が私（wamo）以外いないからです。  
+フォークはご自由にどうぞ。
+
 ## 概要
 
 [Monot](https://github.com/mncrp/monot)ベースのシンプルで便利なブラウザ。  
