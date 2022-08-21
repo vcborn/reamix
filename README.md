@@ -10,6 +10,12 @@
 </table>
 
 ![reamix](https://user-images.githubusercontent.com/39876629/161370659-bbe7ca7b-df8f-4e3e-bf39-8765b75395bf.jpg)
+
+## Archive
+This project is temporarily suspended.  
+This is because there were a lot of negative comments on the release of 2.0 (I felt) and there are no developers other than myself (wamo).  
+Please feel free to fork it.
+
 ## Description
 
 A simple and convenient browser based on [Monot](https://github.com/mncrp/monot).   
@@ -51,4 +57,4 @@ The latest development build can be downloaded [here](https://nightly.link/vcbor
 
 ## License
 
-This project is dual-licensed under the [monochrome License v2.0.0](https://github.com/vcborn/reamix/blob/main/LICENCE.monochrome) and the [GPLv3](https://github.com/vcborn/reamix/blob/main/LICENCE.GPL-3.0).
+This project is licensed under the [monochrome License v2.0.0](https://github.com/vcborn/reamix/blob/main/LICENCE.monochrome).
